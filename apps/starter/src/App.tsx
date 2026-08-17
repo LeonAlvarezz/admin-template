@@ -20,15 +20,7 @@ export default function App() {
         <span style={{ fontSize: "14px", color: "#64748b" }}>User Profile</span>
       }
     >
-      <div
-        // style={{
-        //   backgroundColor: "",
-        //   padding: "24px",
-        //   borderRadius: "8px",
-        //   boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-        // }}
-        className="p-6 bg-white/980"
-      >
+      <div className="p-6 bg-white/980">
         <h2 style={{ marginTop: 0 }}>Current View: {currentPath}</h2>
         <p>
           Turborepo app consuming <code>@admin/core</code> framework package!

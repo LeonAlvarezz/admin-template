@@ -97,7 +97,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           >
             ☰
           </button>
-          <ThemeToggle />
+          {/*<ThemeToggle />*/}
         </header>
         <main style={{ padding: "24px", flex: 1 }}>{children}</main>
       </div>
