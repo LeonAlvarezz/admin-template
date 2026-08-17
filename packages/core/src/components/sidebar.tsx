@@ -16,6 +16,8 @@ import HelpIcon from "~icons/tabler/help-filled";
 import MoonIcon from "~icons/solar/moon-bold";
 import LogoutIcon from "~icons/solar/logout-linear";
 import Avatar from "./ui/avatar";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
 
 function SideBar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -27,7 +29,7 @@ function SideBar() {
       className="border-r border-border z-10 text-foreground group min-h-svh flex flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4  transition-all duration-200"
     >
       <div className="flex flex-col flex-1 gap-2">
-        <header className="px-4 flex flex-col gap-2">
+        <header className="px-4 flex flex-col gap-4">
           <div className="flex justify-between group-data-[collapsed=true]:justify-center">
             <p className="text-foreground font-semibold text-lg whitespace-nowrap overflow-hidden transition-opacity duration-150 group-data-[collapsed=true]:w-0 group-data-[collapsed=true]:opacity-0 group-data-[collapsed=true]:pointer-events-none">
               ZeroUI
@@ -95,14 +97,56 @@ function SideBar() {
               </NavItem.Action>
             </NavItem>
           </ul>
-
-          <div className="px-3 group-data-[collapsed=true]:px-2">
-            <NavItem
-              icon={<LogoutIcon />}
-              label="Logout"
-              className="px-3 text-red-400 hover:text-red-500"
-            />
-          </div>
+          <Menu as="div" className="px-3">
+            <MenuButton className="w-full flex items-center justify-between py-2 px-2 rounded-md hover:bg-accent cursor-pointer transition-colors group-data-[collapsed=true]:justify-center focus:outline-none">
+              <div className="flex gap-2.5 items-center min-w-0">
+                <Avatar className="group-data-[collapsed=true]:size-6" />
+                <div className="flex flex-col text-left group-data-[collapsed=true]:hidden min-w-0">
+                  <span className="text-sm font-medium text-foreground truncate">
+                    Leon
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate">
+                    leon@zeroui.com
+                  </span>
+                </div>
+              </div>
+              <ChevronUpIcon className="size-4 text-muted-foreground group-data-[collapsed=true]:hidden shrink-0" />
+            </MenuButton>
+            <MenuItems
+              transition
+              anchor={{ to: "top start", gap: 12 }}
+              className="w-(--button-width) min-w-48 z-50 rounded-lg border border-border/40 bg-sidebar p-2 text-popover-foreground shadow-lg focus:outline-none transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-bottom"
+            >
+              <MenuItem>
+                <a
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent data-focus:bg-accent whitespace-nowrap"
+                  href="/settings"
+                >
+                  <GearIcon className="size-4 shrink-0" />
+                  <span>Settings</span>
+                </a>
+              </MenuItem>
+              <MenuItem>
+                <a
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent data-focus:bg-accent whitespace-nowrap"
+                  href="/support"
+                >
+                  <HelpIcon className="size-4 shrink-0" />
+                  <span>Support</span>
+                </a>
+              </MenuItem>
+              <hr className="my-1 border-border/40" />
+              <MenuItem>
+                <button
+                  type="button"
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-400 hover:bg-accent data-focus:bg-accent cursor-pointer whitespace-nowrap"
+                >
+                  <LogoutIcon className="size-4 shrink-0" />
+                  <span>Sign out</span>
+                </button>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
         </footer>
       </div>
     </aside>

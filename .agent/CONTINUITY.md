@@ -16,6 +16,11 @@
 - 2026-08-17T15:24Z [CODE] Created `packages/core/src/components/ui/nav-item.tsx` and integrated `<NavItem />` with active state and collapsed layout handling into `packages/core/src/components/sidebar.tsx`.
 - 2026-08-17T15:48Z [CODE] Enhanced `packages/core/src/components/ui/nav-item.tsx` to support `icon` and `label` props alongside `<NavItem.Action>` compound slot for interactable components (like switches/controls).
 - 2026-08-17T16:12Z [CODE] Pinned sidebar footer to bottom using `flex flex-col flex-1` on sidebar container and `mt-auto` on `<footer>` in `packages/core/src/components/sidebar.tsx`.
+- 2026-08-17T17:02Z [CODE] Fixed `@headlessui/react` `<Menu>` popup in `packages/core/src/components/sidebar.tsx` by setting `anchor="top start"` and adding popover container styling (`bg-popover border shadow-lg z-50`).
+- 2026-08-17T17:07Z [CODE] Configured `w-[var(--button-width)]` on `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to match `<MenuButton>` width dynamically.
+- 2026-08-17T17:15Z [CODE] Added `min-w-48` and `whitespace-nowrap` to `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to prevent text squishing/wrapping when sidebar is collapsed.
+- 2026-08-17T17:16Z [CODE] Configured `anchor={{ to: "top start", gap: 12 }}` on `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to shift menu up 12px from `<MenuButton>`.
+- 2026-08-17T17:22Z [CODE] Added `transition` boolean prop to `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to enable Headless UI v2 smooth scale & fade transition lifecycle.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -35,6 +40,7 @@
 - 2026-08-17T15:24Z [CODE] Implemented `<NavItem />` component and updated `SideBar` list items.
 - 2026-08-17T15:48Z [CODE] Added `<NavItem.Action>` compound slot and automatic `<div>` tag switching for interactable controls.
 - 2026-08-17T16:12Z [CODE] Pinned sidebar footer to bottom using `flex-1` flex container & `mt-auto`.
+- 2026-08-17T17:02Z [CODE] Fixed `<Menu>` popup placement with `anchor="top start"` and popover styling.
 
 ## [DISCOVERIES]
 - Bun requires `workspace:*` syntax to locate workspace packages in a monorepo without 404ing on npm.

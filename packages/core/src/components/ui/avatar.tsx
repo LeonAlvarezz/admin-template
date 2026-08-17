@@ -1,3 +1,5 @@
+import { cn } from "../../libs/cn";
+
 type AvatarProps = {
   src?: string;
   fallback?: string;
@@ -9,8 +11,13 @@ function Avatar({
   className,
 }: AvatarProps) {
   return (
-    <div className="aspect-square size-10 overflow-hidden rounded-full">
-      <img src={src} />
+    <div
+      className={cn(
+        "aspect-square shrink-0 size-8 overflow-hidden rounded-full",
+        className,
+      )}
+    >
+      <img src={src} className="object-cover" />
     </div>
   );
 }
