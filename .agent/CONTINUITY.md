@@ -21,6 +21,8 @@
 - 2026-08-17T17:15Z [CODE] Added `min-w-48` and `whitespace-nowrap` to `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to prevent text squishing/wrapping when sidebar is collapsed.
 - 2026-08-17T17:16Z [CODE] Configured `anchor={{ to: "top start", gap: 12 }}` on `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to shift menu up 12px from `<MenuButton>`.
 - 2026-08-17T17:22Z [CODE] Added `transition` boolean prop to `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to enable Headless UI v2 smooth scale & fade transition lifecycle.
+- 2026-08-17T17:55Z [CODE] Decoupled `@admin/core` navigation by introducing `NavItemConfig`, `NavGroupConfig`, and `renderLink` callback prop in `packages/core/src/types/index.ts`.
+- 2026-08-17T17:58Z [CODE] Installed `@tanstack/react-router` in `apps/starter`, created `apps/starter/src/config/navigation.tsx`, and configured root & child routes in `apps/starter/src/App.tsx`.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -41,6 +43,7 @@
 - 2026-08-17T15:48Z [CODE] Added `<NavItem.Action>` compound slot and automatic `<div>` tag switching for interactable controls.
 - 2026-08-17T16:12Z [CODE] Pinned sidebar footer to bottom using `flex-1` flex container & `mt-auto`.
 - 2026-08-17T17:02Z [CODE] Fixed `<Menu>` popup placement with `anchor="top start"` and popover styling.
+- 2026-08-17T17:58Z [CODE] Implemented router-agnostic `renderLink` navigation rendering in `SideBar` and `NavItem`, and integrated TanStack Router into `apps/starter`.
 
 ## [DISCOVERIES]
 - Bun requires `workspace:*` syntax to locate workspace packages in a monorepo without 404ing on npm.
@@ -62,6 +65,9 @@
 - Configured `@iconify/json` and `unplugin-icons` for offline build-time icon bundling across all workspace apps.
 - Fixed `@/` path alias import failure in `packages/core/src/components/ui/button.tsx`.
 - Fixed TypeScript prop typing and placeholder handling in `packages/core/src/components/ui/input.tsx`.
+- Refactored `@admin/core` layout & sidebar navigation to be 100% router-agnostic, accepting dynamic `navGroups` and custom `renderLink` functions.
+- Integrated `@tanstack/react-router` in `apps/starter` with full type safety and client-side page routing.
+
 
 
 

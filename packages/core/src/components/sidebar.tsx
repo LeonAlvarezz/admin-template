@@ -19,20 +19,60 @@ import Avatar from "./ui/avatar";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
 
-function SideBar() {
+import type { NavGroupConfig, SideBarProps } from "../types";
+
+function SideBar({
+  title = "ZeroUI",
+  navGroups,
+  navItems,
+  footerNavItems,
+  currentPath = "/",
+  onNavigate,
+  renderLink,
+}: SideBarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeItem, setActiveItem] = useState("dashboard");
+
+  // Normalize groups: use navGroups if provided, otherwise wrap navItems or default items
+  const groups: NavGroupConfig[] =
+    navGroups ??
+    (navItems && navItems.length > 0
+      ? [{ items: navItems }]
+      : [
+          {
+            items: [
+              {
+                id: "dashboard",
+                label: "Dashboard",
+                path: "/",
+                icon: <DashboardIcon />,
+              },
+              { id: "shop", label: "Shop", path: "/shop", icon: <ShopIcon /> },
+              {
+                id: "schedule",
+                label: "Schedule",
+                path: "/schedule",
+                icon: <TimeIcon />,
+              },
+              {
+                id: "settings",
+                label: "Settings",
+                path: "/settings",
+                icon: <GearIcon />,
+              },
+            ],
+          },
+        ]);
 
   return (
     <aside
       data-collapsed={isCollapsed}
-      className="border-r border-border z-10 text-foreground group min-h-svh flex flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4  transition-all duration-200"
+      className="border-r-[0.5px] border-border z-10 text-foreground group min-h-svh flex flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4 transition-all duration-200"
     >
       <div className="flex flex-col flex-1 gap-2">
         <header className="px-4 flex flex-col gap-4">
           <div className="flex justify-between group-data-[collapsed=true]:justify-center">
             <p className="text-foreground font-semibold text-lg whitespace-nowrap overflow-hidden transition-opacity duration-150 group-data-[collapsed=true]:w-0 group-data-[collapsed=true]:opacity-0 group-data-[collapsed=true]:pointer-events-none">
-              ZeroUI
+              {title}
             </p>
             <Button
               variant="ghost"
@@ -49,34 +89,37 @@ function SideBar() {
           </div>
         </header>
 
-        {/*Nav Item*/}
-        <nav className="mt-4">
-          <ul className="flex flex-col gap-1 px-3 group-data-[collapsed=true]:px-2">
-            <NavItem
-              icon={<DashboardIcon />}
-              label="Dashboard"
-              active={activeItem === "dashboard"}
-              onClick={() => setActiveItem("dashboard")}
-            />
-            <NavItem
-              icon={<ShopIcon />}
-              label="Shop"
-              active={activeItem === "shop"}
-              onClick={() => setActiveItem("shop")}
-            />
-            <NavItem
-              icon={<TimeIcon />}
-              label="Schedule"
-              active={activeItem === "schedule"}
-              onClick={() => setActiveItem("schedule")}
-            />
-            <NavItem
-              icon={<GearIcon />}
-              label="Settings"
-              active={activeItem === "settings"}
-              onClick={() => setActiveItem("settings")}
-            />
-          </ul>
+        {/*Nav Items*/}
+        <nav className="mt-4 flex flex-col gap-4">
+          {groups.map((group, groupIdx) => (
+            <div key={group.id || groupIdx} className="flex flex-col gap-1">
+              {group.title && (
+                <p className="px-4 text-muted text-xs tracking-wider font-semibold group-data-[collapsed=true]:hidden mb-1">
+                  {group.title}
+                </p>
+              )}
+              <ul className="flex flex-col gap-1 px-3 group-data-[collapsed=true]:px-2">
+                {group.items.map((item) => {
+                  const isActive =
+                    item.active ??
+                    (currentPath === item.path ||
+                      (item.path !== "/" && currentPath.startsWith(item.path)));
+                  return (
+                    <NavItem
+                      key={item.id}
+                      icon={item.icon}
+                      label={item.label}
+                      active={isActive}
+                      action={item.action}
+                      href={item.path}
+                      renderLink={renderLink}
+                      onClick={() => onNavigate?.(item.path)}
+                    />
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         <footer className="mt-auto">
@@ -85,17 +128,39 @@ function SideBar() {
             Preferences
           </p>
           <ul className="flex flex-col gap-2 my-2 px-3 group-data-[collapsed=true]:px-2">
-            <NavItem
-              icon={<HelpIcon />}
-              label="Help Center"
-              active={activeItem === "helps"}
-              onClick={() => setActiveItem("helps")}
-            />
-            <NavItem icon={<MoonIcon />} label="Dark Mode">
-              <NavItem.Action>
-                <ThemeSwitch />
-              </NavItem.Action>
-            </NavItem>
+            {footerNavItems && footerNavItems.length > 0 ? (
+              footerNavItems.map((item) => {
+                const isActive = item.active ?? currentPath === item.path;
+                return (
+                  <NavItem
+                    key={item.id}
+                    icon={item.icon}
+                    label={item.label}
+                    active={isActive}
+                    action={item.action}
+                    href={item.path}
+                    renderLink={renderLink}
+                    onClick={() => onNavigate?.(item.path)}
+                  />
+                );
+              })
+            ) : (
+              <>
+                <NavItem
+                  icon={<HelpIcon />}
+                  label="Help Center"
+                  active={currentPath === "/help"}
+                  href="/help"
+                  renderLink={renderLink}
+                  onClick={() => onNavigate?.("/help")}
+                />
+                <NavItem icon={<MoonIcon />} label="Dark Mode">
+                  <NavItem.Action>
+                    <ThemeSwitch />
+                  </NavItem.Action>
+                </NavItem>
+              </>
+            )}
           </ul>
           <Menu as="div" className="px-3">
             <MenuButton className="w-full flex items-center justify-between py-2 px-2 rounded-md hover:bg-accent cursor-pointer transition-colors group-data-[collapsed=true]:justify-center focus:outline-none">
