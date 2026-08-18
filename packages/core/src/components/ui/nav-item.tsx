@@ -67,10 +67,10 @@ function NavItemRoot({
   const isLevel2 = level === 2;
 
   const navClassNames = cn(
-    "flex w-full items-center gap-3 rounded-md transition-colors text-foreground/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
+    "flex w-full opacity-50 items-center gap-3 rounded-md transition-colors text-foreground/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
     isLevel2
-      ? "px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/60 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground font-medium"
-      : "px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground cursor-pointer",
+      ? "px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/60 font-medium data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground"
+      : "px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer data-[active=true]:bg-accent data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground",
     className,
   );
 
@@ -119,8 +119,7 @@ function NavItemRoot({
           <MenuButton
             className={cn(
               navClassNames,
-              isChildActive &&
-                "bg-accent/60 text-accent-foreground font-semibold",
+              isChildActive && "text-accent-foreground font-semibold",
             )}
           >
             {icon && (
@@ -144,11 +143,11 @@ function NavItemRoot({
                 {child.path ? (
                   <Link
                     to={child.path}
+                    className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground hover:bg-accent whitespace-nowrap"
                     activeProps={{
                       className:
                         "bg-accent text-accent-foreground font-semibold",
                     }}
-                    className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground hover:bg-accent whitespace-nowrap"
                   >
                     {child.icon && (
                       <span className="size-4 flex items-center justify-center shrink-0">
@@ -187,7 +186,7 @@ function NavItemRoot({
           {innerContent}
         </button>
         {isOpen && (
-          <ul className="flex flex-col gap-1 mt-1 pl-4 border-l border-border/30 ml-3.5 transition-all">
+          <ul className="flex flex-col gap-1 mt-1 pl-2.5 border-l border-border/30 ml-5 transition-all data-[active=true]:border-border">
             {items!.map((child) => (
               <NavItemRoot
                 key={child.id}
@@ -215,11 +214,11 @@ function NavItemRoot({
         <Link
           to={href}
           data-active={active}
-          activeProps={{
-            className: "bg-accent text-accent-foreground font-semibold",
-          }}
           className={navClassNames}
           onClick={onClick}
+          activeProps={{
+            className: "text-foreground opacity-100 font-light",
+          }}
         >
           {innerContent}
         </Link>
