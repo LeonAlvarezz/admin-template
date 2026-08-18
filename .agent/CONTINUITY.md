@@ -25,6 +25,8 @@
 - 2026-08-17T17:58Z [CODE] Installed `@tanstack/react-router` in `apps/starter`, created `apps/starter/src/config/navigation.tsx`, and configured root & child routes in `apps/starter/src/App.tsx`.
 - 2026-08-18T11:16Z [CODE] Implemented Hybrid Sidebar & Footer Architecture in `packages/core/src/components/sidebar.tsx` with `SidebarContext`, compound sub-components (`SideBar.Header`, `SideBar.Nav`, `SideBar.Footer`, `SideBar.UserMenu`), and convenience props (`user`, `userMenuItems`, `onSignOut`, `sidebarFooter`).
 - 2026-08-18T11:34Z [CODE] Locked in TanStack Router natively in `@admin/core`. Added `@tanstack/react-router` dependency to `packages/core`, updated `NavItem` to render `<Link to={href}>` with `activeProps`, and removed `renderLink` and `currentPath` boilerplate.
+- 2026-08-18T11:38Z [CODE] Created `CustomSidebarDemo` component in `apps/starter/src/components/CustomSidebarDemo.tsx` demonstrating custom compound layout (Org Switcher, Storage bar) and added live toggle in `App.tsx`.
+- 2026-08-18T11:43Z [CODE] Updated root `README.md` and created `docs.md` artifact covering monorepo architecture, design tokens, UI components, TanStack Router integration, and Sidebar APIs.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -48,6 +50,8 @@
 - 2026-08-17T17:58Z [CODE] Implemented router-agnostic `renderLink` navigation rendering in `SideBar` and `NavItem`, and integrated TanStack Router into `apps/starter`.
 - 2026-08-18T11:16Z [CODE] Refactored `SideBar` into a hybrid compound architecture (`SidebarContext`, `SideBar.Header`, `SideBar.Nav`, `SideBar.Footer`, `SideBar.UserMenu`) while supporting prop-based configuration in `<AdminLayout>`.
 - 2026-08-18T11:34Z [CODE] Locked in TanStack Router natively across `@admin/core`. Removed `renderLink` and `currentPath` props.
+- 2026-08-18T11:38Z [CODE] Built disposable `CustomSidebarDemo` component demonstrating custom compound layout in `apps/starter`.
+- 2026-08-18T11:43Z [CODE] Comprehensive documentation updated in root `README.md` and saved to `docs.md` artifact.
 
 ## [DISCOVERIES]
 - Bun requires `workspace:*` syntax to locate workspace packages in a monorepo without 404ing on npm.
@@ -73,9 +77,5 @@
 - Integrated `@tanstack/react-router` in `apps/starter` with full type safety and client-side page routing.
 - Implemented Hybrid Sidebar & Footer Architecture (`SideBar` compound components + `AdminLayout` convenience props) in `@admin/core`.
 - Locked in TanStack Router natively inside `@admin/core`, eliminating all `renderLink` and `currentPath` boilerplate.
-
-
-
-
-
-
+- Built disposable `CustomSidebarDemo` component demonstrating custom compound layout in `apps/starter`.
+- Created comprehensive project documentation in root `README.md` and `docs.md` artifact.

@@ -1,159 +1,158 @@
-# Turborepo starter
+# ZeroUI Admin Template & Architecture
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modern, high-performance monorepo admin template built with **React 19**, **TypeScript**, **Tailwind CSS v4**, **TanStack Router**, and **Headless UI v2**, powered by **Bun** and **Turborepo**.
 
-## Using this example
+---
 
-Run the following command:
+## 🏗️ Monorepo Architecture
 
-```sh
-npx create-turbo@latest
+```
+admin-template/
+├── apps/
+│   └── starter/           # Frontend consumer application using @admin/core
+├── packages/
+│   └── core/              # Core framework package (@admin/core)
+└── package.json           # Workspace root dependencies & scripts
 ```
 
-## What's inside?
+- **Package Manager**: [Bun](https://bun.sh) (uses `workspace:*` dependency protocol).
+- **Monorepo Build System**: [Turborepo](https://turbo.build) for parallel builds and caching.
+- **Bundler & Compiler**: [Vite](https://vitejs.dev) with `@tailwindcss/vite` plugin and `unplugin-icons`.
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
+## 🎨 Design System & Styling
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Tailwind CSS v4 & Semantic Design Tokens
+- Managed centrally in `@admin/core` ([`packages/core/src/styles/main.css`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/styles/main.css)).
+- Uses **OKLCH color space** for high-contrast, accessible light & dark modes:
+  - `--color-primary`, `--color-secondary`, `--color-accent`, `--color-muted`, `--color-destructive`.
+  - Custom sidebar dark charcoal tokens (`#171a23`, `#232836`, `#3b82f6`).
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Offline Icon Bundling
+- Powered by `unplugin-icons` and `@iconify/json`.
+- All 150,000+ Iconify icons (Lucide, Solar, BoxIcons, Tabler, etc.) are bundled at build time with **0 runtime network requests**.
 
-### Utilities
+---
 
-This Turborepo has some additional tools already setup for you:
+## 🧩 UI Components (`@admin/core`)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+| Component | Description |
+| :--- | :--- |
+| **`AdminLayout`** | Top-level layout shell wrapping sidebar, header, and main scroll container. |
+| **`SideBar`** | Collapsible sidebar supporting both **Convenience Props API** and **Compound Components API**. |
+| **`NavItem`** | Natively renders TanStack Router `<Link>` with automatic active route styling and `<NavItem.Action>` slots. |
+| **`Input`** | Form input wrapper built on `@headlessui/react` supporting `startIcon`, `endIcon`, and `focus-within` styling. |
+| **`Keyboard`** | Keycap component supporting modifier symbols (`⌘`, `⌥`, `⇧`, `ctrl`, `k`). |
+| **`ThemeSwitch` / `ThemeToggle`** | Theme mode switchers for toggling dark/light mode. |
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## 🧭 Navigation & Router Architecture
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+`@admin/core` is natively integrated with **TanStack Router**. `<NavItem>` directly renders TanStack's `<Link to={item.path}>` with `activeProps` for automatic active route highlights and route preloading.
 
-```sh
-cd my-turborepo
-turbo build
+### 1. Convenience Props API (Fast Setup)
+
+For 90% of standard admin apps, pass `navGroups`, `user`, and `onSignOut` directly to `<AdminLayout>`:
+
+```tsx
+import { AdminLayout } from "@admin/core";
+import { Outlet } from "@tanstack/react-router";
+import { navGroups } from "./config/navigation";
+
+export default function App() {
+  return (
+    <AdminLayout
+      title="ZeroUI Admin"
+      navGroups={navGroups}
+      user={{
+        name: "Leon Alvarez",
+        email: "leon@zeroui.com",
+      }}
+      onSignOut={() => alert("Signed out successfully!")}
+    >
+      <Outlet />
+    </AdminLayout>
+  );
+}
 ```
 
-Without global `turbo`, use your package manager:
+### 2. Compound Components API (Custom Sidebar)
 
-```sh
-cd my-turborepo
-npx turbo build
-bun dlx turbo build
-bun exec turbo build
+For applications requiring custom widgets (such as organization switchers or storage progress bars), compose `<SideBar>` compound components:
+
+```tsx
+import { AdminLayout, SideBar } from "@admin/core";
+import { Outlet } from "@tanstack/react-router";
+import ShieldIcon from "~icons/solar/shield-bold";
+
+export function CustomApp() {
+  return (
+    <AdminLayout
+      sidebar={
+        <SideBar>
+          {/* Custom Header */}
+          <SideBar.Header title="Acme Enterprise" />
+
+          {/* Navigation */}
+          <SideBar.Nav groups={navGroups} />
+
+          {/* Custom Footer with Org Switcher & Storage Meter */}
+          <SideBar.Footer>
+            <div className="px-3 py-2">
+              <div className="rounded-lg bg-accent/40 p-2 text-xs flex items-center gap-2">
+                <ShieldIcon className="size-4 text-primary" />
+                <span className="font-semibold">Acme Corp (PRO)</span>
+              </div>
+            </div>
+            <SideBar.UserMenu
+              user={{ name: "Leon Alvarez", email: "leon@acme.com" }}
+              onSignOut={() => alert("Signed out!")}
+            />
+          </SideBar.Footer>
+        </SideBar>
+      }
+    >
+      <Outlet />
+    </AdminLayout>
+  );
+}
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+---
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+## 🛠️ Development & Commands
 
-```sh
-turbo build --filter=docs
+### Prerequisites
+- [Bun](https://bun.sh) v1.1+
+
+### Installation
+```bash
+bun install
 ```
 
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-bun exec turbo build --filter=docs
-bun exec turbo build --filter=docs
+### Development
+Start all workspace apps in dev mode:
+```bash
+bun run dev
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
+Or target the starter app directly:
+```bash
+bun --cwd apps/starter dev
 ```
 
-Without global `turbo`, use your package manager:
+### Type Checking & Build
+```bash
+# Typecheck packages and apps
+bun run check-types
 
-```sh
-cd my-turborepo
-npx turbo dev
-bun exec turbo dev
-bun exec turbo dev
+# Production build
+bun run build
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+---
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-bun exec turbo dev --filter=web
-bun exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-bun exec turbo login
-bun exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-bun exec turbo link
-bun exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+## 📄 License
+MIT
