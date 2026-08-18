@@ -61,16 +61,18 @@ function NavItemRoot({
   }, [isChildActive]);
 
   const hasAction = Boolean(children || action);
-  const Component =
-    as || (hasAction || hasSubItems ? "button" : href ? "a" : "div");
+  const Component = as || (hasSubItems ? "button" : href ? "a" : "div");
 
   const isLevel2 = level === 2;
 
   const navClassNames = cn(
     "flex w-full opacity-50 items-center gap-3 rounded-md transition-colors text-foreground/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
+    hasAction && "opacity-100",
     isLevel2
-      ? "px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/60 font-medium data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground"
-      : "px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer data-[active=true]:bg-accent data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground",
+      ? "px-3 py-1.5 text-xs text-muted-foreground font-medium data-[active=true]:bg-accent data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground data-[active=true]:font-bold data-[status=active]:opacity-100 data-[status=active]:text-accent-foreground data-[status=active]:font-bold"
+      : "px-3 py-2 text-sm font-medium data-[active=true]:bg-accent data-[active=true]:opacity-100 data-[active=true]:text-accent-foreground data-[active=true]:font-bold data-[status=active]:bg-accent data-[status=active]:opacity-100 data-[status=active]:text-accent-foreground data-[status=active]:font-bold",
+    !hasAction && "hover:bg-accent hover:text-accent-foreground cursor-pointer",
+    !hasAction && isLevel2 && "hover:text-foreground",
     className,
   );
 
@@ -117,10 +119,8 @@ function NavItemRoot({
       <li className="list-none">
         <Menu as="div" className="relative w-full flex justify-center">
           <MenuButton
-            className={cn(
-              navClassNames,
-              isChildActive && "text-accent-foreground font-semibold",
-            )}
+            data-active={active || isChildActive}
+            className={navClassNames}
           >
             {icon && (
               <span className="shrink-0 text-base flex items-center justify-center">
@@ -138,32 +138,34 @@ function NavItemRoot({
                 {label}
               </div>
             )}
-            {items!.map((child) => (
-              <MenuItem key={child.id}>
-                {child.path ? (
-                  <Link
-                    to={child.path}
-                    className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground hover:bg-accent whitespace-nowrap"
-                    activeProps={{
-                      className:
-                        "bg-accent text-accent-foreground font-semibold",
-                    }}
-                  >
-                    {child.icon && (
-                      <span className="size-4 flex items-center justify-center shrink-0">
-                        {child.icon}
-                      </span>
-                    )}
-                    <span>{child.label}</span>
-                  </Link>
-                ) : (
-                  <div className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground">
-                    {child.icon}
-                    <span>{child.label}</span>
-                  </div>
-                )}
-              </MenuItem>
-            ))}
+            <div className="flex gap-1 flex-col my-2">
+              {items!.map((child) => (
+                <MenuItem key={child.id}>
+                  {child.path ? (
+                    <Link
+                      to={child.path}
+                      className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground hover:bg-accent whitespace-nowrap"
+                      activeProps={{
+                        className:
+                          "bg-accent text-accent-foreground font-semibold",
+                      }}
+                    >
+                      {child.icon && (
+                        <span className="size-4 flex items-center justify-center shrink-0">
+                          {child.icon}
+                        </span>
+                      )}
+                      <span>{child.label}</span>
+                    </Link>
+                  ) : (
+                    <div className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground">
+                      {child.icon}
+                      <span>{child.label}</span>
+                    </div>
+                  )}
+                </MenuItem>
+              ))}
+            </div>
           </MenuItems>
         </Menu>
       </li>
@@ -217,7 +219,10 @@ function NavItemRoot({
           className={navClassNames}
           onClick={onClick}
           activeProps={{
-            className: "text-foreground opacity-100 font-light",
+            className: cn(
+              "text-foreground opacity-100 font-bold",
+              !isLevel2 && "bg-accent",
+            ),
           }}
         >
           {innerContent}

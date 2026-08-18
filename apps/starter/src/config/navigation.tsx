@@ -66,3 +66,4 @@ export const navGroups: NavGroupConfig[] = [
     ],
   },
 ];
+

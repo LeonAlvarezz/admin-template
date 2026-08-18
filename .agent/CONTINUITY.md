@@ -18,6 +18,7 @@
 - 2026-08-17T15:24Z [CODE] Created `packages/core/src/components/ui/nav-item.tsx` and integrated `<NavItem />` with active state and collapsed layout handling into `packages/core/src/components/sidebar.tsx`.
 - 2026-08-17T15:48Z [CODE] Enhanced `packages/core/src/components/ui/nav-item.tsx` to support `icon` and `label` props alongside `<NavItem.Action>` compound slot for interactable components (like switches/controls).
 - 2026-08-17T16:12Z [CODE] Pinned sidebar footer to bottom using `flex flex-col flex-1` on sidebar container and `mt-auto` on `<footer>` in `packages/core/src/components/sidebar.tsx`.
+- 2026-08-18T15:20Z [USER] Locked in `Plus Jakarta Sans` as the primary default font family across `@admin/core` and `apps/starter`. Configured `@theme { --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; }` in `packages/core/src/styles/main.css`.
 - 2026-08-18T14:05Z [CODE] Fixed ESLint configuration in `apps/starter/eslint.config.js` and `packages/core/eslint.config.js` by replacing missing `@tanstack/eslint-config` import with shared monorepo `@repo/eslint-config/react-internal`.
 - 2026-08-17T17:02Z [CODE] Fixed `@headlessui/react` `<Menu>` popup in `packages/core/src/components/sidebar.tsx` by setting `anchor="top start"` and adding popover container styling (`bg-popover border shadow-lg z-50`).
 - 2026-08-17T17:07Z [CODE] Configured `w-[var(--button-width)]` on `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to match `<MenuButton>` width dynamically.
@@ -55,6 +56,10 @@
 - 2026-08-18T11:34Z [CODE] Locked in TanStack Router natively across `@admin/core`. Removed `renderLink` and `currentPath` props.
 - 2026-08-18T11:38Z [CODE] Built disposable `CustomSidebarDemo` component demonstrating custom compound layout in `apps/starter`.
 - 2026-08-18T11:43Z [CODE] Comprehensive documentation updated in root `README.md` and saved to `docs.md` artifact.
+- 2026-08-18T15:22Z [CODE] Removed throwaway `font-prototype.tsx` route, cleaned up `navigation.tsx`, and removed extra prototype font imports from `index.html`. Verified clean production build.
+- 2026-08-18T15:25Z [CODE] Disabled hover background (`hover:bg-accent`) and `cursor-pointer` on `NavItem` components with action slots (`hasAction`).
+
+
 
 ## [DISCOVERIES]
 - 2026-08-18T14:32:34+07:00 [TOOL] `NavItemConfig.path` and `UserMenuItem.href` incorrectly use `LinkProps<RegisteredRouter["routeTree"]>`: `LinkProps`' first generic is the rendered component type and the type represents the entire props object, not a `to` string. `bun --filter @admin/core check-types` fails on every string path; `apps/starter/src/config/navigation.tsx` also has `path: ""` while the generated route is `/shop/products`.
