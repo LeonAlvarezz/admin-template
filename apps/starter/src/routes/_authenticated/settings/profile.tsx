@@ -1,18 +1,18 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/shop/orders")({
-  component: ShopOrdersPage,
+export const Route = createFileRoute("/_authenticated/settings/profile")({
+  component: SettingsProfilePage,
 });
 
-function ShopOrdersPage() {
+function SettingsProfilePage() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold tracking-tight text-foreground">
-        Customer Orders
+        User Profile
       </h1>
       <p className="text-muted-foreground text-sm">
-        Track fulfillment status, shipments, and customer payments.
+        Manage personal avatar, display name, and notification preferences.
       </p>
     </div>
   );

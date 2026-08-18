@@ -5,7 +5,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@repo/api-client": ["../../packages/api-client/src/index.ts"]
     },
     "types": ["unplugin-icons/types/react"]
   },

@@ -1,0 +1,42 @@
+import React from "react";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { AdminLayout, useAuth } from "@admin/core";
+import { navGroups } from "../config/navigation";
+
+export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isLoading && !context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      });
+    }
+  },
+  component: AuthenticatedLayout,
+});
+
+function AuthenticatedLayout() {
+  const { user, logout, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-background text-foreground">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm font-medium text-muted-foreground">Initializing authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AdminLayout
+      title="ZeroUI Admin"
+      navGroups={navGroups}
+      user={user ?? undefined}
+      onSignOut={logout}
+    >
+      <Outlet />
+    </AdminLayout>
+  );
+}

@@ -7,51 +7,85 @@ export interface TokenStorage {
   removeItem: (key: string) => void;
 }
 
+export type RefreshTokenResult =
+  string | { accessToken: string; refreshToken?: string };
+
 export interface JwtStrategyOptions {
-  meEndpoint?: string;
-  loginEndpoint?: string;
-  logoutEndpoint?: string;
-  refreshEndpoint?: string;
+  onInitialize: (
+    token: string | null,
+  ) => Promise<{ user: UserProfile | null; newToken?: string | null }>;
+  onLogin: (
+    credentials: Record<string, any>,
+  ) => Promise<{ user: UserProfile; token: string; refreshToken?: string }>;
+  onRefreshToken?: (
+    refreshToken?: string | null,
+  ) => Promise<RefreshTokenResult>;
+  onLogout?: () => Promise<void>;
   tokenKey?: string;
+  refreshTokenKey?: string;
   storage?: TokenStorage;
 }
 
 export class JwtAuthStrategy implements AuthStrategy {
   type = "jwt" as const;
   private token: string | null = null;
-  private meEndpoint: string;
-  private loginEndpoint: string;
-  private logoutEndpoint: string;
-  private refreshEndpoint?: string;
+  private refreshTokenValue: string | null = null;
+  private onInitialize: JwtStrategyOptions["onInitialize"];
+  private onLogin: JwtStrategyOptions["onLogin"];
+  private onRefreshToken?: JwtStrategyOptions["onRefreshToken"];
+  private onLogout?: JwtStrategyOptions["onLogout"];
   private tokenKey: string;
+  private refreshTokenKey?: string;
   private storage?: TokenStorage;
 
-  constructor(options: JwtStrategyOptions = {}) {
-    this.meEndpoint = options.meEndpoint ?? "/api/auth/me";
-    this.loginEndpoint = options.loginEndpoint ?? "/api/auth/login";
-    this.logoutEndpoint = options.logoutEndpoint ?? "/api/auth/logout";
-    this.refreshEndpoint = options.refreshEndpoint ?? "/api/auth/refresh";
+  constructor(options: JwtStrategyOptions) {
+    this.onInitialize = options.onInitialize;
+    this.onLogin = options.onLogin;
+    this.onRefreshToken = options.onRefreshToken;
+    this.onLogout = options.onLogout;
     this.tokenKey = options.tokenKey ?? "auth_token";
-    this.storage = options.storage ?? (typeof window !== "undefined" ? localStorage : undefined);
+    this.refreshTokenKey = options.refreshTokenKey;
+    this.storage =
+      options.storage ??
+      (typeof window !== "undefined" ? localStorage : undefined);
 
     if (this.storage) {
       this.token = this.storage.getItem(this.tokenKey);
+      if (this.refreshTokenKey) {
+        this.refreshTokenValue = this.storage.getItem(this.refreshTokenKey);
+      }
     }
   }
 
-  setToken(token: string | null): void {
+  setToken(token: string | null, refreshToken?: string | null): void {
     this.token = token;
+    if (refreshToken !== undefined) {
+      this.refreshTokenValue = refreshToken;
+    }
+
     if (this.storage) {
       if (token) {
         this.storage.setItem(this.tokenKey, token);
       } else {
         this.storage.removeItem(this.tokenKey);
       }
+
+      if (this.refreshTokenKey) {
+        if (this.refreshTokenValue) {
+          this.storage.setItem(this.refreshTokenKey, this.refreshTokenValue);
+        } else {
+          this.storage.removeItem(this.refreshTokenKey);
+        }
+      }
     }
   }
 
   getToken(): string | null {
     return this.token;
+  }
+
+  getRefreshToken(): string | null {
+    return this.refreshTokenValue;
   }
 
   getAuthHeaders(): Record<string, string> {
@@ -63,80 +97,48 @@ export class JwtAuthStrategy implements AuthStrategy {
   }
 
   async initialize(): Promise<UserProfile | null> {
-    if (!this.token && this.refreshEndpoint) {
-      try {
-        const refreshRes = await fetch(this.refreshEndpoint, {
-          method: "POST",
-          credentials: "include",
-        });
-        if (refreshRes.ok) {
-          const data = await refreshRes.json();
-          if (data.token) {
-            this.setToken(data.token);
-          }
-        }
-      } catch {
-        // Refresh failed
-      }
-    }
-
-    if (!this.token) return null;
-
     try {
-      const response = await fetch(this.meEndpoint, {
-        method: "GET",
-        headers: this.getAuthHeaders(),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          this.setToken(null);
-        }
-        return null;
+      const result = await this.onInitialize(this.token);
+      if (result.newToken !== undefined) {
+        this.setToken(result.newToken);
       }
-
-      const data = await response.json();
-      return data.user ?? data;
+      if (!result.user) {
+        this.setToken(null, null);
+      }
+      return result.user;
     } catch {
+      this.setToken(null, null);
       return null;
     }
   }
 
   async login(credentials: Record<string, any>): Promise<UserProfile> {
-    const response = await fetch(this.loginEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
+    const { user, token, refreshToken } = await this.onLogin(credentials);
+    this.setToken(token, refreshToken);
+    return user;
+  }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || "Failed to log in");
+  async refreshToken(): Promise<string | null> {
+    if (!this.onRefreshToken) return null;
+    try {
+      const res = await this.onRefreshToken(this.refreshTokenValue);
+      if (typeof res === "string") {
+        this.setToken(res);
+        return res;
+      } else {
+        this.setToken(res.accessToken, res.refreshToken);
+        return res.accessToken;
+      }
+    } catch (err) {
+      this.setToken(null, null);
+      throw err;
     }
-
-    const data = await response.json();
-    const token = data.token ?? data.accessToken;
-    if (token) {
-      this.setToken(token);
-    }
-
-    return data.user ?? data;
   }
 
   async logout(): Promise<void> {
-    if (this.logoutEndpoint) {
-      try {
-        await fetch(this.logoutEndpoint, {
-          method: "POST",
-          headers: this.getAuthHeaders(),
-          credentials: "include",
-        });
-      } catch {
-        // Ignore logout error
-      }
+    if (this.onLogout) {
+      await this.onLogout();
     }
-    this.setToken(null);
+    this.setToken(null, null);
   }
 }

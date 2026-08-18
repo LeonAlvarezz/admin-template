@@ -1,18 +1,18 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/settings/security")({
-  component: SettingsSecurityPage,
+export const Route = createFileRoute("/_authenticated/schedule")({
+  component: SchedulePage,
 });
 
-function SettingsSecurityPage() {
+function SchedulePage() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold tracking-tight text-foreground">
-        Security Settings
+        Schedules & Calendar
       </h1>
       <p className="text-muted-foreground text-sm">
-        Configure two-factor authentication, sessions, and active API tokens.
+        View upcoming tasks, events, and automated schedules.
       </p>
     </div>
   );

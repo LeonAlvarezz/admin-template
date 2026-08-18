@@ -15,6 +15,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@repo/api-client": path.resolve(__dirname, "../../packages/api-client/src/index.ts"),
+      "@admin/core": path.resolve(__dirname, "../../packages/core/src/index.ts"),
     },
   },
 });

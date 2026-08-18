@@ -61,6 +61,11 @@
 - 2026-08-18T15:43Z [USER] Created `packages/core/src/auth/type.ts` defining `AuthStrategy` interface for session and jwt modes.
 - 2026-08-18T15:45Z [CODE] Created `SessionAuthStrategy` and `JwtAuthStrategy` in `packages/core/src/auth/` using native `fetch`. Exported via `packages/core/src/index.ts`. Verified clean typecheck.
 - 2026-08-18T15:54Z [CODE] Ported `/eurasie-travel/packages/api-client` into `packages/api-client` as `@repo/api-client`, refactored 100% from `axios` to zero-dependency native `fetch` client with interceptors, upload/download, and 401 token refresh queue. Verified clean typecheck across monorepo.
+- 2026-08-18T16:00Z [CODE] Implemented `AuthProvider` and `useAuth` hook in `packages/core/src/auth/auth-provider.tsx` with React context state, initialization loading state, login/logout actions, and memoized context value. Verified clean typecheck.
+- 2026-08-18T16:35Z [CODE] Added full `refreshToken` support to `JwtAuthStrategy`, `AuthStrategy`, `AuthProvider`, and `@repo/api-client`. Wired `onRefreshToken` and automatic 401 token refresh queue in `apps/starter/src/config/auth.ts`. Verified clean build across monorepo.
+- 2026-08-18T16:37Z [CODE] Implemented `/login` route in `apps/starter/src/routes/login.tsx` with email/password form, loading states, and error alerts. Updated `__root.tsx` to bypass `AdminLayout` on `/login` and redirect unauthenticated users. Verified clean build.
+- 2026-08-18T16:44Z [CODE] Refactored `apps/starter/src/routes` into idiomatic TanStack Router architecture using `_authenticated.tsx` layout route and native `beforeLoad` route guard. Simplified `__root.tsx` to a pure root container. Verified clean build.
+- 2026-08-18T16:48Z [CODE] Fixed white screen error by moving `useAuth()` call inside `<InnerApp>` (child of `<AuthProvider>`) in `apps/starter/src/App.tsx`. Reverted `apps/starter/src/config/auth.ts` to clean version. Verified clean build.
 
 
 

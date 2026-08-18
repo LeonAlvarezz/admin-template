@@ -1,18 +1,18 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/schedule")({
-  component: SchedulePage,
+export const Route = createFileRoute("/_authenticated/shop/orders")({
+  component: ShopOrdersPage,
 });
 
-function SchedulePage() {
+function ShopOrdersPage() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold tracking-tight text-foreground">
-        Schedules & Calendar
+        Customer Orders
       </h1>
       <p className="text-muted-foreground text-sm">
-        View upcoming tasks, events, and automated schedules.
+        Track fulfillment status, shipments, and customer payments.
       </p>
     </div>
   );

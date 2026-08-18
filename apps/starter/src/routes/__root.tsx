@@ -1,26 +1,14 @@
-import React from "react";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { AdminLayout } from "@admin/core";
-import { navGroups } from "../config/navigation";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import type { AuthContextValue } from "@admin/core";
 
-export const Route = createRootRoute({
+export interface RouterContext {
+  auth: AuthContextValue;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 });
 
 function RootComponent() {
-  return (
-    <AdminLayout
-      title="ZeroUI Admin"
-      navGroups={navGroups}
-      user={{
-        name: "Leon Alvarez",
-        email: "leon@zeroui.com",
-      }}
-      onSignOut={() => alert("Signed out successfully!")}
-    >
-      <Outlet />
-    </AdminLayout>
-  );
+  return <Outlet />;
 }
-
-

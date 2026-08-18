@@ -1,17 +1,31 @@
 import React from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { AuthProvider, useAuth } from "@admin/core";
 import { routeTree } from "./routeTree.gen";
+import { authStrategy } from "./config/auth";
 
-// Create router instance using auto-generated file-based route tree
-export const router = createRouter({ routeTree });
+export const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined!,
+  },
+});
 
-// Register router instance for type safety
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
 }
 
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider strategy={authStrategy}>
+      <InnerApp />
+    </AuthProvider>
+  );
 }
