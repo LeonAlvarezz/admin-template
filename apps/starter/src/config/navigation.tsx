@@ -20,8 +20,19 @@ export const navGroups: NavGroupConfig[] = [
       {
         id: "shop",
         label: "Shop",
-        path: "/shop",
         icon: <ShopIcon />,
+        items: [
+          {
+            id: "products",
+            label: "Products",
+            path: "/shop/products",
+          },
+          {
+            id: "orders",
+            label: "Orders",
+            path: "/shop/orders",
+          },
+        ],
       },
       {
         id: "schedule",
@@ -38,8 +49,19 @@ export const navGroups: NavGroupConfig[] = [
       {
         id: "settings",
         label: "Settings",
-        path: "/settings",
         icon: <GearIcon />,
+        items: [
+          {
+            id: "profile",
+            label: "Profile",
+            path: "/settings/profile",
+          },
+          {
+            id: "security",
+            label: "Security",
+            path: "/settings/security",
+          },
+        ],
       },
     ],
   },

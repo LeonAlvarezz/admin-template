@@ -2,6 +2,8 @@
 
 ## [PLANS]
 - 2026-08-14T15:17Z [CODE] Fix workspace dependency protocol (`workspace:*`) for Bun workspace packages.
+- 2026-08-18T11:57Z [CODE] Add 2-level nested navigation support to `@admin/core` `NavItem` and `SideBar` (accordion when expanded, popover flyout when collapsed).
+- 2026-08-18T14:10Z [CODE] Transition `apps/starter` to TanStack Router File-Based Routing using `@tanstack/router-plugin` and `src/routes/` tree.
 
 ## [DECISIONS]
 - 2026-08-14T15:17Z [CODE] Updated `@admin/core` and `@repo/*` dependencies from `"*"` to `"workspace:*"` in `apps/starter/package.json` and `packages/core/package.json`.
@@ -16,6 +18,7 @@
 - 2026-08-17T15:24Z [CODE] Created `packages/core/src/components/ui/nav-item.tsx` and integrated `<NavItem />` with active state and collapsed layout handling into `packages/core/src/components/sidebar.tsx`.
 - 2026-08-17T15:48Z [CODE] Enhanced `packages/core/src/components/ui/nav-item.tsx` to support `icon` and `label` props alongside `<NavItem.Action>` compound slot for interactable components (like switches/controls).
 - 2026-08-17T16:12Z [CODE] Pinned sidebar footer to bottom using `flex flex-col flex-1` on sidebar container and `mt-auto` on `<footer>` in `packages/core/src/components/sidebar.tsx`.
+- 2026-08-18T14:05Z [CODE] Fixed ESLint configuration in `apps/starter/eslint.config.js` and `packages/core/eslint.config.js` by replacing missing `@tanstack/eslint-config` import with shared monorepo `@repo/eslint-config/react-internal`.
 - 2026-08-17T17:02Z [CODE] Fixed `@headlessui/react` `<Menu>` popup in `packages/core/src/components/sidebar.tsx` by setting `anchor="top start"` and adding popover container styling (`bg-popover border shadow-lg z-50`).
 - 2026-08-17T17:07Z [CODE] Configured `w-[var(--button-width)]` on `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to match `<MenuButton>` width dynamically.
 - 2026-08-17T17:15Z [CODE] Added `min-w-48` and `whitespace-nowrap` to `<MenuItems>` in `packages/core/src/components/sidebar.tsx` to prevent text squishing/wrapping when sidebar is collapsed.
@@ -54,6 +57,7 @@
 - 2026-08-18T11:43Z [CODE] Comprehensive documentation updated in root `README.md` and saved to `docs.md` artifact.
 
 ## [DISCOVERIES]
+- 2026-08-18T14:32:34+07:00 [TOOL] `NavItemConfig.path` and `UserMenuItem.href` incorrectly use `LinkProps<RegisteredRouter["routeTree"]>`: `LinkProps`' first generic is the rendered component type and the type represents the entire props object, not a `to` string. `bun --filter @admin/core check-types` fails on every string path; `apps/starter/src/config/navigation.tsx` also has `path: ""` while the generated route is `/shop/products`.
 - Bun requires `workspace:*` syntax to locate workspace packages in a monorepo without 404ing on npm.
 - `bun add` treats `--filter` arguments as package names to install from npm instead of workspace target filters. Put `--filter` before `add` (`bun --filter <pkg> add`) or use `--cwd <path>`.
 - Tailwind v4 requires `@tailwindcss/vite` in `vite.config.ts` and `@source` in CSS for scanning monorepo package components.
@@ -63,6 +67,7 @@
 - `@iconify/json` provides the complete offline dataset of all 150,000+ Iconify icon sets so `unplugin-icons` bundles any icon into the application output at build-time with 0 runtime network requests.
 - Vite resolves `@/` imports using the consuming app's `vite.config.ts` alias configuration (`apps/starter/src`), causing imports like `@/libs/cn` inside package files (`packages/core/src/...`) to resolve relative to `apps/starter` instead of `packages/core`. Components inside monorepo packages must use relative paths (`../../libs/cn`).
 - `@headlessui/react` v2 `<Input>` component is generic over `TTag`. `React.ComponentPropsWithRef<typeof HeadlessInput>` fails because `typeof HeadlessInput` is an overloaded generic function signature that doesn't default `TTag` to `"input"` during `ComponentPropsWithRef` inference, resulting in `CleanProps<union of 165+ HTML tags>` which strips element-specific props like `placeholder`. Use `InputProps<"input">` from `@headlessui/react` or `ComponentPropsWithRef<"input">` instead.
+- If an application package extends a shared TSConfig with `"declaration": true` and `"declarationMap": true` without setting `"noEmit": true`, running `tsc` will emit `.d.ts` and `.d.ts.map` files directly into `src/`.
 
 ## [OUTCOMES]
 - Package dependency syntax fixed for Bun.
@@ -79,3 +84,7 @@
 - Locked in TanStack Router natively inside `@admin/core`, eliminating all `renderLink` and `currentPath` boilerplate.
 - Built disposable `CustomSidebarDemo` component demonstrating custom compound layout in `apps/starter`.
 - Created comprehensive project documentation in root `README.md` and `docs.md` artifact.
+- Implemented 2-level nested navigation support in `NavItem` and `SideBar` (`NavItemConfig.items`) with accordion toggle, flyout popover in mini mode, and auto-expansion for active child routes.
+- Resolved `.map` / `.d.ts.map` pollution in `apps/starter/src/` by adding `"noEmit": true` to `apps/starter/tsconfig.json` and updating `.gitignore`.
+- Replaced non-existent `@tanstack/eslint-config` with shared workspace config `@repo/eslint-config/react-internal` in `apps/starter/eslint.config.js` and `packages/core/eslint.config.js`.
+- 2026-08-18T14:38Z [CODE] Updated `README.md` with 2-level nested navigation docs and file-based routing architecture. Fixed `RoutePath` type fallback in `packages/core/src/types/index.ts` to support generic string paths alongside generated route autocompletion. Verified `check-types` and production `build`.

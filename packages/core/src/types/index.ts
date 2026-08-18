@@ -1,12 +1,23 @@
-import React from "react";
+import type { LinkProps, RegisteredRouter } from "@tanstack/react-router";
+import type React from "react";
+
+type RoutePath =
+  RegisteredRouter["routeTree"]["types"]["fileRouteTypes"] extends {
+    to: infer TPath extends string;
+  }
+    ? TPath | (string & {})
+    : string;
 
 export interface NavItemConfig {
   id: string;
   label: React.ReactNode;
-  path: string;
+  path?: RoutePath;
   icon?: React.ReactNode;
   action?: React.ReactNode;
   active?: boolean;
+  badge?: React.ReactNode;
+  defaultOpen?: boolean;
+  items?: NavItemConfig[];
 }
 
 export interface NavGroupConfig {
@@ -26,7 +37,7 @@ export interface UserMenuItem {
   id: string;
   label: React.ReactNode;
   icon?: React.ReactNode;
-  href?: string;
+  href?: RoutePath;
   onClick?: () => void;
   variant?: "default" | "destructive";
 }

@@ -1,6 +1,6 @@
 import { useTheme } from "../hooks/theme";
 import { Switch } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function ThemeSwitch() {
   const { theme, setTheme } = useTheme();

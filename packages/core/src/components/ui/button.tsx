@@ -1,8 +1,11 @@
 import { cn } from "../../libs/cn";
 import { Button } from "@headlessui/react";
-import { cva, VariantProps } from "class-variance-authority";
-type ButtonVariant = "default" | "outline" | "ghost" | "secondary" | "barebone";
-type ButtonSize = "sm" | "base" | "md" | "lg" | "xl";
+import { cva  } from "class-variance-authority";
+import type {VariantProps} from "class-variance-authority";
+
+export type ButtonVariant =
+  "default" | "outline" | "ghost" | "secondary" | "barebone";
+export type ButtonSize = "sm" | "base" | "md" | "lg" | "xl";
 
 export type ButtonProps = React.ComponentPropsWithRef<typeof Button> &
   VariantProps<typeof buttonVariants>;

@@ -1,12 +1,26 @@
+import React, { useState, useEffect } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { cn } from "../../libs/cn";
+import type { NavItemConfig } from "../../types";
+import { useSidebarContext } from "../sidebar";
+import { useActiveUrl } from "../../hooks/active-url";
 
-export interface NavItemProps extends ComponentPropsWithoutRef<"a"> {
+import ChevronDownIcon from "~icons/lucide/chevron-down";
+
+export interface NavItemProps extends Omit<
+  ComponentPropsWithoutRef<"a">,
+  "children"
+> {
   icon?: ReactNode;
   label?: ReactNode;
   active?: boolean;
   action?: ReactNode;
+  badge?: ReactNode;
+  items?: NavItemConfig[];
+  defaultOpen?: boolean;
+  level?: number;
   children?: ReactNode;
   as?: React.ElementType;
 }
@@ -16,6 +30,10 @@ function NavItemRoot({
   label,
   active,
   action,
+  badge,
+  items,
+  defaultOpen,
+  level = 1,
   children,
   className,
   as,
@@ -23,13 +41,36 @@ function NavItemRoot({
   href,
   ...props
 }: NavItemProps) {
+  const sidebarContext = useSidebarContext();
+  const isCollapsed = sidebarContext?.isCollapsed ?? false;
+
+  const { isItemActive } = useActiveUrl();
+
+  const hasSubItems = Boolean(items && items.length > 0);
+
+  // Check if any child item is active using useActiveUrl
+  const isChildActive = hasSubItems && isItemActive(items);
+
+  const [isOpen, setIsOpen] = useState(defaultOpen || isChildActive);
+
+  // Auto-expand if a child route becomes active
+  useEffect(() => {
+    if (isChildActive) {
+      setIsOpen(true);
+    }
+  }, [isChildActive]);
+
   const hasAction = Boolean(children || action);
-  const Component = as || (hasAction && !href ? "div" : "a");
+  const Component =
+    as || (hasAction || hasSubItems ? "button" : href ? "a" : "div");
+
+  const isLevel2 = level === 2;
 
   const navClassNames = cn(
-    "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors text-foreground/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
-    !hasAction &&
-      "hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground cursor-pointer",
+    "flex w-full items-center gap-3 rounded-md transition-colors text-foreground/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
+    isLevel2
+      ? "px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/60 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground font-medium"
+      : "px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground cursor-pointer",
     className,
   );
 
@@ -41,9 +82,22 @@ function NavItemRoot({
         </span>
       )}
       {label && (
-        <span className="truncate whitespace-nowrap transition-all duration-150 group-data-[collapsed=true]:w-0 group-data-[collapsed=true]:opacity-0 group-data-[collapsed=true]:hidden">
+        <span className="truncate whitespace-nowrap transition-all duration-150 group-data-[collapsed=true]:w-0 group-data-[collapsed=true]:opacity-0 group-data-[collapsed=true]:hidden flex-1 text-left">
           {label}
         </span>
+      )}
+      {badge && (
+        <span className="ml-auto shrink-0 group-data-[collapsed=true]:hidden">
+          {badge}
+        </span>
+      )}
+      {hasSubItems && (
+        <ChevronDownIcon
+          className={cn(
+            "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[collapsed=true]:hidden",
+            isOpen && "rotate-180",
+          )}
+        />
       )}
       {action && (
         <span
@@ -57,6 +111,104 @@ function NavItemRoot({
     </>
   );
 
+  // --- COLLAPSED MODE WITH SUB-ITEMS: FLYOUT POPOVER MENU ---
+  if (isCollapsed && hasSubItems) {
+    return (
+      <li className="list-none">
+        <Menu as="div" className="relative w-full flex justify-center">
+          <MenuButton
+            className={cn(
+              navClassNames,
+              isChildActive &&
+                "bg-accent/60 text-accent-foreground font-semibold",
+            )}
+          >
+            {icon && (
+              <span className="shrink-0 text-base flex items-center justify-center">
+                {icon}
+              </span>
+            )}
+          </MenuButton>
+          <MenuItems
+            transition
+            anchor={{ to: "right start", gap: 10 }}
+            className="z-50 min-w-44 rounded-lg border border-border/40 bg-sidebar p-2 shadow-lg text-popover-foreground transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-left"
+          >
+            {label && (
+              <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground border-b border-border/40 mb-1">
+                {label}
+              </div>
+            )}
+            {items!.map((child) => (
+              <MenuItem key={child.id}>
+                {child.path ? (
+                  <Link
+                    to={child.path}
+                    activeProps={{
+                      className:
+                        "bg-accent text-accent-foreground font-semibold",
+                    }}
+                    className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground hover:bg-accent whitespace-nowrap"
+                  >
+                    {child.icon && (
+                      <span className="size-4 flex items-center justify-center shrink-0">
+                        {child.icon}
+                      </span>
+                    )}
+                    <span>{child.label}</span>
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-2 rounded-md px-3 py-1.5 text-xs text-foreground">
+                    {child.icon}
+                    <span>{child.label}</span>
+                  </div>
+                )}
+              </MenuItem>
+            ))}
+          </MenuItems>
+        </Menu>
+      </li>
+    );
+  }
+
+  // --- EXPANDED MODE WITH SUB-ITEMS: ACCORDION LIST ---
+  if (hasSubItems) {
+    return (
+      <li className="list-none flex flex-col">
+        <button
+          type="button"
+          data-active={active || isChildActive}
+          onClick={(e) => {
+            setIsOpen(!isOpen);
+            onClick?.(e as unknown as React.MouseEvent<HTMLAnchorElement>);
+          }}
+          className={navClassNames}
+        >
+          {innerContent}
+        </button>
+        {isOpen && (
+          <ul className="flex flex-col gap-1 mt-1 pl-4 border-l border-border/30 ml-3.5 transition-all">
+            {items!.map((child) => (
+              <NavItemRoot
+                key={child.id}
+                id={child.id}
+                icon={child.icon}
+                label={child.label}
+                href={child.path}
+                active={child.active}
+                action={child.action}
+                badge={child.badge}
+                items={child.items}
+                level={2}
+              />
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
+
+  // --- STANDARD SINGLE LINK (NO SUB-ITEMS) ---
   if (href && !hasAction) {
     return (
       <li className="list-none">
@@ -64,7 +216,7 @@ function NavItemRoot({
           to={href}
           data-active={active}
           activeProps={{
-            className: "bg-accent text-accent-foreground",
+            className: "bg-accent text-accent-foreground font-semibold",
           }}
           className={navClassNames}
           onClick={onClick}

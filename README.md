@@ -41,7 +41,7 @@ admin-template/
 | :--- | :--- |
 | **`AdminLayout`** | Top-level layout shell wrapping sidebar, header, and main scroll container. |
 | **`SideBar`** | Collapsible sidebar supporting both **Convenience Props API** and **Compound Components API**. |
-| **`NavItem`** | Natively renders TanStack Router `<Link>` with automatic active route styling and `<NavItem.Action>` slots. |
+| **`NavItem`** | Renders TanStack Router `<Link>` with active route styling, `<NavItem.Action>` slots, and **2-level nested sub-menu navigation** (accordion in expanded mode, Headless UI Popover flyout in collapsed mode). |
 | **`Input`** | Form input wrapper built on `@headlessui/react` supporting `startIcon`, `endIcon`, and `focus-within` styling. |
 | **`Keyboard`** | Keycap component supporting modifier symbols (`⌘`, `⌥`, `⇧`, `ctrl`, `k`). |
 | **`ThemeSwitch` / `ThemeToggle`** | Theme mode switchers for toggling dark/light mode. |
@@ -50,7 +50,34 @@ admin-template/
 
 ## 🧭 Navigation & Router Architecture
 
-`@admin/core` is natively integrated with **TanStack Router**. `<NavItem>` directly renders TanStack's `<Link to={item.path}>` with `activeProps` for automatic active route highlights and route preloading.
+`@admin/core` is natively integrated with **TanStack Router** using **File-Based Routing** (`@tanstack/router-plugin`). `<NavItem>` directly renders TanStack's `<Link to={item.path}>` with `activeProps` for automatic active route highlights and route preloading.
+
+### 🌿 Nested Navigation (Sub-menus)
+
+`NavItemConfig` supports 2-level nested sub-navigation via the optional `items` field:
+
+```ts
+export const navGroups: NavGroupConfig[] = [
+  {
+    title: "Platform",
+    items: [
+      { label: "Dashboard", path: "/", icon: DashboardIcon },
+      {
+        label: "Shop",
+        path: "/shop",
+        icon: ShopIcon,
+        items: [
+          { label: "Products", path: "/shop/products", icon: ProductIcon },
+          { label: "Categories", path: "/shop/categories", icon: CategoryIcon },
+        ],
+      },
+    ],
+  },
+];
+```
+
+- **Expanded Mode**: Displays an interactive accordion sub-menu with rotatable chevron, active route highlighting, and automatic auto-expansion when a child route is active.
+- **Collapsed Mode**: Displays a floating Headless UI `Popover` flyout sub-menu on hover/click.
 
 ### 1. Convenience Props API (Fast Setup)
 

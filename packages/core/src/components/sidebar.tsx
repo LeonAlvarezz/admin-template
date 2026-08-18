@@ -39,11 +39,6 @@ const SidebarContext = createContext<SidebarContextValue | undefined>(
 
 export function useSidebarContext() {
   const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error(
-      "Sidebar compound components must be rendered inside <SideBar /> context provider",
-    );
-  }
   return context;
 }
 
@@ -58,7 +53,9 @@ function SideBarHeader({
   children?: ReactNode;
   className?: string;
 }) {
-  const { isCollapsed, setIsCollapsed } = useSidebarContext();
+  const context = useSidebarContext();
+  const isCollapsed = context?.isCollapsed ?? false;
+  const setIsCollapsed = context?.setIsCollapsed ?? (() => {});
 
   return (
     <header className={cn("px-4 flex flex-col gap-4", className)}>
@@ -144,7 +141,10 @@ function SideBarNav({
                 label={item.label}
                 active={item.active}
                 action={item.action}
+                badge={item.badge}
                 href={item.path}
+                items={item.items}
+                defaultOpen={item.defaultOpen}
               />
             ))}
           </ul>
@@ -295,7 +295,10 @@ function SideBarRoot({
                           label={item.label}
                           active={item.active}
                           action={item.action}
+                          badge={item.badge}
                           href={item.path}
+                          items={item.items}
+                          defaultOpen={item.defaultOpen}
                         />
                       ))}
                     </ul>
