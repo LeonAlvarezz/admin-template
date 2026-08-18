@@ -15,34 +15,46 @@ export interface NavGroupConfig {
   items: NavItemConfig[];
 }
 
-export type RenderLinkProps = {
-  path: string;
-  className?: string;
-  active?: boolean;
-  children: React.ReactNode;
-};
+export interface UserProfile {
+  name: string;
+  email: string;
+  avatarUrl?: string;
+  role?: string;
+}
 
-export type RenderLinkFn = (props: RenderLinkProps) => React.ReactNode;
+export interface UserMenuItem {
+  id: string;
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+  variant?: "default" | "destructive";
+}
 
 export interface SideBarProps {
   title?: string;
+  logo?: React.ReactNode;
   navGroups?: NavGroupConfig[];
   navItems?: NavItemConfig[];
   footerNavItems?: NavItemConfig[];
-  currentPath?: string;
-  onNavigate?: (path: string) => void;
-  renderLink?: RenderLinkFn;
+  user?: UserProfile;
+  userMenuItems?: UserMenuItem[];
+  onSignOut?: () => void;
+  sidebarFooter?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export interface AdminLayoutProps {
   title?: string;
+  logo?: React.ReactNode;
   navGroups?: NavGroupConfig[];
   navItems?: NavItemConfig[];
   footerNavItems?: NavItemConfig[];
-  currentPath?: string;
-  onNavigate?: (path: string) => void;
-  renderLink?: RenderLinkFn;
+  user?: UserProfile;
+  userMenuItems?: UserMenuItem[];
+  onSignOut?: () => void;
   headerActions?: React.ReactNode;
+  sidebarFooter?: React.ReactNode;
+  sidebar?: React.ReactNode;
   children: React.ReactNode;
 }
-

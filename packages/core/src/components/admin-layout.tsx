@@ -1,30 +1,38 @@
-import React, { useState } from "react";
-import { AdminLayoutProps } from "../types";
+import React from "react";
+import type { AdminLayoutProps } from "../types";
 import SideBar from "./sidebar";
-import ThemeToggle from "./theme-toggle";
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({
   title = "ZeroUI",
+  logo,
   navGroups,
   navItems,
   footerNavItems,
-  currentPath = "/",
-  onNavigate,
-  renderLink,
+  user,
+  userMenuItems,
+  onSignOut,
   headerActions,
+  sidebarFooter,
+  sidebar,
   children,
 }) => {
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <SideBar
-        title={title}
-        navGroups={navGroups}
-        navItems={navItems}
-        footerNavItems={footerNavItems}
-        currentPath={currentPath}
-        onNavigate={onNavigate}
-        renderLink={renderLink}
-      />
+      {sidebar ? (
+        sidebar
+      ) : (
+        <SideBar
+          title={title}
+          logo={logo}
+          navGroups={navGroups}
+          navItems={navItems}
+          footerNavItems={footerNavItems}
+          user={user}
+          userMenuItems={userMenuItems}
+          onSignOut={onSignOut}
+          sidebarFooter={sidebarFooter}
+        />
+      )}
 
       <div className="flex-1 flex flex-col min-w-0">
         {headerActions && (

@@ -3,28 +3,23 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  Link,
   Outlet,
   RouterProvider,
-  useLocation,
 } from "@tanstack/react-router";
 import { AdminLayout } from "@admin/core";
 import { navGroups } from "./config/navigation";
 
 // Root component that integrates AdminLayout with TanStack Router
 function RootComponent() {
-  const location = useLocation();
-
   return (
     <AdminLayout
       title="ZeroUI Admin"
       navGroups={navGroups}
-      currentPath={location.pathname}
-      renderLink={({ path, className, children }) => (
-        <Link to={path} className={className}>
-          {children}
-        </Link>
-      )}
+      user={{
+        name: "Leon Alvarez",
+        email: "leon@zeroui.com",
+      }}
+      onSignOut={() => alert("Signed out successfully!")}
     >
       <Outlet />
     </AdminLayout>

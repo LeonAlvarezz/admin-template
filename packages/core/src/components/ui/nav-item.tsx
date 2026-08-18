@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "../../libs/cn";
-import type { RenderLinkFn } from "../../types";
 
 export interface NavItemProps extends ComponentPropsWithoutRef<"a"> {
   icon?: ReactNode;
@@ -9,19 +9,17 @@ export interface NavItemProps extends ComponentPropsWithoutRef<"a"> {
   action?: ReactNode;
   children?: ReactNode;
   as?: React.ElementType;
-  renderLink?: RenderLinkFn;
 }
 
 function NavItemRoot({
   icon,
   label,
-  active = false,
+  active,
   action,
   children,
   className,
   as,
   onClick,
-  renderLink,
   href,
   ...props
 }: NavItemProps) {
@@ -59,15 +57,20 @@ function NavItemRoot({
     </>
   );
 
-  if (renderLink && href) {
+  if (href && !hasAction) {
     return (
       <li className="list-none">
-        {renderLink({
-          path: href,
-          className: navClassNames,
-          active,
-          children: innerContent,
-        })}
+        <Link
+          to={href}
+          data-active={active}
+          activeProps={{
+            className: "bg-accent text-accent-foreground",
+          }}
+          className={navClassNames}
+          onClick={onClick}
+        >
+          {innerContent}
+        </Link>
       </li>
     );
   }
