@@ -15,7 +15,7 @@ import CuidaSideBarCollapse from "~icons/cuida/sidebar-collapse-outline";
 import CuidaSideBarExpand from "~icons/cuida/sidebar-expand-outline";
 import GearIcon from "~icons/icon-park-solid/setting";
 import TimeIcon from "~icons/mingcute/time-fill";
-import HelpIcon from "~icons/tabler/help-filled";
+import MoonIcon from "~icons/solar/moon-bold";
 import LogoutIcon from "~icons/solar/logout-linear";
 import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
 
@@ -26,6 +26,7 @@ import type {
   UserMenuItem,
   UserProfile,
 } from "../types";
+import ThemeSwitch from "./theme-switch";
 
 interface SidebarContextValue {
   isCollapsed: boolean;
@@ -162,7 +163,12 @@ function SideBarFooter({
 }) {
   return (
     <footer className={cn("mt-auto", className)}>
-      <hr className="border-border/40 my-4 group-data-[collapsed=true]:mx-2" />
+      <hr className="border-border/70 my-4 group-data-[collapsed=true]:mx-2" />
+      <NavItem label="Dark Mode" className="px-5 my-1" icon={<MoonIcon />}>
+        <NavItem.Action>
+          <ThemeSwitch />
+        </NavItem.Action>
+      </NavItem>
       {children}
     </footer>
   );
