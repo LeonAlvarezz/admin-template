@@ -30,7 +30,8 @@
 - 2026-08-18T11:16Z [CODE] Implemented Hybrid Sidebar & Footer Architecture in `packages/core/src/components/sidebar.tsx` with `SidebarContext`, compound sub-components (`SideBar.Header`, `SideBar.Nav`, `SideBar.Footer`, `SideBar.UserMenu`), and convenience props (`user`, `userMenuItems`, `onSignOut`, `sidebarFooter`).
 - 2026-08-18T11:34Z [CODE] Locked in TanStack Router natively in `@admin/core`. Added `@tanstack/react-router` dependency to `packages/core`, updated `NavItem` to render `<Link to={href}>` with `activeProps`, and removed `renderLink` and `currentPath` boilerplate.
 - 2026-08-18T11:38Z [CODE] Created `CustomSidebarDemo` component in `apps/starter/src/components/CustomSidebarDemo.tsx` demonstrating custom compound layout (Org Switcher, Storage bar) and added live toggle in `App.tsx`.
-- 2026-08-18T11:43Z [CODE] Updated root `README.md` and created `docs.md` artifact covering monorepo architecture, design tokens, UI components, TanStack Router integration, and Sidebar APIs.
+- 2026-08-18T15:34Z [USER] Proposed pluggable AuthStrategy pattern supporting both Session-based (cookie) and JWT-based (Bearer token) authentication for `@admin/core` and TanStack Router in `apps/starter`.
+- 2026-08-18T15:39Z [USER] Activated Judy mentor mode for implementing Step 1: `AuthStrategy` interface & `AuthProvider` in `packages/core`.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -57,7 +58,9 @@
 - 2026-08-18T11:38Z [CODE] Built disposable `CustomSidebarDemo` component demonstrating custom compound layout in `apps/starter`.
 - 2026-08-18T11:43Z [CODE] Comprehensive documentation updated in root `README.md` and saved to `docs.md` artifact.
 - 2026-08-18T15:22Z [CODE] Removed throwaway `font-prototype.tsx` route, cleaned up `navigation.tsx`, and removed extra prototype font imports from `index.html`. Verified clean production build.
-- 2026-08-18T15:25Z [CODE] Disabled hover background (`hover:bg-accent`) and `cursor-pointer` on `NavItem` components with action slots (`hasAction`).
+- 2026-08-18T15:43Z [USER] Created `packages/core/src/auth/type.ts` defining `AuthStrategy` interface for session and jwt modes.
+- 2026-08-18T15:45Z [CODE] Created `SessionAuthStrategy` and `JwtAuthStrategy` in `packages/core/src/auth/` using native `fetch`. Exported via `packages/core/src/index.ts`. Verified clean typecheck.
+- 2026-08-18T15:54Z [CODE] Ported `/eurasie-travel/packages/api-client` into `packages/api-client` as `@repo/api-client`, refactored 100% from `axios` to zero-dependency native `fetch` client with interceptors, upload/download, and 401 token refresh queue. Verified clean typecheck across monorepo.
 
 
 
