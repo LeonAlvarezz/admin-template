@@ -18,7 +18,7 @@ function LoginPage() {
     if (isAuthenticated) {
       navigate({ to: "/" });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +56,10 @@ function LoginPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4 rounded-md">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-foreground">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-foreground"
+              >
                 Email address
               </label>
               <input
@@ -72,7 +75,10 @@ function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-foreground">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-foreground"
+              >
                 Password
               </label>
               <input

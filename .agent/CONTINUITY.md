@@ -30,8 +30,9 @@
 - 2026-08-18T11:16Z [CODE] Implemented Hybrid Sidebar & Footer Architecture in `packages/core/src/components/sidebar.tsx` with `SidebarContext`, compound sub-components (`SideBar.Header`, `SideBar.Nav`, `SideBar.Footer`, `SideBar.UserMenu`), and convenience props (`user`, `userMenuItems`, `onSignOut`, `sidebarFooter`).
 - 2026-08-18T11:34Z [CODE] Locked in TanStack Router natively in `@admin/core`. Added `@tanstack/react-router` dependency to `packages/core`, updated `NavItem` to render `<Link to={href}>` with `activeProps`, and removed `renderLink` and `currentPath` boilerplate.
 - 2026-08-18T11:38Z [CODE] Created `CustomSidebarDemo` component in `apps/starter/src/components/CustomSidebarDemo.tsx` demonstrating custom compound layout (Org Switcher, Storage bar) and added live toggle in `App.tsx`.
-- 2026-08-18T15:34Z [USER] Proposed pluggable AuthStrategy pattern supporting both Session-based (cookie) and JWT-based (Bearer token) authentication for `@admin/core` and TanStack Router in `apps/starter`.
 - 2026-08-18T15:39Z [USER] Activated Judy mentor mode for implementing Step 1: `AuthStrategy` interface & `AuthProvider` in `packages/core`.
+- 2026-08-19T11:50Z [CODE] Created `UserSchema`, `CreateUserSchema`, `UpdateUserSchema` and inferred TypeScript types in `packages/types/user.ts` using Valibot based on `apps/backend/src/db/schema/user.schema.ts`.
+- 2026-08-19T14:07Z [CODE] Refined `SignInEmailSchema`, `SignInEmailResponseSchema`, and `SessionSchema` in `packages/types/auth.ts` using Valibot v1 and updated export typings.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.

@@ -1,9 +1,10 @@
+import type { SignInEmail } from "@admin/types";
 import type { UserProfile } from "../types";
 import type { AuthStrategy } from "./type";
 
 export interface SessionStrategyOptions {
   onInitialize: () => Promise<UserProfile | null>;
-  onLogin: (credentials: Record<string, any>) => Promise<UserProfile>;
+  onLogin: (payload: SignInEmail) => Promise<UserProfile>;
   onLogout: () => Promise<void>;
   getCsrfToken?: () => string | null;
   csrfHeaderName?: string;

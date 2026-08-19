@@ -17,12 +17,13 @@
     "@tanstack/react-router": "^1.170.29",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "@admin/types": "workspace:*"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.516",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@admin/eslint-config": "workspace:*",
+    "@admin/typescript-config": "workspace:*",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@tanstack/router-plugin": "^1.168.32",

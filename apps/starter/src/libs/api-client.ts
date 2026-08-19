@@ -464,4 +464,5 @@ function createApiClient(options?: ApiClientOptions) {
 export const apiClient = createApiClient({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3333",
   defaultApiPath: "/api",
+  credentials: "include",
 });
