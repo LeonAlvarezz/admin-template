@@ -2,12 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import tanstackRouter from "@tanstack/router-plugin/vite";
 import path from "path";
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ target: "react", autoCodeSplitting: true }),
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
     react(),
     tailwindcss(),
     Icons({ compiler: "jsx", jsx: "react" }),
@@ -15,8 +15,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@repo/api-client": path.resolve(__dirname, "../../packages/api-client/src/index.ts"),
-      "@admin/core": path.resolve(__dirname, "../../packages/core/src/index.ts"),
+      "@admin/core": path.resolve(
+        __dirname,
+        "../../packages/core/src/index.ts",
+      ),
     },
   },
 });

@@ -5,10 +5,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@repo/api-client": ["../../packages/api-client/src/index.ts"]
+      "@/*": ["./src/*"]
     },
-    "types": ["unplugin-icons/types/react"]
+    "types": ["unplugin-icons/types/react", "vite/client"]
   },
   "include": ["src"]
 }

@@ -66,6 +66,15 @@
 - 2026-08-18T16:37Z [CODE] Implemented `/login` route in `apps/starter/src/routes/login.tsx` with email/password form, loading states, and error alerts. Updated `__root.tsx` to bypass `AdminLayout` on `/login` and redirect unauthenticated users. Verified clean build.
 - 2026-08-18T16:44Z [CODE] Refactored `apps/starter/src/routes` into idiomatic TanStack Router architecture using `_authenticated.tsx` layout route and native `beforeLoad` route guard. Simplified `__root.tsx` to a pure root container. Verified clean build.
 - 2026-08-18T16:48Z [CODE] Fixed white screen error by moving `useAuth()` call inside `<InnerApp>` (child of `<AuthProvider>`) in `apps/starter/src/App.tsx`. Reverted `apps/starter/src/config/auth.ts` to clean version. Verified clean build.
+- 2026-08-18T16:55Z [CODE] Cloned `https://github.com/LeonAlvarezz/express-template` repository into `apps/backend` inside the monorepo workspace.
+- 2026-08-18T17:18Z [CODE] Created `.env.example` and `.env` in `apps/backend`, exported `book.schema.ts` in `src/db/schema/index.ts`, added missing dependencies (`http-errors`, `qs`), and verified zero typecheck errors via `tsc`.
+- 2026-08-18T17:20Z [CODE] Refactored `apps/backend/src/core/middleware/guard.ts` from API Key check (`x-api-key`) to Better Auth session-based auth (`auth.api.getSession`), attaching `user` & `session` to Express `Request`.
+- 2026-08-18T17:27Z [CODE] Synchronized `auth-schema.ts` into modular schema files in `apps/backend/src/db/schema/` (`user`, `session`, `account`, `verification`, `relations`). Removed standalone `auth-schema.ts` and verified `tsc` passes clean.
+- 2026-08-18T18:00Z [CODE] Fixed export in `apps/starter/src/libs/api-client.ts`, wired `auth.ts` to `@/libs/api-client`, removed redundant `packages/api-client` directory & dependencies across monorepo. Verified clean `tsc` build.
+
+
+
+
 
 
 

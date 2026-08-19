@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
-    "@repo/api-client": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/eslint-config": "^0.4.0",
     "@tanstack/react-router": "^1.170.29",
