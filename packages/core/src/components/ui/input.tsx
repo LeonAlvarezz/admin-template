@@ -1,7 +1,5 @@
-import {
-  Input as HeadlessInput,
-  type InputProps as HeadlessInputProps,
-} from "@headlessui/react";
+import { Input as HeadlessInput } from "@headlessui/react";
+import type { InputProps as HeadlessInputProps } from "@headlessui/react";
 import type { ReactNode } from "react";
 import { cn } from "../../libs/cn";
 

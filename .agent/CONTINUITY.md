@@ -33,6 +33,9 @@
 - 2026-08-18T15:39Z [USER] Activated Judy mentor mode for implementing Step 1: `AuthStrategy` interface & `AuthProvider` in `packages/core`.
 - 2026-08-19T11:50Z [CODE] Created `UserSchema`, `CreateUserSchema`, `UpdateUserSchema` and inferred TypeScript types in `packages/types/user.ts` using Valibot based on `apps/backend/src/db/schema/user.schema.ts`.
 - 2026-08-19T14:07Z [CODE] Refined `SignInEmailSchema`, `SignInEmailResponseSchema`, and `SessionSchema` in `packages/types/auth.ts` using Valibot v1 and updated export typings.
+- 2026-08-19T14:44Z [CODE] Installed `@tanstack/react-form` and `@tanstack/valibot-form-adapter` in `apps/starter` and refactored `apps/starter/src/routes/login.tsx` to use TanStack Form with `SignInEmailSchema` validation.
+- 2026-08-19T14:50Z [CODE] Fixed TanStack Form type mismatch by adding default value `false` to `v.optional(v.boolean(), false)` in `packages/types/auth.ts` and explicitly typing `useForm<SignInEmail>`.
+- 2026-08-19T15:18Z [CODE] Updated `packages/core/src/components/ui/field.tsx` to wrap `Field` and `FieldSet` in Headless UI's `Field` (`HeadlessField`) and `Fieldset` (`HeadlessFieldset`), providing valid parent context for `HeadlessLabel`.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -110,4 +113,8 @@
 - Implemented 2-level nested navigation support in `NavItem` and `SideBar` (`NavItemConfig.items`) with accordion toggle, flyout popover in mini mode, and auto-expansion for active child routes.
 - Resolved `.map` / `.d.ts.map` pollution in `apps/starter/src/` by adding `"noEmit": true` to `apps/starter/tsconfig.json` and updating `.gitignore`.
 - Replaced non-existent `@tanstack/eslint-config` with shared workspace config `@repo/eslint-config/react-internal` in `apps/starter/eslint.config.js` and `packages/core/eslint.config.js`.
+- 2026-08-19T15:18Z [CODE] Headless UI v2 `Label` component (`HeadlessLabel`) expects to be rendered within a Headless UI parent context (`Field`, `Fieldset`, `Control`, `Checkbox`, `Radio`, etc.). Rendering `HeadlessLabel` inside a standard `<div>` triggers runtime error: "You used a <Label /> component, but it is not inside a relevant parent."
 - 2026-08-18T14:38Z [CODE] Updated `README.md` with 2-level nested navigation docs and file-based routing architecture. Fixed `RoutePath` type fallback in `packages/core/src/types/index.ts` to support generic string paths alongside generated route autocompletion. Verified `check-types` and production `build`.
+- 2026-08-19T15:18Z [CODE] Resolved `<Label />` parent context runtime error by converting `Field` and `FieldSet` in `packages/core/src/components/ui/field.tsx` to Headless UI `Field` and `Fieldset` components. Verified zero type errors and clean production build.
+- 2026-08-19T15:45Z [CODE] Created `ThemeProvider` React Context in `packages/core/src/hooks/theme.tsx`, updated `useTheme` hook, simplified `ThemeSwitch` to sync `isDark` state, and wrapped `App` with `ThemeProvider` in `apps/starter/src/App.tsx` so theme initializes immediately on initial load (including `/login`). Verified zero typecheck errors across monorepo.
+

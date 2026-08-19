@@ -13,7 +13,7 @@ export interface SessionStrategyOptions {
 export class SessionAuthStrategy implements AuthStrategy {
   type = "session" as const;
   private onInitialize: () => Promise<UserProfile | null>;
-  private onLogin: (credentials: Record<string, any>) => Promise<UserProfile>;
+  private onLogin: (payload: SignInEmail) => Promise<UserProfile>;
   private onLogout: () => Promise<void>;
   private getCsrfToken?: () => string | null;
   private csrfHeaderName: string;
@@ -30,8 +30,8 @@ export class SessionAuthStrategy implements AuthStrategy {
     return this.onInitialize();
   }
 
-  async login(credentials: Record<string, any>): Promise<UserProfile> {
-    return this.onLogin(credentials);
+  async login(payload: SignInEmail): Promise<UserProfile> {
+    return this.onLogin(payload);
   }
 
   async logout(): Promise<void> {

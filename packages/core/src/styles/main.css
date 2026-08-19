@@ -25,7 +25,7 @@
   --accent: oklch(0.9 0.02 255);
   --accent-foreground: oklch(0.205 0 0);
 
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(70.4% 0.191 22.216);
   --destructive-foreground: oklch(0.99 0 0);
 
   --border: oklch(0.9 0.01 240);
@@ -63,7 +63,7 @@
   --accent: oklch(0.15 0.04 255);
   --accent-foreground: oklch(0.98 0 0);
 
-  --destructive: oklch(0.48 0.2 27);
+  --destructive: oklch(70.4% 0.191 22.216);
   --destructive-foreground: oklch(0.99 0 0);
 
   --border: oklch(0.5 0.01 240);
@@ -144,7 +144,6 @@
     font-family: var(--font-app, var(--font-sans));
   }
 }
-
 
 @utility input-focus {
   @apply outline-none focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20 duration-300;

@@ -1,21 +1,16 @@
 import { useTheme } from "../hooks/theme";
 import { Switch } from "@headlessui/react";
-import { useState } from "react";
 
 function ThemeSwitch() {
-  const { theme, setTheme } = useTheme();
-  const [enabled, setEnabled] = useState(theme === "dark" ? true : false);
+  const { isDark, setTheme } = useTheme();
 
   const handleChange = (checked: boolean) => {
     setTheme(checked ? "dark" : "light");
-    setEnabled(checked);
   };
-
-  // useEffect(() => { setEnabled(); }, [theme]);
 
   return (
     <Switch
-      checked={enabled}
+      checked={isDark}
       onChange={handleChange}
       className="group relative flex h-full w-10 cursor-pointer rounded-full bg-accent dark:bg-accent p-0.5 ease-in-out focus:not-data-focus:outline-none data-checked:bg-primary data-focus:outline data-focus:outline-white"
     >

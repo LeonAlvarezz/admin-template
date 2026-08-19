@@ -3,9 +3,12 @@ import * as v from "valibot";
 import { UserSchema } from "./user";
 
 export const SignInEmailSchema = v.object({
-  email: v.pipe(v.string(), v.email()),
-  password: v.pipe(v.string(), v.minLength(1)),
-  rememberMe: v.optional(v.boolean()),
+  email: v.pipe(v.string(), v.email("Invalid email address")),
+  password: v.pipe(
+    v.string(),
+    v.minLength(6, "Password must be at least 6 characters"),
+  ),
+  rememberMe: v.boolean(),
 });
 
 export type SignInEmail = v.InferOutput<typeof SignInEmailSchema>;

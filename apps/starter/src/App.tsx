@@ -1,6 +1,6 @@
 import React from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { AuthProvider, useAuth } from "@admin/core";
+import { AuthProvider, ThemeProvider, Toaster, useAuth } from "@admin/core";
 import { routeTree } from "./routeTree.gen";
 import { authStrategy } from "./config/auth";
 
@@ -24,8 +24,11 @@ function InnerApp() {
 
 export default function App() {
   return (
-    <AuthProvider strategy={authStrategy}>
-      <InnerApp />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider strategy={authStrategy}>
+        <Toaster />
+        <InnerApp />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

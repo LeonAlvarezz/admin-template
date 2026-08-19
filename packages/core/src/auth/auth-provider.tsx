@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   }, [initialize]);
 
   const login = useCallback(
-    async (credentials: Record<string, any>): Promise<UserProfile> => {
+    async (credentials: any): Promise<UserProfile> => {
       setIsLoading(true);
       setError(null);
       try {
