@@ -9,6 +9,8 @@ import { useActiveUrl } from "../../hooks/active-url";
 
 import ChevronDownIcon from "~icons/lucide/chevron-down";
 
+const SUB_NAV_ITEM_STEP_PX = 32;
+
 export interface NavItemProps extends Omit<
   ComponentPropsWithoutRef<"a">,
   "children"
@@ -48,8 +50,10 @@ function NavItemRoot({
 
   const hasSubItems = Boolean(items && items.length > 0);
 
-  // Check if any child item is active using useActiveUrl
-  const isChildActive = hasSubItems && isItemActive(items);
+  const activeChildIndex = hasSubItems
+    ? items!.findIndex((item) => isItemActive([item]))
+    : -1;
+  const isChildActive = activeChildIndex >= 0;
 
   const [isOpen, setIsOpen] = useState(defaultOpen || isChildActive);
 
@@ -188,7 +192,19 @@ function NavItemRoot({
           {innerContent}
         </button>
         {isOpen && (
-          <ul className="flex flex-col gap-1 mt-1 pl-2.5 border-l border-border/30 ml-5 transition-all data-[active=true]:border-border">
+          <ul
+            data-active={isChildActive}
+            className="relative flex flex-col gap-1 mt-1 pl-2.5 border-l border-border/30 ml-5 transition-colors duration-200 data-[active=true]:border-foreground/50"
+          >
+            {activeChildIndex >= 0 && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute z-10 left-[-4.5px] top-2.5 size-2 rounded-full bg-foreground ring-2 ring-sidebar transition-transform duration-200 ease-out motion-reduce:transition-none"
+                style={{
+                  transform: `translateY(${activeChildIndex * SUB_NAV_ITEM_STEP_PX}px)`,
+                }}
+              />
+            )}
             {items!.map((child) => (
               <NavItemRoot
                 key={child.id}
