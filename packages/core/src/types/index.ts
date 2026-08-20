@@ -74,3 +74,42 @@ export interface AdminLayoutProps {
   sidebar?: React.ReactNode;
   children: React.ReactNode;
 }
+
+export interface CommandItem {
+  id: string;
+  label: string;
+  description?: string;
+  category?: string;
+  icon?: React.ReactNode;
+  path?: RoutePath;
+  onSelect?: () => void;
+  keywords?: string[];
+  shortcut?: string[];
+  badge?: React.ReactNode;
+}
+
+export interface CommandGroup {
+  id: string;
+  title?: string;
+  items: CommandItem[];
+}
+
+export interface CommandSearchProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  groups?: CommandGroup[];
+  items?: CommandItem[];
+  navGroups?: NavGroupConfig[];
+  navItems?: NavItemConfig[];
+  onSignOut?: () => void;
+  placeholder?: string;
+  emptyText?: string;
+}
+
+export interface CommandSearchContextValue {
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
+}
+

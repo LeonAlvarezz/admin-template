@@ -5,6 +5,7 @@
 - 2026-08-18T11:57Z [CODE] Add 2-level nested navigation support to `@admin/core` `NavItem` and `SideBar` (accordion when expanded, popover flyout when collapsed).
 - 2026-08-18T14:10Z [CODE] Transition `apps/starter` to TanStack Router File-Based Routing using `@tanstack/router-plugin` and `src/routes/` tree.
 - 2026-08-19T17:03Z [USER] Refined API error plan: use existing `toast` component instead of `Alert`, and utilize `ApiClientError.data` error response payload for frontend error handling.
+- 2026-08-20T15:08Z [USER] Created implementation plan for Command Search palette component in `@admin/core` with `Cmd+K` global shortcut and sidebar search trigger integration.
 
 ## [DECISIONS]
 - 2026-08-14T15:17Z [CODE] Updated `@admin/core` and `@repo/*` dependencies from `"*"` to `"workspace:*"` in `apps/starter/package.json` and `packages/core/package.json`.
@@ -99,6 +100,7 @@
 - 2026-08-20T14:12:26+07:00 [CODE] Expanded nested navigation now derives the active child index, animates a round marker in 32px row steps, and animates a bright rail only from the list top to the marker center. Changed-file lint, core typecheck, starter build, and `git diff --check` passed.
 - 2026-08-20T14:16:37+07:00 [CODE] Added a faint truncated background track ending at the final sub-item center behind the animated selected rail; verification remained clean.
 - 2026-08-20T15:04:31+07:00 [CODE] Kept the selected rail and round marker mounted while the submenu is open, using a zero-height/hidden origin state so the first child selection grows, fades, and slides into place. Focused lint, core typecheck, starter build, and `git diff --check` passed.
+- 2026-08-20T15:15:20+07:00 [CODE] Implemented Command Search palette component (`CommandSearch`) in `@admin/core` with `Cmd+K` global shortcut, Headless UI Combobox & Dialog modal, automatic `navGroups` extraction with breadcrumbs, theme switcher & sign out system actions, and `SideBarHeader` search trigger integration. Core check-types, starter check-types, and starter build passed with 0 errors.
 
 
 

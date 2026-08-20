@@ -10,7 +10,9 @@ export { default as Checkbox } from "./components/ui/checkbox";
 export type { CheckboxProps } from "./components/ui/checkbox";
 export { Toaster, toast } from "./components/ui/toaster";
 export * from "./components/ui/field";
+export * from "./components/ui/command-search";
 export * from "./hooks/active-url";
 export * from "./hooks/theme";
 export * from "./types";
 export * from "./auth";
+

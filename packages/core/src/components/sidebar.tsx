@@ -28,6 +28,8 @@ import type {
 } from "../types";
 import ThemeSwitch from "./theme-switch";
 
+import { useCommandSearch } from "./ui/command-search";
+
 interface SidebarContextValue {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
@@ -54,6 +56,7 @@ function SideBarHeader({
   className?: string;
 }) {
   const context = useSidebarContext();
+  const commandSearch = useCommandSearch();
   const isCollapsed = context?.isCollapsed ?? false;
   const setIsCollapsed = context?.setIsCollapsed ?? (() => {});
 
@@ -76,6 +79,10 @@ function SideBarHeader({
       ) : (
         <div className="group-data-[collapsed=true]:hidden">
           <Input
+            readOnly
+            onClick={commandSearch?.open}
+            onFocus={commandSearch?.open}
+            className="cursor-pointer"
             startIcon={<SearchIcon />}
             endIcon={<Keyboard keys={["command", "k"]} />}
           />
