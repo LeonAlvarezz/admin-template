@@ -10,6 +10,7 @@ import { useActiveUrl } from "../../hooks/active-url";
 import ChevronDownIcon from "~icons/lucide/chevron-down";
 
 const SUB_NAV_ITEM_STEP_PX = 32;
+const SUB_NAV_ITEM_CENTER_PX = 14;
 
 export interface NavItemProps extends Omit<
   ComponentPropsWithoutRef<"a">,
@@ -192,18 +193,31 @@ function NavItemRoot({
           {innerContent}
         </button>
         {isOpen && (
-          <ul
-            data-active={isChildActive}
-            className="relative flex flex-col gap-1 mt-1 pl-2.5 border-l border-border/30 ml-5 transition-colors duration-200 data-[active=true]:border-foreground/50"
-          >
+          <ul className="relative flex flex-col gap-1 mt-1 pl-2.5 ml-5">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -left-px top-0 w-px bg-foreground/20"
+              style={{
+                height: `${(items!.length - 1) * SUB_NAV_ITEM_STEP_PX + SUB_NAV_ITEM_CENTER_PX}px`,
+              }}
+            />
             {activeChildIndex >= 0 && (
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute z-10 left-[-4.5px] top-2.5 size-2 rounded-full bg-foreground ring-2 ring-sidebar transition-transform duration-200 ease-out motion-reduce:transition-none"
-                style={{
-                  transform: `translateY(${activeChildIndex * SUB_NAV_ITEM_STEP_PX}px)`,
-                }}
-              />
+              <>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -left-px top-0 w-px bg-foreground/70 transition-[height] duration-200 ease-out motion-reduce:transition-none"
+                  style={{
+                    height: `${activeChildIndex * SUB_NAV_ITEM_STEP_PX + SUB_NAV_ITEM_CENTER_PX}px`,
+                  }}
+                />
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute z-10 left-[-4.5px] top-2.5 size-2 rounded-full bg-foreground ring-2 ring-sidebar transition-transform duration-200 ease-out motion-reduce:transition-none"
+                  style={{
+                    transform: `translateY(${activeChildIndex * SUB_NAV_ITEM_STEP_PX}px)`,
+                  }}
+                />
+              </>
             )}
             {items!.map((child) => (
               <NavItemRoot

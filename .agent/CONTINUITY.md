@@ -40,6 +40,8 @@
 - 2026-08-20T11:37Z [CODE] Fixed login form in `apps/starter/src/routes/login.tsx` by setting submit button disabled state to `disabled={isSubmitting}` instead of `disabled={!canSubmit || isSubmitting}`, allowing immediate submit clicks without requiring field unfocus or showing live typing validation errors.
 - 2026-08-20T12:07:33+07:00 [USER] Login validation contract: fields give feedback on blur, the full schema validates on submit, and users can submit by click or Enter without first blurring the password field.
 - 2026-08-20T13:11:18+07:00 [USER] Place `LoginForm` in `apps/starter/src/modules/auth/components/login-form.tsx`; do not add a test file.
+- 2026-08-20T14:12:26+07:00 [USER] Nested sidebar active state uses a round marker and a bright animated rail that ends at the marker center; no faint rail tail may extend below it.
+- 2026-08-20T14:16:37+07:00 [USER] Supersedes the 14:12 rail detail: retain a faint background track from the list top to the final sub-item center, while the brighter selected segment ends at the active round marker; neither reaches the row bottom.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -93,6 +95,8 @@
 - 2026-08-19T17:57Z [CODE] Backend `errorMiddleware` and `res.error` safely parse non-numeric status strings to integer status codes.
 - 2026-08-20T12:07:33+07:00 [CODE] Login now runs `SignInEmailSchema` on submit, keeps aligned email/password validators on blur, and has a Bun regression test proving valid credentials submit without password blur. Focused test, changed-file lint, starter typecheck/build, and `git diff --check` passed; full starter lint remains blocked by the pre-existing `vite.config.ts` parser-project mismatch.
 - 2026-08-20T13:11:18+07:00 [CODE] Supersedes the 12:07 test-file detail: login form state, validation, submit, and redirect behavior now live in `src/modules/auth/components/login-form.tsx`; `routes/login.tsx` only owns the page shell, and no login-form test file remains. Focused lint, starter typecheck/build, and `git diff --check` passed.
+- 2026-08-20T14:12:26+07:00 [CODE] Expanded nested navigation now derives the active child index, animates a round marker in 32px row steps, and animates a bright rail only from the list top to the marker center. Changed-file lint, core typecheck, starter build, and `git diff --check` passed.
+- 2026-08-20T14:16:37+07:00 [CODE] Added a faint truncated background track ending at the final sub-item center behind the animated selected rail; verification remained clean.
 
 
 
@@ -138,6 +142,4 @@
 - 2026-08-19T17:05Z [CODE] Implemented robust API error extraction and network error wrapping in `ApiClient` (`apps/starter/src/libs/api-client.ts`), capturing response `data` on `ApiClientError.data`. Updated `LoginPage` to display exact server/network error messages via `toast.error()`. Verified clean typecheck and production build.
 - 2026-08-20T13:33:00+07:00 [CODE] Added `InputPassword` (`<Input.Password />`) and `Checkbox` components to `packages/core/src/components/ui/`, exported from `@admin/core`, and integrated `Input.Password` + `rememberMe` checkbox into `LoginForm` in `apps/starter`.
 - 2026-08-20T13:38:00+07:00 [CODE] Omitted render-prop `children` from `HeadlessCheckboxProps` in `CheckboxProps` so `children` type defaults to `ReactNode`.
-
-
 
