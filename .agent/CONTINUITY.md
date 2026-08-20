@@ -89,6 +89,7 @@
 ## [DISCOVERIES]
 - 2026-08-19T17:57Z [CODE] Better Auth `APIError` sets `status` to string enum (e.g., `'UNAUTHORIZED'`) and `statusCode` to integer `401`. Express `res.status(statusCode)` throws a runtime `TypeError` if passed a non-numeric string.
 - 2026-08-20T11:51:02+07:00 [TOOL] Login password error appears during typing because email blur runs the form-level `SignInEmailSchema` and stores a password error; password `handleChange` then marks `isTouched`, satisfying the UI error gate before password blur. TanStack Form 1.33.5 state reproduction confirmed the error clears on password blur.
+- 2026-08-20T15:04:31+07:00 [CODE] The sub-navigation selected rail and marker were conditionally mounted only after a child became active, so their initial render already had final geometry and CSS had no prior state to animate from.
 
 ## [OUTCOMES]
 - 2026-08-19T17:53Z [CODE] `ApiClient` seamlessly unwraps backend `ApiResponse<T>` envelopes and treats `success: false` as error responses.
@@ -97,6 +98,7 @@
 - 2026-08-20T13:11:18+07:00 [CODE] Supersedes the 12:07 test-file detail: login form state, validation, submit, and redirect behavior now live in `src/modules/auth/components/login-form.tsx`; `routes/login.tsx` only owns the page shell, and no login-form test file remains. Focused lint, starter typecheck/build, and `git diff --check` passed.
 - 2026-08-20T14:12:26+07:00 [CODE] Expanded nested navigation now derives the active child index, animates a round marker in 32px row steps, and animates a bright rail only from the list top to the marker center. Changed-file lint, core typecheck, starter build, and `git diff --check` passed.
 - 2026-08-20T14:16:37+07:00 [CODE] Added a faint truncated background track ending at the final sub-item center behind the animated selected rail; verification remained clean.
+- 2026-08-20T15:04:31+07:00 [CODE] Kept the selected rail and round marker mounted while the submenu is open, using a zero-height/hidden origin state so the first child selection grows, fades, and slides into place. Focused lint, core typecheck, starter build, and `git diff --check` passed.
 
 
 
@@ -146,7 +148,6 @@
 - 2026-08-20T14:42:00+07:00 [DECISION] Locked in Option 1C (Split Hero Icon Pillar) as the production toast design. Refactored `Toaster` in `packages/core/src/components/ui/toaster.tsx` to natively render all `toast` notifications using the Split Hero Glass Pillar layout. Monorepo typechecks passed cleanly.
 - 2026-08-20T14:47:00+07:00 [CODE] Fixed first-toast missing animation bug by defining `@keyframes toastEnter` / `toastExit` in `packages/core/src/styles/main.css` and attaching explicit CSS keyframe animation styles to `SplitHeroToast` in `toaster.tsx`. Monorepo typechecks passed cleanly.
 - 2026-08-20T14:55:00+07:00 [CODE] Extended `toast` in `packages/core/src/components/ui/toaster.tsx` with `toast.warning()` (amber pillar + warning icon) and `toast.info()` (blue pillar + info icon) methods. Monorepo typechecks passed cleanly.
-
 
 
 

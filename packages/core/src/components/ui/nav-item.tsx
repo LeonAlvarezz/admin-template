@@ -201,24 +201,25 @@ function NavItemRoot({
                 height: `${(items!.length - 1) * SUB_NAV_ITEM_STEP_PX + SUB_NAV_ITEM_CENTER_PX}px`,
               }}
             />
-            {activeChildIndex >= 0 && (
-              <>
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -left-px top-0 w-px bg-foreground/70 transition-[height] duration-200 ease-out motion-reduce:transition-none"
-                  style={{
-                    height: `${activeChildIndex * SUB_NAV_ITEM_STEP_PX + SUB_NAV_ITEM_CENTER_PX}px`,
-                  }}
-                />
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute z-10 left-[-4.5px] top-2.5 size-2 rounded-full bg-foreground ring-2 ring-sidebar transition-transform duration-200 ease-out motion-reduce:transition-none"
-                  style={{
-                    transform: `translateY(${activeChildIndex * SUB_NAV_ITEM_STEP_PX}px)`,
-                  }}
-                />
-              </>
-            )}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -left-px top-0 w-px bg-foreground/70 transition-[height] duration-200 ease-out motion-reduce:transition-none"
+              style={{
+                height: isChildActive
+                  ? `${activeChildIndex * SUB_NAV_ITEM_STEP_PX + SUB_NAV_ITEM_CENTER_PX}px`
+                  : "0px",
+              }}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute z-10 left-[-4.5px] top-2.5 size-2 rounded-full bg-foreground ring-2 ring-sidebar transition-[transform,opacity] duration-200 ease-out motion-reduce:transition-none"
+              style={{
+                opacity: isChildActive ? 1 : 0,
+                transform: isChildActive
+                  ? `translateY(${activeChildIndex * SUB_NAV_ITEM_STEP_PX}px) scale(1)`
+                  : `translateY(-${SUB_NAV_ITEM_CENTER_PX}px) scale(0.75)`,
+              }}
+            />
             {items!.map((child) => (
               <NavItemRoot
                 key={child.id}
