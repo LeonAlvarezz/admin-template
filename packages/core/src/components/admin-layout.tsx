@@ -21,7 +21,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   return (
     <CommandSearchProvider>
-      <div className="flex min-h-screen bg-background text-foreground">
+      <div className="flex h-svh w-screen overflow-hidden bg-background text-foreground">
         {sidebar ? (
           sidebar
         ) : (
@@ -44,7 +44,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               {headerActions}
             </header>
           )}
-          <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+          <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto">
+            {children}
+          </main>
+
         </div>
       </div>
       <CommandSearch
@@ -57,4 +60,3 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     </CommandSearchProvider>
   );
 };
-

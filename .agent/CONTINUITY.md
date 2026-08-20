@@ -156,6 +156,23 @@
 - 2026-08-20T15:36:50+07:00 [CODE] Fixed runtime `TypeError: Cannot read properties of undefined (reading 'label')` in `ChartTooltipContent` ([`chart.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/chart.tsx#L159)) by safely casting and checking optional `configItem?.label` for unmapped X-axis ticks.
 - 2026-08-20T15:37:25+07:00 [CODE] Removed default browser focus outline box on chart click by adding `[&_*]:outline-none [&_.recharts-wrapper]:outline-none [&_svg]:outline-none` to `ChartContainer` in [`chart.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/chart.tsx#L48).
 - 2026-08-20T15:40:00+07:00 [CODE] Fixed stacked bar render order inversion when toggling traffic filters by retaining stable `key="desktop"` / `key="mobile"` and using Recharts `hide` prop on [`visitor-bar-chart.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/modules/dashboard/components/visitor-bar-chart.tsx#L128).
+- 2026-08-20T15:40:00+07:00 [CODE] Fixed Sidebar height cut-off bug in admin-layout.tsx and sidebar.tsx.
+- 2026-08-20T16:32:00+07:00 [CODE] Created interactive Mobile Sidebar Prototype route in apps/starter/src/routes/_authenticated/mobile-sidebar-prototype.tsx showcasing 3 UX mobile navigation patterns (Slide Drawer Sheet, Bottom Dock, Top Dropdown Banner). Built cleanly with zero errors.
+- 2026-08-20T16:34:00+07:00 [CODE] Enhanced mobile sidebar prototype with 2 multi-level submenu patterns for Option B Bottom Dock (Option B1: Accordion Tree Sheet, Option B2: Slide Drill-down Stack with back transition). Verified clean production build.
+- 2026-08-20T16:38:00+07:00 [CODE] Updated prototype with direct multi-level dock item popover menu (anchored above "Shop" dock tab with chevron indicator) and matched @admin/core NavItem accordion styling (vertical track, animated primary rail, active round marker) inside the bottom sheet.
+- 2026-08-20T16:46:00+07:00 [CODE] Implemented responsive Mobile Navigation in @admin/core (packages/core/src/components/sidebar.tsx): renders hidden md:flex desktop sidebar and md:flex mobile bottom dock + bottom sheet drawer with popover submenu support. Core check-types, starter check-types, and starter build passed cleanly.
+- 2026-08-20T16:48:00+07:00 [CODE] Replaced ~icons/icon-park-solid/setting with ~icons/solar/settings-bold in navigation.tsx, sidebar.tsx, and mobile-sidebar-prototype.tsx to fix solid grey block icon rendering bug. Verified 0 typecheck errors across monorepo.
+- 2026-08-20T17:07:00+07:00 [CODE] Extracted reusable Drawer component into packages/core/src/components/ui/drawer.tsx using Headless UI Dialog & DialogPanel. Added touch swipe-down gesture tracking (onTouchStart/Move/End with spring snap-back & threshold close) on top drag handle and header. Wired into MobileNav in sidebar.tsx and exported from @admin/core.
+- 2026-08-20T17:11:00+07:00 [CODE] Configured MobileNav in sidebar.tsx and NavItem to automatically close the mobile drawer and popovers upon route change (via useActiveUrl pathname effect and sub-item onClick handler propagation).
+
+- 2026-08-20T17:10:00+07:00 [CODE] Fixed mobile layout content clipping bug in AdminLayout (packages/core/src/components/admin-layout.tsx): added responsive bottom padding pb-20 md:pb-6 to <main> element so all bottom page content scrolls cleanly above the fixed 64px mobile dock bar.
+
+
+
+
+
+
+
 
 
 

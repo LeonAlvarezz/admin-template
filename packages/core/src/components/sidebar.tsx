@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import Button from "./ui/button";
 import Input from "./ui/input";
@@ -27,8 +27,9 @@ import type {
   UserProfile,
 } from "../types";
 import ThemeSwitch from "./theme-switch";
-
 import { useCommandSearch } from "./ui/command-search";
+import Drawer from "./ui/drawer";
+import MobileNav from "./mobile-nav";
 
 interface SidebarContextValue {
   isCollapsed: boolean;
@@ -61,7 +62,7 @@ function SideBarHeader({
   const setIsCollapsed = context?.setIsCollapsed ?? (() => {});
 
   return (
-    <header className={cn("px-4 flex flex-col gap-4", className)}>
+    <header className={cn("px-4 flex flex-col gap-4 shrink-0", className)}>
       <div className="flex justify-between group-data-[collapsed=true]:justify-center">
         {logo ? (
           logo
@@ -132,7 +133,12 @@ function SideBarNav({
         ]);
 
   return (
-    <nav className={cn("mt-4 flex flex-col gap-4", className)}>
+    <nav
+      className={cn(
+        "mt-4 flex flex-col gap-4 flex-1 overflow-y-auto min-h-0",
+        className,
+      )}
+    >
       {navGroups.map((group, groupIdx) => (
         <div key={group.id || groupIdx} className="flex flex-col gap-1">
           {group.title && (
@@ -169,7 +175,7 @@ function SideBarFooter({
   className?: string;
 }) {
   return (
-    <footer className={cn("mt-auto", className)}>
+    <footer className={cn("mt-auto shrink-0", className)}>
       <hr className="border-border/70 my-4 group-data-[collapsed=true]:mx-2" />
       <NavItem label="Dark Mode" className="px-5 my-1" icon={<MoonIcon />}>
         <NavItem.Action>
@@ -278,11 +284,12 @@ function SideBarRoot({
 
   return (
     <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed }}>
+      {/* Desktop Sidebar */}
       <aside
         data-collapsed={isCollapsed}
-        className="border-r-[0.5px] border-border z-10 text-foreground group min-h-svh flex flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4 transition-all duration-200"
+        className="hidden md:flex border-r-[0.5px] border-border z-10 text-foreground group h-svh shrink-0 flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4 transition-all duration-200"
       >
-        <div className="flex flex-col flex-1 gap-2">
+        <div className="flex flex-col flex-1 gap-2 min-h-0">
           {children ? (
             children
           ) : (
@@ -321,6 +328,17 @@ function SideBarRoot({
           )}
         </div>
       </aside>
+
+      {/* Mobile Responsive Navigation (Bottom Dock + Bottom Sheet) */}
+      <MobileNav
+        navGroups={navGroups}
+        navItems={navItems}
+        footerNavItems={footerNavItems}
+        user={user}
+        userMenuItems={userMenuItems}
+        onSignOut={onSignOut}
+        sidebarFooter={sidebarFooter}
+      />
     </SidebarContext.Provider>
   );
 }

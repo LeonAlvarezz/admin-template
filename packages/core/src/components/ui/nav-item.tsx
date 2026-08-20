@@ -231,9 +231,11 @@ function NavItemRoot({
                 action={child.action}
                 badge={child.badge}
                 items={child.items}
+                onClick={onClick}
                 level={2}
               />
             ))}
+
           </ul>
         )}
       </li>

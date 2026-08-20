@@ -16,4 +16,7 @@ export * from "./hooks/theme";
 export * from "./types";
 export * from "./auth";
 export * from "./components/ui/chart";
+export { default as Drawer } from "./components/ui/drawer";
+export type { DrawerProps } from "./components/ui/drawer";
+
 

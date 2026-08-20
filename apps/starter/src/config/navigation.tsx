@@ -4,7 +4,8 @@ import type { NavGroupConfig } from "@admin/core";
 import DashboardIcon from "~icons/boxicons/dashboard-filled";
 import ShopIcon from "~icons/solar/cart-4-bold";
 import TimeIcon from "~icons/mingcute/time-fill";
-import GearIcon from "~icons/icon-park-solid/setting";
+import GearIcon from "~icons/solar/settings-bold";
+
 
 export const navGroups: NavGroupConfig[] = [
   {
