@@ -1,6 +1,14 @@
-import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
-import type { UserProfile } from "../types";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
+import type { ApiResult, UserProfile } from "../types";
 import type { AuthStrategy } from "./type";
+import type { SignInEmail } from "@admin/types";
 
 export interface AuthContextValue {
   user: UserProfile | null;
@@ -8,7 +16,7 @@ export interface AuthContextValue {
   isLoading: boolean;
   error: Error | null;
   strategy: AuthStrategy;
-  login: (credentials: Record<string, any>) => Promise<UserProfile>;
+  login: (payload: SignInEmail) => Promise<ApiResult<UserProfile, Error>>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<string | null>;
   initialize: () => Promise<void>;
@@ -41,7 +49,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         onUnauthenticated();
       }
     } catch (err: any) {
-      setError(err instanceof Error ? err : new Error("Auth initialization failed"));
+      setError(
+        err instanceof Error ? err : new Error("Auth initialization failed"),
+      );
       setUser(null);
       if (onUnauthenticated) {
         onUnauthenticated();
@@ -56,23 +66,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   }, [initialize]);
 
   const login = useCallback(
-    async (credentials: any): Promise<UserProfile> => {
+    async (payload: SignInEmail): Promise<ApiResult<UserProfile, Error>> => {
       setIsLoading(true);
       setError(null);
       try {
-        const loggedInUser = await strategy.login(credentials);
+        const loggedInUser = await strategy.login(payload);
         setUser(loggedInUser);
-        return loggedInUser;
+        return { success: true, data: loggedInUser, error: null };
       } catch (err: any) {
-        const loginError = err instanceof Error ? err : new Error("Login failed");
+        const loginError =
+          err instanceof Error ? err : new Error("Login failed");
         setError(loginError);
         setUser(null);
-        throw loginError;
+        return { success: false, data: null, error: loginError };
       } finally {
         setIsLoading(false);
       }
     },
-    [strategy]
+    [strategy],
   );
 
   const logout = useCallback(async () => {
@@ -107,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       refreshToken,
       initialize,
     }),
-    [user, isLoading, error, strategy, login, logout, refreshToken, initialize]
+    [user, isLoading, error, strategy, login, logout, refreshToken, initialize],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

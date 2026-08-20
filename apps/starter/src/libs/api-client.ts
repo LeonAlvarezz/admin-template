@@ -3,7 +3,7 @@ type ParamValue = PrimitiveParam | PrimitiveParam[] | null | undefined;
 type Params = Record<string, ParamValue>;
 
 type ParamsSerializerFormat = "brackets" | "comma" | "indices" | "repeat";
-type ResponseReturn = "body" | "data" | "raw";
+type ResponseReturn = "body" | "data" | "envelope" | "raw";
 type Fetcher = (
   input: RequestInfo | URL,
   init?: RequestInit,
@@ -12,6 +12,10 @@ type Fetcher = (
 export type ApiServiceBinding = {
   fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
+
+export type ApiResponse<T = unknown> =
+  | { success: true; data: T; message?: string }
+  | { success: false; data?: null; error?: unknown; message: string };
 
 export type ApiClientConfig<TData = unknown> = Omit<RequestInit, "method"> & {
   baseURL?: string;
@@ -80,8 +84,72 @@ export class ApiClientError<T = unknown> extends Error {
   }
 }
 
+export function isApiClientError<T = unknown>(
+  error: unknown,
+): error is ApiClientError<T> {
+  return error instanceof ApiClientError;
+}
+
 export function isApiClientNotFoundError(error: unknown) {
-  return error instanceof ApiClientError && error.status === 404;
+  return isApiClientError(error) && error.status === 404;
+}
+
+export function getErrorMessage(
+  error: unknown,
+  fallback = "An unexpected error occurred",
+): string {
+  if (isApiClientError(error)) {
+    return extractErrorMessage(error.data, error.message, error.status);
+  }
+  if (error instanceof Error && error.message.trim() !== "") {
+    return error.message;
+  }
+  if (typeof error === "string" && error.trim() !== "") {
+    return error;
+  }
+  return fallback;
+}
+
+export function extractErrorMessage(
+  data: unknown,
+  statusText?: string,
+  status?: number,
+): string {
+  if (data && typeof data === "object") {
+    const obj = data as Record<string, any>;
+    if (typeof obj.message === "string" && obj.message.trim() !== "") {
+      return obj.message;
+    }
+    if (typeof obj.error === "string" && obj.error.trim() !== "") {
+      return obj.error;
+    }
+    if (
+      obj.error &&
+      typeof obj.error === "object" &&
+      typeof obj.error.message === "string" &&
+      obj.error.message.trim() !== ""
+    ) {
+      return obj.error.message;
+    }
+    if (
+      typeof obj.errorMessage === "string" &&
+      obj.errorMessage.trim() !== ""
+    ) {
+      return obj.errorMessage;
+    }
+    if (Array.isArray(obj.errors) && obj.errors.length > 0) {
+      const first = obj.errors[0];
+      if (typeof first === "string") return first;
+      if (typeof first === "object" && first?.message) return first.message;
+    }
+  }
+  if (typeof data === "string" && data.trim() !== "") {
+    return data;
+  }
+  if (statusText && statusText.trim() !== "") {
+    return statusText;
+  }
+  return status ? `API request failed: ${status}` : "An unknown error occurred";
 }
 
 const BODYLESS_METHODS = new Set(["GET", "HEAD"]);
@@ -279,14 +347,22 @@ export class ApiClient {
       return interceptedResponse as T;
     }
 
-    if (requestConfig.responseReturn === "data") {
-      const data = interceptedResponse.data;
-      if (data && typeof data === "object" && "data" in data) {
-        return data.data as T;
-      }
+    if (requestConfig.responseReturn === "envelope") {
+      return interceptedResponse.data as T;
     }
 
-    return interceptedResponse.data as T;
+    const data = interceptedResponse.data;
+    if (
+      data &&
+      typeof data === "object" &&
+      "success" in data &&
+      "data" in data &&
+      (data as Record<string, any>).success === true
+    ) {
+      return (data as Record<string, any>).data as T;
+    }
+
+    return data as T;
   }
 
   private async dispatchRequest<T>(
@@ -325,11 +401,22 @@ export class ApiClient {
         url,
       };
 
-      if (!response.ok) {
+      const isEnvelopeError =
+        data &&
+        typeof data === "object" &&
+        "success" in data &&
+        (data as Record<string, any>).success === false;
+
+      if (!response.ok || isEnvelopeError) {
+        const message = extractErrorMessage(
+          data,
+          response.statusText,
+          response.status,
+        );
         throw new ApiClientError({
           config,
           data,
-          message: `API request failed: ${response.status}`,
+          message,
           response,
           url,
         });
@@ -337,7 +424,25 @@ export class ApiClient {
 
       return apiResponse;
     } catch (error) {
-      throw await this.runRejectedResponseInterceptors(error);
+      let finalError = error;
+      if (!(error instanceof ApiClientError)) {
+        const isNetworkOrAbort =
+          error instanceof TypeError ||
+          (error instanceof DOMException && error.name === "AbortError");
+        const networkMessage = isNetworkOrAbort
+          ? "Network error: Unable to reach server. Please check your internet connection."
+          : error instanceof Error
+            ? error.message
+            : "An unexpected request error occurred";
+
+        finalError = new ApiClientError({
+          config,
+          data: null,
+          message: networkMessage,
+          url,
+        });
+      }
+      throw await this.runRejectedResponseInterceptors(finalError);
     } finally {
       if (timeoutId) {
         clearTimeout(timeoutId);

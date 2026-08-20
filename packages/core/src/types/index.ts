@@ -8,6 +8,11 @@ type RoutePath =
     ? TPath | (string & {})
     : string;
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type ApiResult<T, E = Error> =
+  | { success: true; data: T; error: null }
+  | { success: false; data: null; error: E };
+
 export interface NavItemConfig {
   id: string;
   label: React.ReactNode;

@@ -1,7 +1,11 @@
 import { Input as HeadlessInput } from "@headlessui/react";
 import type { InputProps as HeadlessInputProps } from "@headlessui/react";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import { cn } from "../../libs/cn";
+
+import EyeIcon from "~icons/solar/eye-bold";
+import EyeClosedIcon from "~icons/solar/eye-closed-bold";
 
 export interface InputProps extends HeadlessInputProps<"input"> {
   startIcon?: ReactNode;
@@ -9,7 +13,7 @@ export interface InputProps extends HeadlessInputProps<"input"> {
   containerClassName?: string;
 }
 
-function Input({
+function InputRoot({
   className,
   containerClassName,
   startIcon,
@@ -46,4 +50,45 @@ function Input({
   );
 }
 
+export interface InputPasswordProps extends Omit<InputProps, "type"> {}
+
+export function InputPassword({
+  placeholder = "Enter password...",
+  endIcon,
+  ...props
+}: InputPasswordProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <InputRoot
+      type={isVisible ? "text" : "password"}
+      placeholder={placeholder}
+      endIcon={
+        <div className="flex items-center gap-1.5">
+          {endIcon}
+          <button
+            type="button"
+            onClick={() => setIsVisible((prev) => !prev)}
+            className="flex items-center text-foreground/50 hover:text-foreground cursor-pointer focus:outline-none transition-colors"
+            tabIndex={-1}
+            aria-label={isVisible ? "Hide password" : "Show password"}
+          >
+            {isVisible ? (
+              <EyeClosedIcon className="size-4 shrink-0" />
+            ) : (
+              <EyeIcon className="size-4 shrink-0" />
+            )}
+          </button>
+        </div>
+      }
+      {...props}
+    />
+  );
+}
+
+export const Input = Object.assign(InputRoot, {
+  Password: InputPassword,
+});
+
 export default Input;
+

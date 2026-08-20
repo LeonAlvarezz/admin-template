@@ -4,6 +4,7 @@
 - 2026-08-14T15:17Z [CODE] Fix workspace dependency protocol (`workspace:*`) for Bun workspace packages.
 - 2026-08-18T11:57Z [CODE] Add 2-level nested navigation support to `@admin/core` `NavItem` and `SideBar` (accordion when expanded, popover flyout when collapsed).
 - 2026-08-18T14:10Z [CODE] Transition `apps/starter` to TanStack Router File-Based Routing using `@tanstack/router-plugin` and `src/routes/` tree.
+- 2026-08-19T17:03Z [USER] Refined API error plan: use existing `toast` component instead of `Alert`, and utilize `ApiClientError.data` error response payload for frontend error handling.
 
 ## [DECISIONS]
 - 2026-08-14T15:17Z [CODE] Updated `@admin/core` and `@repo/*` dependencies from `"*"` to `"workspace:*"` in `apps/starter/package.json` and `packages/core/package.json`.
@@ -36,6 +37,9 @@
 - 2026-08-19T14:44Z [CODE] Installed `@tanstack/react-form` and `@tanstack/valibot-form-adapter` in `apps/starter` and refactored `apps/starter/src/routes/login.tsx` to use TanStack Form with `SignInEmailSchema` validation.
 - 2026-08-19T14:50Z [CODE] Fixed TanStack Form type mismatch by adding default value `false` to `v.optional(v.boolean(), false)` in `packages/types/auth.ts` and explicitly typing `useForm<SignInEmail>`.
 - 2026-08-19T15:18Z [CODE] Updated `packages/core/src/components/ui/field.tsx` to wrap `Field` and `FieldSet` in Headless UI's `Field` (`HeadlessField`) and `Fieldset` (`HeadlessFieldset`), providing valid parent context for `HeadlessLabel`.
+- 2026-08-20T11:37Z [CODE] Fixed login form in `apps/starter/src/routes/login.tsx` by setting submit button disabled state to `disabled={isSubmitting}` instead of `disabled={!canSubmit || isSubmitting}`, allowing immediate submit clicks without requiring field unfocus or showing live typing validation errors.
+- 2026-08-20T12:07:33+07:00 [USER] Login validation contract: fields give feedback on blur, the full schema validates on submit, and users can submit by click or Enter without first blurring the password field.
+- 2026-08-20T13:11:18+07:00 [USER] Place `LoginForm` in `apps/starter/src/modules/auth/components/login-form.tsx`; do not add a test file.
 
 ## [PROGRESS]
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
@@ -75,6 +79,20 @@
 - 2026-08-18T17:20Z [CODE] Refactored `apps/backend/src/core/middleware/guard.ts` from API Key check (`x-api-key`) to Better Auth session-based auth (`auth.api.getSession`), attaching `user` & `session` to Express `Request`.
 - 2026-08-18T17:27Z [CODE] Synchronized `auth-schema.ts` into modular schema files in `apps/backend/src/db/schema/` (`user`, `session`, `account`, `verification`, `relations`). Removed standalone `auth-schema.ts` and verified `tsc` passes clean.
 - 2026-08-18T18:00Z [CODE] Fixed export in `apps/starter/src/libs/api-client.ts`, wired `auth.ts` to `@/libs/api-client`, removed redundant `packages/api-client` directory & dependencies across monorepo. Verified clean `tsc` build.
+- 2026-08-19T17:35Z [CODE] Hooked up `signInEmail`, `logOut`, and `getSession` from `AuthService` in `AuthController` (`apps/backend/src/modules/auth/auth.controller.ts`), added `fromNodeHeaders` header passing, and removed leftover `BookController` boilerplate. Verified clean `tsc` typecheck.
+- 2026-08-19T17:36Z [CODE] Fixed `apps/backend/src/modules/auth/auth.route.ts` to export standard `Router` default export (`authRouter`), mounted under `/auth` in `apps/backend/src/core/route-handler/index.ts`. Resolving Express `app.use` middleware runtime TypeError. Verified clean `tsc` typecheck.
+- 2026-08-19T17:53Z [CODE] Updated `ApiClient` in `apps/starter/src/libs/api-client.ts` with `ApiResponse<T>` envelope support, automatic `data.data` unwrapping on `success: true`, explicit `responseReturn: "envelope"`, and automatic `ApiClientError` throwing when `success: false`.
+- 2026-08-19T17:57Z [CODE] Fixed backend `error-middleware.ts` status code parsing when `error.status` is a string (e.g. Better Auth `APIError` `status: "UNAUTHORIZED"`), preventing Express `res.status()` runtime TypeError.
+
+## [DISCOVERIES]
+- 2026-08-19T17:57Z [CODE] Better Auth `APIError` sets `status` to string enum (e.g., `'UNAUTHORIZED'`) and `statusCode` to integer `401`. Express `res.status(statusCode)` throws a runtime `TypeError` if passed a non-numeric string.
+- 2026-08-20T11:51:02+07:00 [TOOL] Login password error appears during typing because email blur runs the form-level `SignInEmailSchema` and stores a password error; password `handleChange` then marks `isTouched`, satisfying the UI error gate before password blur. TanStack Form 1.33.5 state reproduction confirmed the error clears on password blur.
+
+## [OUTCOMES]
+- 2026-08-19T17:53Z [CODE] `ApiClient` seamlessly unwraps backend `ApiResponse<T>` envelopes and treats `success: false` as error responses.
+- 2026-08-19T17:57Z [CODE] Backend `errorMiddleware` and `res.error` safely parse non-numeric status strings to integer status codes.
+- 2026-08-20T12:07:33+07:00 [CODE] Login now runs `SignInEmailSchema` on submit, keeps aligned email/password validators on blur, and has a Bun regression test proving valid credentials submit without password blur. Focused test, changed-file lint, starter typecheck/build, and `git diff --check` passed; full starter lint remains blocked by the pre-existing `vite.config.ts` parser-project mismatch.
+- 2026-08-20T13:11:18+07:00 [CODE] Supersedes the 12:07 test-file detail: login form state, validation, submit, and redirect behavior now live in `src/modules/auth/components/login-form.tsx`; `routes/login.tsx` only owns the page shell, and no login-form test file remains. Focused lint, starter typecheck/build, and `git diff --check` passed.
 
 
 
@@ -117,4 +135,9 @@
 - 2026-08-18T14:38Z [CODE] Updated `README.md` with 2-level nested navigation docs and file-based routing architecture. Fixed `RoutePath` type fallback in `packages/core/src/types/index.ts` to support generic string paths alongside generated route autocompletion. Verified `check-types` and production `build`.
 - 2026-08-19T15:18Z [CODE] Resolved `<Label />` parent context runtime error by converting `Field` and `FieldSet` in `packages/core/src/components/ui/field.tsx` to Headless UI `Field` and `Fieldset` components. Verified zero type errors and clean production build.
 - 2026-08-19T15:45Z [CODE] Created `ThemeProvider` React Context in `packages/core/src/hooks/theme.tsx`, updated `useTheme` hook, simplified `ThemeSwitch` to sync `isDark` state, and wrapped `App` with `ThemeProvider` in `apps/starter/src/App.tsx` so theme initializes immediately on initial load (including `/login`). Verified zero typecheck errors across monorepo.
+- 2026-08-19T17:05Z [CODE] Implemented robust API error extraction and network error wrapping in `ApiClient` (`apps/starter/src/libs/api-client.ts`), capturing response `data` on `ApiClientError.data`. Updated `LoginPage` to display exact server/network error messages via `toast.error()`. Verified clean typecheck and production build.
+- 2026-08-20T13:33:00+07:00 [CODE] Added `InputPassword` (`<Input.Password />`) and `Checkbox` components to `packages/core/src/components/ui/`, exported from `@admin/core`, and integrated `Input.Password` + `rememberMe` checkbox into `LoginForm` in `apps/starter`.
+- 2026-08-20T13:38:00+07:00 [CODE] Omitted render-prop `children` from `HeadlessCheckboxProps` in `CheckboxProps` so `children` type defaults to `ReactNode`.
+
+
 
