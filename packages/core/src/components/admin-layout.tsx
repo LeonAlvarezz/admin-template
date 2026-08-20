@@ -15,6 +15,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   headerActions,
   sidebarFooter,
   sidebar,
+  commandGroups,
+  commandItems,
   children,
 }) => {
   return (
@@ -48,6 +50,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       <CommandSearch
         navGroups={navGroups}
         navItems={navItems}
+        groups={commandGroups}
+        items={commandItems}
         onSignOut={onSignOut}
       />
     </CommandSearchProvider>

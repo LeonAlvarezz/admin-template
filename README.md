@@ -39,9 +39,10 @@ admin-template/
 
 | Component | Description |
 | :--- | :--- |
-| **`AdminLayout`** | Top-level layout shell wrapping sidebar, header, and main scroll container. |
+| **`AdminLayout`** | Top-level layout shell wrapping sidebar, header, command palette, and main scroll container. |
 | **`SideBar`** | Collapsible sidebar supporting both **Convenience Props API** and **Compound Components API**. |
 | **`NavItem`** | Renders TanStack Router `<Link>` with active route styling, `<NavItem.Action>` slots, and **2-level nested sub-menu navigation** (accordion in expanded mode, Headless UI Popover flyout in collapsed mode). |
+| **`CommandSearch`** | Interactive command palette modal (`Cmd+K`) supporting auto route indexing, search filtering, and pluggable action registration. |
 | **`Input`** | Form input wrapper built on `@headlessui/react` supporting `startIcon`, `endIcon`, and `focus-within` styling. |
 | **`Keyboard`** | Keycap component supporting modifier symbols (`⌘`, `⌥`, `⇧`, `ctrl`, `k`). |
 | **`ThemeSwitch` / `ThemeToggle`** | Theme mode switchers for toggling dark/light mode. |
@@ -144,6 +145,74 @@ export function CustomApp() {
       <Outlet />
     </AdminLayout>
   );
+}
+```
+
+---
+
+## 🔍 Command Search Palette (Cmd+K)
+
+`@admin/core` includes a built-in, accessible Command Search palette powered by `@headlessui/react` (`Dialog` and `Combobox`). It opens via global keyboard shortcut (`Cmd+K` / `Ctrl+K`) or by clicking the sidebar search bar.
+
+### Features
+- **Auto Route Indexing**: Automatically indexes all routes from `navGroups` / `navItems` with category breadcrumbs (e.g. `Shop > Products`).
+- **System Actions**: Built-in dark/light mode toggle and sign-out actions.
+- **Keyboard Navigation**: Native arrow key navigation (`↑`, `↓`), selection (`Enter`), and exit (`Esc`).
+
+### Pluggable Custom Commands API
+
+You can extend the command search with custom actions in two ways:
+
+#### 1. Layout-Scoped (via `AdminLayout` props)
+
+Pass custom command items or groups to `<AdminLayout />`:
+
+```tsx
+import { AdminLayout } from "@admin/core";
+import PlusIcon from "~icons/solar/add-circle-bold";
+
+export function App() {
+  return (
+    <AdminLayout
+      navGroups={navGroups}
+      commandItems={[
+        {
+          id: "create-invoice",
+          label: "Create New Invoice",
+          category: "Actions",
+          icon: <PlusIcon className="size-4" />,
+          onSelect: () => openCreateInvoiceModal(),
+          shortcut: ["cmd", "n"],
+        },
+      ]}
+    >
+      <Outlet />
+    </AdminLayout>
+  );
+}
+```
+
+#### 2. Component-Scoped (via `useRegisterCommands()` hook)
+
+Dynamically register actions inside any route or component. Commands automatically register when mounted and clean up when unmounted:
+
+```tsx
+import { useRegisterCommands } from "@admin/core";
+import DownloadIcon from "~icons/solar/download-bold";
+
+export function ProductsPage() {
+  useRegisterCommands([
+    {
+      id: "export-products-csv",
+      label: "Export Products to CSV",
+      category: "Product Actions",
+      icon: <DownloadIcon className="size-4" />,
+      onSelect: () => handleExportCSV(),
+      shortcut: ["shift", "e"],
+    },
+  ]);
+
+  return <div>Products Management</div>;
 }
 ```
 

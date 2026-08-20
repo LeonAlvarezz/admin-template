@@ -46,10 +46,32 @@ export function useCommandSearch() {
 
 export function CommandSearchProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [registeredCommands, setRegisteredCommands] = useState<CommandItem[]>(
+    [],
+  );
 
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
+
+  const unregisterCommands = (ids: string[]) => {
+    setRegisteredCommands((prev) =>
+      prev.filter((cmd) => !ids.includes(cmd.id)),
+    );
+  };
+
+  const registerCommands = (commands: CommandItem[]) => {
+    setRegisteredCommands((prev) => {
+      const existingIds = new Set(prev.map((c) => c.id));
+      const newCommands = commands.filter((c) => !existingIds.has(c.id));
+      return [...prev, ...newCommands];
+    });
+
+    return () => {
+      const idsToUnregister = commands.map((c) => c.id);
+      unregisterCommands(idsToUnregister);
+    };
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -64,10 +86,30 @@ export function CommandSearchProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <CommandSearchContext.Provider value={{ isOpen, open, close, toggle }}>
+    <CommandSearchContext.Provider
+      value={{
+        isOpen,
+        open,
+        close,
+        toggle,
+        registeredCommands,
+        registerCommands,
+        unregisterCommands,
+      }}
+    >
       {children}
     </CommandSearchContext.Provider>
   );
+}
+
+export function useRegisterCommands(commands: CommandItem[]) {
+  const context = useContext(CommandSearchContext);
+
+  useEffect(() => {
+    if (!context || commands.length === 0) return;
+    const unregister = context.registerCommands(commands);
+    return unregister;
+  }, [context, commands]);
 }
 
 function extractNavCommands(
@@ -155,16 +197,18 @@ export function CommandSearch({
       });
     }
 
-    // 2. Custom passed groups & items
+    // 2. Custom passed groups & items + Context registered commands
     if (customGroups.length > 0) {
       result.push(...customGroups);
     }
 
-    if (customItems.length > 0) {
+    const registered = context?.registeredCommands ?? [];
+    const combinedActions = [...customItems, ...registered];
+    if (combinedActions.length > 0) {
       result.push({
         id: "custom-actions",
         title: "Actions",
-        items: customItems,
+        items: combinedActions,
       });
     }
 
@@ -206,6 +250,7 @@ export function CommandSearch({
     navItems,
     customGroups,
     customItems,
+    context?.registeredCommands,
     isDark,
     setTheme,
     onSignOut,

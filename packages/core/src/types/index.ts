@@ -72,6 +72,8 @@ export interface AdminLayoutProps {
   headerActions?: React.ReactNode;
   sidebarFooter?: React.ReactNode;
   sidebar?: React.ReactNode;
+  commandGroups?: CommandGroup[];
+  commandItems?: CommandItem[];
   children: React.ReactNode;
 }
 
@@ -111,5 +113,9 @@ export interface CommandSearchContextValue {
   open: () => void;
   close: () => void;
   toggle: () => void;
+  registeredCommands: CommandItem[];
+  registerCommands: (commands: CommandItem[]) => () => void;
+  unregisterCommands: (ids: string[]) => void;
 }
+
 

@@ -101,6 +101,8 @@
 - 2026-08-20T14:16:37+07:00 [CODE] Added a faint truncated background track ending at the final sub-item center behind the animated selected rail; verification remained clean.
 - 2026-08-20T15:04:31+07:00 [CODE] Kept the selected rail and round marker mounted while the submenu is open, using a zero-height/hidden origin state so the first child selection grows, fades, and slides into place. Focused lint, core typecheck, starter build, and `git diff --check` passed.
 - 2026-08-20T15:15:20+07:00 [CODE] Implemented Command Search palette component (`CommandSearch`) in `@admin/core` with `Cmd+K` global shortcut, Headless UI Combobox & Dialog modal, automatic `navGroups` extraction with breadcrumbs, theme switcher & sign out system actions, and `SideBarHeader` search trigger integration. Core check-types, starter check-types, and starter build passed with 0 errors.
+- 2026-08-20T15:20:25+07:00 [CODE] Enhanced Command Search architecture to be 100% pluggable: added `commandGroups` & `commandItems` props to `<AdminLayout />`, and `useRegisterCommands()` hook for registering component-scoped actions that auto-mount and auto-cleanup. Verified clean typechecks and production build.
+- 2026-08-20T15:24:04+07:00 [CODE] Documented Command Search Palette (`Cmd+K`), automatic route indexing, layout-scoped custom commands, and component-scoped `useRegisterCommands()` hook in root `README.md`.
 
 
 
