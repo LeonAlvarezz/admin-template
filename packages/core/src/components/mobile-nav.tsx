@@ -93,7 +93,7 @@ function MobileNav({
                 >
                   <div className="relative flex items-center justify-center">
                     {item.icon}
-                    <span className="absolute -top-0.5 -right-1 size-2 rounded-full bg-primary" />
+                    {/* <span className="absolute -top-0.5 -right-1 size-2 rounded-full bg-primary" />*/}
                   </div>
                   <div className="flex items-center gap-0.5">
                     <span className="text-[10px] font-medium">
