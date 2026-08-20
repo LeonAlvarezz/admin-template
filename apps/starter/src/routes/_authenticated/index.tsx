@@ -1,5 +1,6 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Button, toast } from "@admin/core";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: DashboardPage,

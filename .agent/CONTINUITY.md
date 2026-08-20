@@ -142,4 +142,13 @@
 - 2026-08-19T17:05Z [CODE] Implemented robust API error extraction and network error wrapping in `ApiClient` (`apps/starter/src/libs/api-client.ts`), capturing response `data` on `ApiClientError.data`. Updated `LoginPage` to display exact server/network error messages via `toast.error()`. Verified clean typecheck and production build.
 - 2026-08-20T13:33:00+07:00 [CODE] Added `InputPassword` (`<Input.Password />`) and `Checkbox` components to `packages/core/src/components/ui/`, exported from `@admin/core`, and integrated `Input.Password` + `rememberMe` checkbox into `LoginForm` in `apps/starter`.
 - 2026-08-20T13:38:00+07:00 [CODE] Omitted render-prop `children` from `HeadlessCheckboxProps` in `CheckboxProps` so `children` type defaults to `ReactNode`.
+- 2026-08-20T14:41:00+07:00 [CODE] Expanded Glass Toast prototype at `/_authenticated/toast-prototype` with 4 vibrant options (Neon Glow, Progress Timer, Split Hero Column, Frosted Island) resolving dull/generic look. Verified clean `tsc` build.
+- 2026-08-20T14:42:00+07:00 [DECISION] Locked in Option 1C (Split Hero Icon Pillar) as the production toast design. Refactored `Toaster` in `packages/core/src/components/ui/toaster.tsx` to natively render all `toast` notifications using the Split Hero Glass Pillar layout. Monorepo typechecks passed cleanly.
+- 2026-08-20T14:47:00+07:00 [CODE] Fixed first-toast missing animation bug by defining `@keyframes toastEnter` / `toastExit` in `packages/core/src/styles/main.css` and attaching explicit CSS keyframe animation styles to `SplitHeroToast` in `toaster.tsx`. Monorepo typechecks passed cleanly.
+- 2026-08-20T14:55:00+07:00 [CODE] Extended `toast` in `packages/core/src/components/ui/toaster.tsx` with `toast.warning()` (amber pillar + warning icon) and `toast.info()` (blue pillar + info icon) methods. Monorepo typechecks passed cleanly.
+
+
+
+
+
 
