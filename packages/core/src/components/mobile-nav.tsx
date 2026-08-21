@@ -99,12 +99,12 @@ function MobileNav({
                     <span className="text-[10px] font-medium">
                       {item.label}
                     </span>
-                    <ChevronUpIcon
+                    {/* <ChevronUpIcon
                       className={cn(
                         "size-3 transition-transform",
                         isPopoverOpen ? "rotate-180" : "rotate-0",
                       )}
-                    />
+                    />*/}
                   </div>
                 </Button>
               </div>

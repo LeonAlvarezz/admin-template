@@ -6,6 +6,11 @@
 - 2026-08-18T14:10Z [CODE] Transition `apps/starter` to TanStack Router File-Based Routing using `@tanstack/router-plugin` and `src/routes/` tree.
 - 2026-08-19T17:03Z [USER] Refined API error plan: use existing `toast` component instead of `Alert`, and utilize `ApiClientError.data` error response payload for frontend error handling.
 - 2026-08-20T15:08Z [USER] Created implementation plan for Command Search palette component in `@admin/core` with `Cmd+K` global shortcut and sidebar search trigger integration.
+- 2026-08-20T17:45Z [CODE] Implemented simplified standalone e-commerce `product` Drizzle ORM schema (`product.schema.ts`) and `@admin/types` Valibot schemas (`product.ts`).
+- 2026-08-21T10:52Z [CODE] Fixed `USER_ROLE.SUPER_ADMIN` enum value to `"superAdmin"` (camelCase) to align with Better Auth role configuration, generated `ProductController` and `productRoute` in `apps/backend`.
+- 2026-08-21T11:05Z [CODE] Removed `swagger-ui-express` dependency; standardized backend API docs on Scalar API Reference (`/docs`) with `openapi.config.ts`.
+- 2026-08-21T11:10Z [CODE] Wrapped `GET /products/:id` with `protectedRoute(...)` in `product.route.ts` so `req.user` & `req.session` are populated by Better Auth.
+- 2026-08-21T11:38Z [CODE] Switched `apps/backend` dev watcher script to `nodemon` (`nodemon --watch src --watch main.ts -e ts --exec bun run main.ts`) to prevent watcher exits on syntax errors.
 
 ## [DECISIONS]
 - 2026-08-14T15:17Z [CODE] Updated `@admin/core` and `@repo/*` dependencies from `"*"` to `"workspace:*"` in `apps/starter/package.json` and `packages/core/package.json`.
@@ -166,6 +171,10 @@
 - 2026-08-20T17:11:00+07:00 [CODE] Configured MobileNav in sidebar.tsx and NavItem to automatically close the mobile drawer and popovers upon route change (via useActiveUrl pathname effect and sub-item onClick handler propagation).
 
 - 2026-08-20T17:10:00+07:00 [CODE] Fixed mobile layout content clipping bug in AdminLayout (packages/core/src/components/admin-layout.tsx): added responsive bottom padding pb-20 md:pb-6 to <main> element so all bottom page content scrolls cleanly above the fixed 64px mobile dock bar.
+- 2026-08-20T17:51:00+07:00 [CODE] Fixed Better Auth `RoleInput` type error in `apps/backend/src/lib/permissions.ts` by adding `user: ["ban"]` to `statement` in `createAccessControl(statement)`. Typecheck verified clean.
+- 2026-08-20T17:55:00+07:00 [CODE] Implemented multi-role idempotent database seed script in `apps/backend/src/db/seed.ts` creating `super_admin`, `admin`, and `user` accounts via Better Auth + Drizzle, and hooked `db:seed` script in root `package.json` (`bun db:seed`). Verification passed clean.
+- 2026-08-20T17:57:00+07:00 [CODE] Implemented `ProductRepository` in `apps/backend/src/modules/product/product.repository.ts` with full CRUD operations (`findAll`, `findById`, `findBySlug`, `create`, `update`, `delete`) using Drizzle ORM and `@admin/types`. Typecheck verified clean.
+- 2026-08-21T10:31:00+07:00 [CODE] Updated `product.id` to auto-incrementing `serial("id")` in `product.schema.ts`, fixed migration SQL in `0003_change_product_id_to_serial.sql` (sequence-backed integer migration), updated `ProductSchema` in `@admin/types`, `ProductRepository`, and `ProductService`. `db:migrate` executed successfully.
 
 
 

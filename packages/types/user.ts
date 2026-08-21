@@ -1,5 +1,11 @@
 import * as v from "valibot";
 
+export enum USER_ROLE {
+  SUPER_ADMIN = "super_admin",
+  ADMIN = "admin",
+  USER = "user",
+}
+
 export const UserSchema = v.object({
   id: v.string(),
   name: v.string(),
@@ -8,6 +14,10 @@ export const UserSchema = v.object({
   image: v.nullable(v.string()),
   createdAt: v.union([v.date(), v.string()]),
   updatedAt: v.union([v.date(), v.string()]),
+  role: v.optional(v.nullable(v.string())),
+  banned: v.optional(v.nullable(v.boolean())),
+  banReason: v.optional(v.nullable(v.string())),
+  banExpires: v.optional(v.nullable(v.union([v.date(), v.string()]))),
 });
 
 export type User = v.InferOutput<typeof UserSchema>;
@@ -23,4 +33,3 @@ export type CreateUser = v.InferOutput<typeof CreateUserSchema>;
 export const UpdateUserSchema = v.partial(CreateUserSchema);
 
 export type UpdateUser = v.InferOutput<typeof UpdateUserSchema>;
-
