@@ -21,108 +21,51 @@ interface Product {
   createdAt: string;
 }
 
-const SAMPLE_PRODUCTS: Product[] = [
-  {
-    id: "PROD-001",
-    name: "Wireless Noise-Canceling Headphones",
-    sku: "AUDIO-NC-01",
-    category: "Electronics",
-    price: 299.99,
-    stock: 45,
-    status: "active",
-    createdAt: "2026-01-15",
-  },
-  {
-    id: "PROD-002",
-    name: "Ergonomic Mechanical Keyboard",
-    sku: "PERIPH-MK-87",
-    category: "Electronics",
-    price: 149.5,
-    stock: 12,
-    status: "active",
-    createdAt: "2026-02-01",
-  },
-  {
-    id: "PROD-003",
-    name: "Minimalist Leather Backpack",
-    sku: "BAG-LEA-09",
-    category: "Accessories",
-    price: 185.0,
-    stock: 0,
-    status: "archived",
-    createdAt: "2026-02-10",
-  },
-  {
-    id: "PROD-004",
-    name: "Smart Fitness Watch Ultra",
-    sku: "SMART-WATCH-04",
-    category: "Electronics",
-    price: 349.0,
-    stock: 28,
-    status: "active",
-    createdAt: "2026-03-05",
-  },
-  {
-    id: "PROD-005",
-    name: "Ceramic Coffee Mug (Set of 4)",
-    sku: "HOME-MUG-04",
-    category: "Home & Kitchen",
-    price: 34.99,
-    stock: 120,
-    status: "active",
-    createdAt: "2026-03-12",
-  },
-  {
-    id: "PROD-006",
-    name: "USB-C Multi-Port Hub Pro",
-    sku: "ACC-USBC-71",
-    category: "Accessories",
-    price: 59.99,
-    stock: 5,
-    status: "draft",
-    createdAt: "2026-04-02",
-  },
-  {
-    id: "PROD-007",
-    name: "Organic Cotton T-Shirt",
-    sku: "APP-TSHIRT-01",
-    category: "Apparel",
-    price: 24.95,
-    stock: 85,
-    status: "active",
-    createdAt: "2026-04-18",
-  },
-  {
-    id: "PROD-008",
-    name: "Portable Bluetooth Speaker",
-    sku: "AUDIO-SPK-02",
-    category: "Electronics",
-    price: 89.99,
-    stock: 19,
-    status: "active",
-    createdAt: "2026-05-01",
-  },
-  {
-    id: "PROD-009",
-    name: "Stainless Steel Water Bottle 1L",
-    sku: "HOME-BTL-1L",
-    category: "Home & Kitchen",
-    price: 29.0,
-    stock: 64,
-    status: "active",
-    createdAt: "2026-05-14",
-  },
-  {
-    id: "PROD-010",
-    name: "Adjustable Desk Lamp LED",
-    sku: "HOME-LAMP-01",
-    category: "Home & Kitchen",
-    price: 49.99,
-    stock: 0,
-    status: "draft",
-    createdAt: "2026-06-01",
-  },
+const BASE_PRODUCTS = [
+  { name: "Wireless Noise-Canceling Headphones", category: "Audio", price: 299.99 },
+  { name: "Ergonomic Mechanical Keyboard", category: "Electronics", price: 149.5 },
+  { name: "Minimalist Leather Backpack", category: "Accessories", price: 185.0 },
+  { name: "Smart Fitness Watch Ultra", category: "Electronics", price: 349.0 },
+  { name: "Ceramic Coffee Mug (Set of 4)", category: "Home & Kitchen", price: 34.99 },
+  { name: "USB-C Multi-Port Hub Pro", category: "Accessories", price: 59.99 },
+  { name: "Organic Cotton T-Shirt", category: "Apparel", price: 24.95 },
+  { name: "Portable Bluetooth Speaker", category: "Audio", price: 89.99 },
+  { name: "Stainless Steel Water Bottle 1L", category: "Home & Kitchen", price: 29.0 },
+  { name: "Adjustable Desk Lamp LED", category: "Home & Kitchen", price: 49.99 },
+  { name: "Ultra-Wide Curved Gaming Monitor 34\"", category: "Electronics", price: 699.99 },
+  { name: "Wireless Ergonomic Vertical Mouse", category: "Electronics", price: 69.95 },
+  { name: "Aluminum Laptop Stand Riser", category: "Accessories", price: 39.99 },
+  { name: "Noise-Isolating In-Ear Earbuds", category: "Audio", price: 49.99 },
+  { name: "Standing Desk Converter", category: "Office & Stationery", price: 219.0 },
+  { name: "Leather Desk Pad Protector", category: "Office & Stationery", price: 29.5 },
+  { name: "Smart Home Security Camera", category: "Electronics", price: 129.99 },
+  { name: "Mechanical Pencil Set 0.5mm", category: "Office & Stationery", price: 15.99 },
+  { name: "Fast Wireless Charging Pad 15W", category: "Accessories", price: 32.5 },
+  { name: "Thermal Insulated Travel Flask", category: "Home & Kitchen", price: 27.99 },
 ];
+
+const STATUSES: Array<Product["status"]> = ["active", "draft", "archived"];
+
+const SAMPLE_PRODUCTS: Product[] = Array.from({ length: 65 }, (_, index) => {
+  const base = BASE_PRODUCTS[index % BASE_PRODUCTS.length];
+  const idNum = String(index + 1).padStart(3, "0");
+  const skuPrefix = base.category.substring(0, 3).toUpperCase();
+  const status = STATUSES[index % 3];
+  const stock = (index * 7 + 3) % 120;
+  const version = Math.floor(index / BASE_PRODUCTS.length);
+
+  return {
+    id: `PROD-${idNum}`,
+    name: version > 0 ? `${base.name} (V${version + 1})` : base.name,
+    sku: `${skuPrefix}-${idNum}`,
+    category: base.category,
+    price: parseFloat((base.price + (index % 5) * 5).toFixed(2)),
+    stock: stock,
+    status: stock === 0 ? "archived" : status,
+    createdAt: `2026-0${(index % 6) + 1}-${String((index % 28) + 1).padStart(2, "0")}`,
+  };
+});
+
 
 function ProductPage() {
   const [products, setProducts] = React.useState<Product[]>(SAMPLE_PRODUCTS);

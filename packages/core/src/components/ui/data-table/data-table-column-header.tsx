@@ -1,7 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Button from "../button";
 import { cn } from "../../../libs/cn";
-import ChevronIcon from "~icons/tabler/chevron-down";
 import ArrowIcon from "~icons/solar/arrow-up-bold";
 import HideIcon from "~icons/bxs/hide";
 
@@ -37,7 +36,7 @@ export function DataTableColumnHeader({
           as={Button}
           variant="ghost"
           size="sm"
-          className="h-8 -ml-3 flex items-center gap-1.5 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:bg-red-500 hover:text-foreground data-open:bg-accent"
+          className="h-8 -ml-3 flex items-center gap-1.5 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground data-open:bg-accent"
         >
           <span>{title}</span>
           {isSorted === "desc" ? (

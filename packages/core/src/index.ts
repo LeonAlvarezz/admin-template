@@ -21,3 +21,11 @@ export * from "./components/ui/chart";
 export * from "./components/ui/data-table";
 export { default as Drawer } from "./components/ui/drawer";
 export type { DrawerProps } from "./components/ui/drawer";
+export { default as NativeSelect } from "./components/ui/native-select";
+export type {
+  NativeSelectProps,
+  NativeSelectOption,
+} from "./components/ui/native-select";
+export { default as Pagination } from "./components/ui/pagination";
+export type { PaginationProps } from "./components/ui/pagination";
+

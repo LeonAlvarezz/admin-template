@@ -195,7 +195,7 @@ export function DataTable<
                 />
               ))}
             </colgroup>
-            <thead className="bg-muted/50 border-b border-border text-xs uppercase tracking-wider text-muted-foreground select-none">
+            <thead className="bg-muted/20 border-border text-xs uppercase tracking-wider text-muted-foreground select-none">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
