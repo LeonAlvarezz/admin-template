@@ -117,5 +117,3 @@ export interface CommandSearchContextValue {
   registerCommands: (commands: CommandItem[]) => () => void;
   unregisterCommands: (ids: string[]) => void;
 }
-
-

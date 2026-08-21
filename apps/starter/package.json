@@ -17,6 +17,7 @@
     "@tanstack/eslint-config": "^0.4.0",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-router": "^1.170.29",
+    "@tanstack/react-table": "^9.1.2",
     "@tanstack/valibot-form-adapter": "^0.42.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

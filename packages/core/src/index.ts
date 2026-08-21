@@ -8,6 +8,8 @@ export type { InputProps, InputPasswordProps } from "./components/ui/input";
 export { default as Button } from "./components/ui/button";
 export { default as Checkbox } from "./components/ui/checkbox";
 export type { CheckboxProps } from "./components/ui/checkbox";
+export { default as Tooltip } from "./components/ui/tooltip";
+export type { TooltipProps } from "./components/ui/tooltip";
 export { Toaster, toast } from "./components/ui/toaster";
 export * from "./components/ui/field";
 export * from "./components/ui/command-search";
@@ -16,7 +18,6 @@ export * from "./hooks/theme";
 export * from "./types";
 export * from "./auth";
 export * from "./components/ui/chart";
+export * from "./components/ui/data-table";
 export { default as Drawer } from "./components/ui/drawer";
 export type { DrawerProps } from "./components/ui/drawer";
-
-

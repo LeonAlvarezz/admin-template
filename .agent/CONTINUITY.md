@@ -11,8 +11,14 @@
 - 2026-08-21T11:05Z [CODE] Removed `swagger-ui-express` dependency; standardized backend API docs on Scalar API Reference (`/docs`) with `openapi.config.ts`.
 - 2026-08-21T11:10Z [CODE] Wrapped `GET /products/:id` with `protectedRoute(...)` in `product.route.ts` so `req.user` & `req.session` are populated by Better Auth.
 - 2026-08-21T11:38Z [CODE] Switched `apps/backend` dev watcher script to `nodemon` (`nodemon --watch src --watch main.ts -e ts --exec bun run main.ts`) to prevent watcher exits on syntax errors.
+- 2026-08-21T13:46Z [USER] Created implementation plan for DataTable component in `@admin/core` using `@tanstack/react-table` v8.
+- 2026-08-21T14:07Z [USER] Standardized interactive element hover/focus states to `bg-accent text-accent-foreground` across `@admin/core`.
 
 ## [DECISIONS]
+- 2026-08-21T15:24:09+07:00 [USER] Approved a reusable core Tooltip attached automatically to truncated DataTable content; it must appear only when the rendered content actually overflows.
+- 2026-08-21T15:09:18+07:00 [USER] DataTable core owns common text truncation: default accessor cells ellipsize automatically, custom-rendered cells stay unchanged, and `meta.truncate` explicitly overrides either default.
+- 2026-08-21T14:53:59+07:00 [USER] Long DataTable text should ellipsize within its cell; tooltip is explicitly deferred to a later task.
+- 2026-08-21T14:45:22+07:00 [USER] DataTable width contract supersedes `meta.className` sizing: an explicit `ColumnDef.size` is fixed; columns without `size` share remaining width and stay single-line.
 - 2026-08-14T15:17Z [CODE] Updated `@admin/core` and `@repo/*` dependencies from `"*"` to `"workspace:*"` in `apps/starter/package.json` and `packages/core/package.json`.
 - 2026-08-14T15:22Z [CODE] Configured `@tailwindcss/vite` plugin in `apps/starter/vite.config.ts` and added `@source "../**/*.{ts,tsx}"` to `packages/core/src/styles/main.css`.
 - 2026-08-14T15:26Z [CODE] Added OKLCH semantic theme design tokens (`primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `card`, `popover`) for light/dark modes in `packages/core/src/styles/main.css`.
@@ -93,11 +99,16 @@
 - 2026-08-19T17:57Z [CODE] Fixed backend `error-middleware.ts` status code parsing when `error.status` is a string (e.g. Better Auth `APIError` `status: "UNAUTHORIZED"`), preventing Express `res.status()` runtime TypeError.
 
 ## [DISCOVERIES]
+- 2026-08-21T15:24:09+07:00 [TOOL] Width-based truncation detection requires a layout box: the DataTable Tooltip trigger must be `block`; live measurement showed the long product at `scrollWidth=502`, `clientWidth=366`, while `USB Hub` was `366/366` and correctly produced no tooltip.
 - 2026-08-19T17:57Z [CODE] Better Auth `APIError` sets `status` to string enum (e.g., `'UNAUTHORIZED'`) and `statusCode` to integer `401`. Express `res.status(statusCode)` throws a runtime `TypeError` if passed a non-numeric string.
 - 2026-08-20T11:51:02+07:00 [TOOL] Login password error appears during typing because email blur runs the form-level `SignInEmailSchema` and stores a password error; password `handleChange` then marks `isTouched`, satisfying the UI error gate before password blur. TanStack Form 1.33.5 state reproduction confirmed the error clears on password blur.
 - 2026-08-20T15:04:31+07:00 [CODE] The sub-navigation selected rail and marker were conditionally mounted only after a child became active, so their initial render already had final geometry and CSS had no prior state to animate from.
 
 ## [OUTCOMES]
+- 2026-08-21T15:24:09+07:00 [CODE] Added reusable exported `Tooltip` with hover/focus behavior, portal positioning, resize/scroll updates, accessible tooltip semantics, and `showWhenTruncated`; DataTable now applies it to core-managed truncated cells. Nine core tests, changed-file lint, core/starter typechecks, starter build, formatting, and diff checks passed. Live browser verification confirmed long-text hover and focus each show one tooltip while fitting text shows none; full core lint remains blocked by four pre-existing errors outside changed files.
+- 2026-08-21T15:09:18+07:00 [CODE] Supersedes page-owned product truncation: DataTable now wraps default accessor output in a constrained ellipsis container while checkbox, badge, action, and other custom cells remain untouched. `meta.truncate` supports opt-in/opt-out. Six focused tests, changed-file lint, core/starter typechecks, starter production build, and formatting passed.
+- 2026-08-21T14:53:59+07:00 [CODE] Normal DataTable cells now clip overflow at their boundary, and the product-name renderer uses a constrained `truncate` block instead of intrinsic `w-fit`, producing ellipsis rather than crossing into Category. Three focused regressions, both changed-file lints, core/starter typechecks, starter build, formatting, and `git diff --check` passed; live visual verification stopped at sign-in because credentials were not submitted.
+- 2026-08-21T14:45:22+07:00 [CODE] DataTable now uses a fixed-layout `<colgroup>` so explicit `size` values remain fixed and unsized columns fill remaining space; header/body cells use `whitespace-nowrap`, and horizontal scrolling activates below TanStack's total minimum size. Focused 2-test regression, changed-file lint, core/starter typechecks, and starter build passed; full core lint remains blocked by four pre-existing errors in `theme-toggle.tsx`, `active-url.ts`, and `cn.ts`.
 - 2026-08-19T17:53Z [CODE] `ApiClient` seamlessly unwraps backend `ApiResponse<T>` envelopes and treats `success: false` as error responses.
 - 2026-08-19T17:57Z [CODE] Backend `errorMiddleware` and `res.error` safely parse non-numeric status strings to integer status codes.
 - 2026-08-20T12:07:33+07:00 [CODE] Login now runs `SignInEmailSchema` on submit, keeps aligned email/password validators on blur, and has a Bun regression test proving valid credentials submit without password blur. Focused test, changed-file lint, starter typecheck/build, and `git diff --check` passed; full starter lint remains blocked by the pre-existing `vite.config.ts` parser-project mismatch.
@@ -175,9 +186,12 @@
 - 2026-08-20T17:55:00+07:00 [CODE] Implemented multi-role idempotent database seed script in `apps/backend/src/db/seed.ts` creating `super_admin`, `admin`, and `user` accounts via Better Auth + Drizzle, and hooked `db:seed` script in root `package.json` (`bun db:seed`). Verification passed clean.
 - 2026-08-20T17:57:00+07:00 [CODE] Implemented `ProductRepository` in `apps/backend/src/modules/product/product.repository.ts` with full CRUD operations (`findAll`, `findById`, `findBySlug`, `create`, `update`, `delete`) using Drizzle ORM and `@admin/types`. Typecheck verified clean.
 - 2026-08-21T10:31:00+07:00 [CODE] Updated `product.id` to auto-incrementing `serial("id")` in `product.schema.ts`, fixed migration SQL in `0003_change_product_id_to_serial.sql` (sequence-backed integer migration), updated `ProductSchema` in `@admin/types`, `ProductRepository`, and `ProductService`. `db:migrate` executed successfully.
-
-
-
+- 2026-08-21T13:49:00+07:00 [CODE] Built reusable `DataTable`, `DataTableColumnHeader`, `DataTablePagination`, `DataTableViewOptions`, `DataTableToolbar`, and `DataTableRowActions` components in `@admin/core` using native `@tanstack/react-table` v9 (`useTable` + `tableFeatures`). Integrated demo into `apps/starter` ProductPage (`/shop/products`). Monorepo check-types and production build passed with 0 errors.
+- 2026-08-21T14:07:00+07:00 [CODE] Audited hover states across workspace and standardized all interactive hover/focus states to `bg-accent text-accent-foreground` across `button.tsx`, `data-table-column-header.tsx`, `data-table-row-actions.tsx`, and `data-table-view-options.tsx`. Typecheck and production build passed clean.
+- 2026-08-21T14:13:00+07:00 [CODE] Enhanced `DataTable` in `@admin/core` to support custom cell/column widths via `meta: { className, headerClassName, cellClassName }` and `size: number` props in TanStack Table `columnDef`. Typecheck and starter build passed clean.
+- 2026-08-21T14:24:00+07:00 [CODE] Standardized TanStack Table v9 `ColumnMeta` module augmentation in [`packages/core/src/types/index.ts`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/types/index.ts#L3-L15) using `@tanstack/table-core` default type parameters, enabling `meta: { className: "w-full" }` across all column definitions without any TS/IDE errors. Monorepo check-types and build passed cleanly.
+- 2026-08-21T14:28:00+07:00 [CODE] Configured explicit `meta: { className }` width classes (`w-10`, `w-32`, `w-full min-w-[200px]`, `w-36`, `w-28`, `w-12 text-right`) across all product table columns in [`product.page.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/modules/product/product.page.tsx#L147-L245). Typecheck and production build passed with 0 errors.
+- 2026-08-21T14:29:00+07:00 [CODE] Added 4 new properties (`brand`, `rating`, `salesCount`, `createdAt`) and custom column renderers (star rating icons, formatted sales counters, brand labels, dates) in [`product.page.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/modules/product/product.page.tsx#L14-L310). Typechecks and build passed clean with 0 errors.
 
 
 
