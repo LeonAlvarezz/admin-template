@@ -7,6 +7,10 @@ mock.module("~icons/solar/eye-bold", () => ({ default: () => null }));
 mock.module("~icons/solar/eye-closed-bold", () => ({ default: () => null }));
 mock.module("~icons/boxicons/check", () => ({ default: () => null }));
 mock.module("~icons/tabler/chevron-down", () => ({ default: () => null }));
+mock.module("~icons/mingcute/column-fill", () => ({ default: () => null }));
+mock.module("~icons/solar/arrow-up-bold", () => ({ default: () => null }));
+mock.module("~icons/bxs/hide", () => ({ default: () => null }));
+mock.module("~icons/mingcute/more-4-line", () => ({ default: () => null }));
 
 const { DataTable } =
   await import("../src/components/ui/data-table/data-table");
@@ -37,7 +41,6 @@ function renderTable(
       data={[
         { name: "A product name that must stay on one line", status: "Active" },
       ]}
-      enableGlobalFilter={false}
       enablePagination={false}
       enableColumnViewToggle={false}
     />,

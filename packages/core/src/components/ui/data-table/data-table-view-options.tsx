@@ -4,6 +4,7 @@ import Button from "../button";
 import Checkbox from "../checkbox";
 import { cn } from "../../../libs/cn";
 import type { DefaultDataTableFeatures } from "./data-table";
+import ColumnIcon from "~icons/mingcute/column-fill";
 
 interface DataTableViewOptionsProps<TData extends Record<string, any> = any> {
   table: ReactTable<DefaultDataTableFeatures, TData>;
@@ -16,7 +17,7 @@ export function DataTableViewOptions<TData extends Record<string, any> = any>({
     .getAllColumns()
     .filter(
       (column) =>
-        typeof column.accessorFn !== "undefined" && column.getCanHide()
+        typeof column.accessorFn !== "undefined" && column.getCanHide(),
     );
 
   if (toggleableColumns.length === 0) return null;
@@ -25,47 +26,51 @@ export function DataTableViewOptions<TData extends Record<string, any> = any>({
     <Menu as="div" className="relative inline-block text-left">
       <MenuButton
         as={Button}
-        variant="outline"
+        variant="ghost"
         size="sm"
-        className="h-9 flex items-center gap-2 px-3 text-xs"
+        className="flex items-center gap-2 px-2 text-xs"
       >
-        <span className="i-lucide-sliders-horizontal size-4" />
-        <span>View Columns</span>
+        {/* <ColumnIcon />*/}
+        Properties
       </MenuButton>
 
       <MenuItems
         transition
         anchor="bottom end"
-        className="z-50 min-w-44 rounded-md border border-border bg-popover p-1.5 text-popover-foreground shadow-md transition duration-100 ease-out data-closed:scale-95 data-closed:opacity-0"
+        className="z-50 min-w-44 rounded-md border border-border bg-sidebar p-1.5 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
       >
-        <div className="px-2 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          Toggle columns
+        <div className="px-2 py-1 text-xs font-semibold text-muted-foreground capitalize tracking-wider">
+          View columns
         </div>
-        <div className="my-1 h-px bg-border" />
+        <hr className="my-2 border-border" />
         <div className="max-h-60 overflow-y-auto">
           {toggleableColumns.map((column) => {
             const isVisible = column.getIsVisible();
             const header = column.columnDef.header;
-            const label =
-              typeof header === "string"
-                ? header
-                : column.id;
+            const label = typeof header === "string" ? header : column.id;
 
             return (
               <MenuItem key={column.id}>
                 {({ focus }) => (
-                  <label
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      column.toggleVisibility(!isVisible);
+                    }}
                     className={cn(
-                      "flex items-center gap-2.5 rounded-sm px-2 py-1.5 text-xs capitalize cursor-pointer select-none",
-                      focus && "bg-accent text-accent-foreground"
+                      "flex w-full items-center gap-2.5 rounded-sm px-2 py-1.5 text-xs capitalize cursor-pointer select-none text-left focus:outline-none transition-colors",
+                      focus && "bg-accent text-accent-foreground",
                     )}
                   >
                     <Checkbox
                       checked={isVisible}
-                      onChange={(checked) => column.toggleVisibility(checked)}
+                      onChange={() => {}}
+                      tabIndex={-1}
+                      className="pointer-events-none"
                     />
                     <span className="truncate">{label}</span>
-                  </label>
+                  </button>
                 )}
               </MenuItem>
             );

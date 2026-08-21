@@ -17,10 +17,10 @@ export const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground data-hover:opacity-90",
         outline: "border data-hover:border-primary data-hover:text-primary",
-        ghost: "data-hover:bg-accent data-hover:text-accent-foreground",
+        ghost: "data-hover:bg-muted/30 data-hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground data-hover:bg-accent data-hover:text-accent-foreground",
-        barebone: "bg-transparent text-inherit",
+        barebone: "bg-transparent text-inherit data-active:translate-y-0",
       },
       size: {
         sm: "",

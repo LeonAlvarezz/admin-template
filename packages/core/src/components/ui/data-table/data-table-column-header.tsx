@@ -51,7 +51,7 @@ export function DataTableColumnHeader({
         <MenuItems
           transition
           anchor="bottom start"
-          className="z-50 min-w-36 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md transition duration-100 ease-out data-closed:scale-95 data-closed:opacity-0"
+          className="z-50 min-w-36 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
         >
           <MenuItem>
             {({ focus }) => (

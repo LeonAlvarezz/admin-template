@@ -6,14 +6,12 @@ import {
   rowSortingFeature,
   rowPaginationFeature,
   columnFilteringFeature,
-  globalFilteringFeature,
   rowSelectionFeature,
   columnVisibilityFeature,
   columnSizingFeature,
   metaHelper,
   createCoreRowModel,
   createSortedRowModel,
-  createFilteredRowModel,
   createPaginatedRowModel,
 } from "@tanstack/react-table";
 import type {
@@ -27,6 +25,9 @@ import { cn } from "../../../libs/cn";
 import { Tooltip } from "../tooltip";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTableViewOptions } from "./data-table-view-options";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export interface DataTableColumnMeta {
   className?: string;
@@ -37,14 +38,12 @@ export const defaultFeatures = tableFeatures({
   rowSortingFeature,
   rowPaginationFeature,
   columnFilteringFeature,
-  globalFilteringFeature,
   rowSelectionFeature,
   columnVisibilityFeature,
   columnSizingFeature,
   columnMeta: metaHelper<DataTableColumnMeta>(),
   coreRowModel: createCoreRowModel(),
   sortedRowModel: createSortedRowModel(),
-  filteredRowModel: createFilteredRowModel(),
   paginatedRowModel: createPaginatedRowModel(),
 });
 
@@ -95,32 +94,32 @@ export interface DataTableProps<
   columns: ColumnDef<DefaultDataTableFeatures, TData, TValue>[];
   data: TData[];
   loading?: boolean;
-  searchPlaceholder?: string;
-  enableGlobalFilter?: boolean;
   enablePagination?: boolean;
   enableColumnViewToggle?: boolean;
   pageSizeOptions?: number[];
   initialPageSize?: number;
   toolbarActions?: React.ReactNode;
+  toolbar?:
+    | React.ReactNode
+    | ((table: any) => React.ReactNode);
   emptyState?: React.ReactNode;
   onRowClick?: (row: TData) => void;
   className?: string;
 }
 
-export function DataTable<
+function DataTableRoot<
   TData extends Record<string, any> = any,
   TValue = unknown,
 >({
   columns,
   data,
   loading = false,
-  searchPlaceholder = "Search all columns...",
-  enableGlobalFilter = true,
   enablePagination = true,
   enableColumnViewToggle = true,
   pageSizeOptions = [10, 20, 30, 40, 50],
   initialPageSize = 10,
   toolbarActions,
+  toolbar,
   emptyState,
   onRowClick,
   className,
@@ -129,7 +128,6 @@ export function DataTable<
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [globalFilter, setGlobalFilter] = React.useState<string>("");
   const [columnVisibility, setColumnVisibility] =
     React.useState<ColumnVisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
@@ -143,7 +141,6 @@ export function DataTable<
     state: {
       sorting,
       columnFilters,
-      globalFilter,
       columnVisibility,
       rowSelection,
     },
@@ -155,26 +152,26 @@ export function DataTable<
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
   });
 
   return (
     <div className={cn("w-full space-y-3", className)}>
-      {/* Toolbar (Search, Filter Reset, Custom Actions, Column Toggle) */}
-      {(enableGlobalFilter || enableColumnViewToggle || toolbarActions) && (
+      {/* Toolbar Slot */}
+      {toolbar ? (
+        typeof toolbar === "function" ? (
+          toolbar(table as any)
+        ) : (
+          toolbar
+        )
+      ) : enableColumnViewToggle || toolbarActions ? (
         <DataTableToolbar
           table={table as any}
-          globalFilter={globalFilter}
-          onGlobalFilterChange={
-            enableGlobalFilter ? setGlobalFilter : undefined
-          }
-          searchPlaceholder={searchPlaceholder}
           enableColumnViewToggle={enableColumnViewToggle}
           actions={toolbarActions}
         />
-      )}
+      ) : null}
 
       {/* Main Table Shell */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
@@ -303,3 +300,11 @@ export function DataTable<
     </div>
   );
 }
+
+export const DataTable = Object.assign(DataTableRoot, {
+  Toolbar: DataTableToolbar,
+  ViewOptions: DataTableViewOptions,
+  Pagination: DataTablePagination,
+  ColumnHeader: DataTableColumnHeader,
+  RowActions: DataTableRowActions,
+});

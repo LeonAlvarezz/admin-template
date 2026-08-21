@@ -1,10 +1,17 @@
 import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
+import SearchIcon from "~icons/boxicons/search";
+import PlusIcon from "~icons/tabler/plus-filled";
+import EditIcon from "~icons/lets-icons/edit-fill";
+import CopyIcon from "~icons/solar/copy-bold";
+import DeleteIcon from "~icons/mingcute/delete-fill";
+
 import {
   DataTable,
   DataTableColumnHeader,
   DataTableRowActions,
   Button,
+  Input,
   Checkbox,
   toast,
 } from "@admin/core";
@@ -22,26 +29,86 @@ interface Product {
 }
 
 const BASE_PRODUCTS = [
-  { name: "Wireless Noise-Canceling Headphones", category: "Audio", price: 299.99 },
-  { name: "Ergonomic Mechanical Keyboard", category: "Electronics", price: 149.5 },
-  { name: "Minimalist Leather Backpack", category: "Accessories", price: 185.0 },
+  {
+    name: "Wireless Noise-Canceling Headphones",
+    category: "Audio",
+    price: 299.99,
+  },
+  {
+    name: "Ergonomic Mechanical Keyboard",
+    category: "Electronics",
+    price: 149.5,
+  },
+  {
+    name: "Minimalist Leather Backpack",
+    category: "Accessories",
+    price: 185.0,
+  },
   { name: "Smart Fitness Watch Ultra", category: "Electronics", price: 349.0 },
-  { name: "Ceramic Coffee Mug (Set of 4)", category: "Home & Kitchen", price: 34.99 },
+  {
+    name: "Ceramic Coffee Mug (Set of 4)",
+    category: "Home & Kitchen",
+    price: 34.99,
+  },
   { name: "USB-C Multi-Port Hub Pro", category: "Accessories", price: 59.99 },
   { name: "Organic Cotton T-Shirt", category: "Apparel", price: 24.95 },
   { name: "Portable Bluetooth Speaker", category: "Audio", price: 89.99 },
-  { name: "Stainless Steel Water Bottle 1L", category: "Home & Kitchen", price: 29.0 },
-  { name: "Adjustable Desk Lamp LED", category: "Home & Kitchen", price: 49.99 },
-  { name: "Ultra-Wide Curved Gaming Monitor 34\"", category: "Electronics", price: 699.99 },
-  { name: "Wireless Ergonomic Vertical Mouse", category: "Electronics", price: 69.95 },
-  { name: "Aluminum Laptop Stand Riser", category: "Accessories", price: 39.99 },
+  {
+    name: "Stainless Steel Water Bottle 1L",
+    category: "Home & Kitchen",
+    price: 29.0,
+  },
+  {
+    name: "Adjustable Desk Lamp LED",
+    category: "Home & Kitchen",
+    price: 49.99,
+  },
+  {
+    name: 'Ultra-Wide Curved Gaming Monitor 34"',
+    category: "Electronics",
+    price: 699.99,
+  },
+  {
+    name: "Wireless Ergonomic Vertical Mouse",
+    category: "Electronics",
+    price: 69.95,
+  },
+  {
+    name: "Aluminum Laptop Stand Riser",
+    category: "Accessories",
+    price: 39.99,
+  },
   { name: "Noise-Isolating In-Ear Earbuds", category: "Audio", price: 49.99 },
-  { name: "Standing Desk Converter", category: "Office & Stationery", price: 219.0 },
-  { name: "Leather Desk Pad Protector", category: "Office & Stationery", price: 29.5 },
-  { name: "Smart Home Security Camera", category: "Electronics", price: 129.99 },
-  { name: "Mechanical Pencil Set 0.5mm", category: "Office & Stationery", price: 15.99 },
-  { name: "Fast Wireless Charging Pad 15W", category: "Accessories", price: 32.5 },
-  { name: "Thermal Insulated Travel Flask", category: "Home & Kitchen", price: 27.99 },
+  {
+    name: "Standing Desk Converter",
+    category: "Office & Stationery",
+    price: 219.0,
+  },
+  {
+    name: "Leather Desk Pad Protector",
+    category: "Office & Stationery",
+    price: 29.5,
+  },
+  {
+    name: "Smart Home Security Camera",
+    category: "Electronics",
+    price: 129.99,
+  },
+  {
+    name: "Mechanical Pencil Set 0.5mm",
+    category: "Office & Stationery",
+    price: 15.99,
+  },
+  {
+    name: "Fast Wireless Charging Pad 15W",
+    category: "Accessories",
+    price: 32.5,
+  },
+  {
+    name: "Thermal Insulated Travel Flask",
+    category: "Home & Kitchen",
+    price: 27.99,
+  },
 ];
 
 const STATUSES: Array<Product["status"]> = ["active", "draft", "archived"];
@@ -65,7 +132,6 @@ const SAMPLE_PRODUCTS: Product[] = Array.from({ length: 65 }, (_, index) => {
     createdAt: `2026-0${(index % 6) + 1}-${String((index % 28) + 1).padStart(2, "0")}`,
   };
 });
-
 
 function ProductPage() {
   const [products, setProducts] = React.useState<Product[]>(SAMPLE_PRODUCTS);
@@ -187,9 +253,7 @@ function ProductPage() {
     },
     {
       id: "actions",
-      meta: {
-        className: "w-12 text-right",
-      },
+      enableHiding: true,
       cell: ({ row }) => {
         const product = row.original;
 
@@ -198,17 +262,17 @@ function ProductPage() {
             actions={[
               {
                 label: "Edit",
-                icon: "i-lucide-pencil",
+                icon: <EditIcon />,
                 onClick: () => toast.info(`Editing ${product.name}`),
               },
               {
                 label: "Copy SKU",
-                icon: "i-lucide-copy",
+                icon: <CopyIcon />,
                 onClick: () => toast.info(`Copied SKU: ${product.sku}`),
               },
               {
                 label: "Delete",
-                icon: "i-lucide-trash-2",
+                icon: <DeleteIcon />,
                 variant: "destructive",
                 onClick: () => {
                   setProducts((prev) =>
@@ -242,18 +306,28 @@ function ProductPage() {
       <DataTable
         columns={columns}
         data={products}
-        searchPlaceholder="Search by product name, SKU, or category..."
-        toolbarActions={
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => toast.success("Create Product Modal Triggered")}
-            className="h-9 px-3 text-xs flex items-center gap-1.5"
-          >
-            <span className="i-lucide-plus size-4" />
-            <span>Add Product</span>
-          </Button>
-        }
+        toolbar={(table) => (
+          <DataTable.Toolbar>
+            <Input
+              placeholder="Search products..."
+              startIcon={<SearchIcon />}
+              containerClassName="h-8"
+              className="min-w-80"
+            />
+            <div className="flex items-center gap-2">
+              <DataTable.ViewOptions table={table} />
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => toast.success("Create Product Modal Triggered")}
+                className="h-8 px-3 text-xs flex items-center gap-1.5"
+              >
+                <PlusIcon />
+                <span>Add Product</span>
+              </Button>
+            </div>
+          </DataTable.Toolbar>
+        )}
       />
     </div>
   );

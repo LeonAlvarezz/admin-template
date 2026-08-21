@@ -1,10 +1,12 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Button from "../button";
 import { cn } from "../../../libs/cn";
+import MoreIcon from "~icons/mingcute/more-4-line";
+import type { ReactNode } from "react";
 
 export interface DataTableRowActionItem {
   label: string;
-  icon?: string;
+  icon?: ReactNode;
   onClick: () => void;
   variant?: "default" | "destructive";
 }
@@ -28,13 +30,13 @@ export function DataTableRowActions({
         size="sm"
         className="h-8 w-8 p-0 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
       >
-        <span className="i-lucide-more-horizontal size-4" />
+        <MoreIcon />
       </MenuButton>
 
       <MenuItems
         transition
         anchor="bottom end"
-        className="z-50 min-w-36 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md transition duration-100 ease-out data-closed:scale-95 data-closed:opacity-0"
+        className="z-50 min-w-36 rounded-md border border-border bg-sidebar p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
       >
         {actions.map((action, index) => {
           const isDestructive = action.variant === "destructive";
@@ -50,7 +52,7 @@ export function DataTableRowActions({
                     action.onClick();
                   }}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer transition-colors",
+                    "flex w-full items-center gap-2 rounded-sm px-2 text-xs text-left cursor-pointer transition-colors",
                     isDestructive
                       ? "text-destructive focus:text-destructive"
                       : "text-foreground",
@@ -60,9 +62,7 @@ export function DataTableRowActions({
                         : "bg-accent text-accent-foreground"),
                   )}
                 >
-                  {action.icon && (
-                    <span className={cn(action.icon, "size-3.5")} />
-                  )}
+                  {action.icon && action.icon}
                   <span>{action.label}</span>
                 </Button>
               )}

@@ -16,6 +16,8 @@
 
 ## [DECISIONS]
 - 2026-08-21T15:24:09+07:00 [USER] Approved a reusable core Tooltip attached automatically to truncated DataTable content; it must appear only when the rendered content actually overflows.
+- 2026-08-21T17:28:00+07:00 [USER] Standardized `DataTable` compound toolbar architecture (`DataTable.Toolbar`) supporting search bars, action buttons, and `DataTable.ViewOptions` side-by-side.
+- 2026-08-21T17:22:00+07:00 [USER] Fixed `DataTableViewOptions` focus outline ring and row/keyboard column checkbox toggling.
 - 2026-08-21T15:09:18+07:00 [USER] DataTable core owns common text truncation: default accessor cells ellipsize automatically, custom-rendered cells stay unchanged, and `meta.truncate` explicitly overrides either default.
 - 2026-08-21T14:53:59+07:00 [USER] Long DataTable text should ellipsize within its cell; tooltip is explicitly deferred to a later task.
 - 2026-08-21T14:45:22+07:00 [USER] DataTable width contract supersedes `meta.className` sizing: an explicit `ColumnDef.size` is fixed; columns without `size` share remaining width and stay single-line.
@@ -194,6 +196,8 @@
 - 2026-08-21T16:26:00+07:00 [CODE] Created reusable `NativeSelect` component in `@admin/core` (`packages/core/src/components/ui/native-select.tsx`) wrapping native HTML `<select>` (via `@headlessui/react` `Select`). Supports `options` prop, `children` options/optgroups, `placeholder`, `startIcon`, `endIcon`, `sizeVariant` (`sm`, `md`, `lg`), `invalid` error highlighting, `disabled` styling, and seamlessly integrates with `<Field>`. Added test suite (`native-select.test.tsx`) with 3 passing tests, exported from `@admin/core`, and integrated interactive showcase into `apps/starter` profile settings page. Monorepo typechecks, unit tests, and production build passed with 0 errors.
 - 2026-08-21T16:48:00+07:00 [CODE] Created reusable `Pagination` component (`packages/core/src/components/ui/pagination.tsx`) with smart `...` ellipsis truncation and Previous (`<`) / Next (`>`) buttons (omitting first `<<` and last `>>` buttons). Exported from `@admin/core`, updated `DataTablePagination` to use `Pagination`, added unit tests (`pagination.test.tsx`), and verified 15 unit tests, typechecks, and production build with 0 errors.
 - 2026-08-21T17:01:00+07:00 [CODE] Expanded product mock dataset in [`product.page.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/modules/product/product.page.tsx) to 65 items across 6 categories to enable multi-page pagination and page-size selector testing in the browser. Starter check-types and build passed cleanly.
+- 2026-08-21T17:10:00+07:00 [CODE] Completely removed `globalFilteringFeature` and `createFilteredRowModel` from [`data-table.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table.tsx) and search input from [`data-table-toolbar.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table-toolbar.tsx). Removed ~8.6 kB of client-side filtering code from the bundle. Monorepo typechecks, unit tests, and production build passed with 0 errors.
+
 
 
 

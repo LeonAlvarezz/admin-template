@@ -71,7 +71,11 @@ function SideBarHeader({
             {title}
           </p>
         )}
-        <Button variant="ghost" onClick={() => setIsCollapsed(!isCollapsed)}>
+        <Button
+          variant="ghost"
+          className="h-fit w-fit py-1 px-1"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
           {isCollapsed ? <CuidaSideBarExpand /> : <CuidaSideBarCollapse />}
         </Button>
       </div>
