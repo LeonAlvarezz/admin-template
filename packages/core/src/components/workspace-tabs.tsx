@@ -16,16 +16,18 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react";
-import CloseIcon from "~icons/lucide/x";
-import CloseOthersIcon from "~icons/solar/close-circle-linear";
-import ArrowRightIcon from "~icons/solar/arrow-right-linear";
-import TrashIcon from "~icons/solar/trash-bin-trash-bold";
-import TabIcon from "~icons/material-symbols/tab-group-rounded";
+import {
+  CloseIcon,
+  CloseCircleIcon as CloseOthersIcon,
+  ArrowRightLinearIcon as ArrowRightIcon,
+  TrashIcon,
+  TabIcon,
+  SearchIcon,
+} from "./ui/icons";
 import type { NavGroupConfig, NavItemConfig } from "../types";
 import Button from "./ui/button";
 import ContextMenu from "./ui/context-menu";
 import { cn } from "../libs/cn";
-import SearchIcon from "~icons/boxicons/search";
 
 import { useWorkspaceTabsStore } from "../store/workspace-tabs";
 
@@ -194,7 +196,7 @@ export const WorkspaceTabItem: React.FC<WorkspaceTabItemProps> = ({
       onClick={() => handleTabClick(tab.path)}
       onContextMenu={(e) => openContextMenu(e, tab.path)}
       className={cn(
-        "group relative flex items-center gap-2 min-h-9 py-2 px-4 text-xs font-medium cursor-pointer transition-all rounded-t-lg shrink-0 select-none",
+        "group relative flex items-center gap-2 min-h-9 py-2 pl-3 pr-2 text-xs font-medium cursor-pointer transition-all rounded-t-lg shrink-0 select-none",
         isActive
           ? "bg-background text-foreground border-t border-x border-border border-b-background shadow-xs -mb-px font-semibold"
           : "bg-transparent text-muted-foreground border-transparent hover:bg-accent/40 hover:text-accent-foreground",

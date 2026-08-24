@@ -4,8 +4,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { cn } from "../../libs/cn";
 
-import EyeIcon from "~icons/solar/eye-bold";
-import EyeClosedIcon from "~icons/solar/eye-closed-bold";
+import { EyeIcon, EyeOffIcon as EyeClosedIcon } from "./icons";
 
 export interface InputProps extends HeadlessInputProps<"input"> {
   startIcon?: ReactNode;

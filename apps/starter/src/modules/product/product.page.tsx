@@ -1,11 +1,5 @@
 import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import SearchIcon from "~icons/boxicons/search";
-import PlusIcon from "~icons/tabler/plus-filled";
-import EditIcon from "~icons/lets-icons/edit-fill";
-import CopyIcon from "~icons/solar/copy-bold";
-import DeleteIcon from "~icons/mingcute/delete-fill";
-
 import {
   DataTable,
   DataTableColumnHeader,
@@ -17,6 +11,11 @@ import {
   formatCurrency,
   copyToClipboard,
   ConfirmModal,
+  SearchIcon,
+  PlusIcon,
+  EditIcon,
+  CopyIcon,
+  DeleteIcon,
 } from "@admin/core";
 import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
@@ -257,6 +256,10 @@ function ProductPage() {
     },
     {
       id: "actions",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Action" />
+      ),
+      size: 100,
       enableHiding: true,
       cell: ({ row }) => {
         const product = row.original;

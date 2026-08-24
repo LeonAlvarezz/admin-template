@@ -1,7 +1,7 @@
 import * as React from "react";
 import Button from "./button";
 import { cn } from "../../libs/cn";
-import ChevronIcon from "~icons/tabler/chevron-down";
+import { ChevronDownIcon as ChevronIcon } from "./icons";
 
 export type PaginationItem = number | "...";
 

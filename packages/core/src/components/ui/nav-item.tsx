@@ -7,7 +7,7 @@ import type { NavItemConfig } from "../../types";
 import { useSidebarContext } from "../sidebar";
 import { useActiveUrl } from "../../hooks/active-url";
 
-import ChevronDownIcon from "~icons/lucide/chevron-down";
+import { ChevronDownIcon } from "./icons";
 
 const SUB_NAV_ITEM_STEP_PX = 32;
 const SUB_NAV_ITEM_CENTER_PX = 14;

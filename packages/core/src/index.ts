@@ -85,4 +85,5 @@ export type {
   ContextMenuLabelProps,
   ContextMenuPosition,
 } from "./components/ui/context-menu";
+export * from "./components/ui/icons";
 export * from "./utils";

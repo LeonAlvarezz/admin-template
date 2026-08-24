@@ -22,6 +22,7 @@ import type {
   ColumnVisibilityState,
 } from "@tanstack/react-table";
 import { cn } from "../../../libs/cn";
+import { InboxIcon } from "../icons";
 import { Tooltip } from "../tooltip";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
@@ -99,9 +100,7 @@ export interface DataTableProps<
   pageSizeOptions?: number[];
   initialPageSize?: number;
   toolbarActions?: React.ReactNode;
-  toolbar?:
-    | React.ReactNode
-    | ((table: any) => React.ReactNode);
+  toolbar?: React.ReactNode | ((table: any) => React.ReactNode);
   emptyState?: React.ReactNode;
   onRowClick?: (row: TData) => void;
   className?: string;
@@ -278,7 +277,7 @@ function DataTableRoot<
                   >
                     {emptyState ?? (
                       <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                        <span className="i-lucide-inbox size-8 opacity-40" />
+                        <InboxIcon className="size-8 opacity-40" />
                         <p className="text-sm font-medium">No results found.</p>
                       </div>
                     )}

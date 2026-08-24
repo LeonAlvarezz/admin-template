@@ -1,7 +1,7 @@
 import { Checkbox as HeadlessCheckbox } from "@headlessui/react";
 import type { CheckboxProps as HeadlessCheckboxProps } from "@headlessui/react";
 import type { ReactNode } from "react";
-import CheckIcon from "~icons/boxicons/check";
+import { CheckIcon } from "./icons";
 import { cn } from "../../libs/cn";
 
 export interface CheckboxProps extends Omit<HeadlessCheckboxProps, "children"> {

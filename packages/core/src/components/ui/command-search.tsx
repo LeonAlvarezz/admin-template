@@ -28,12 +28,14 @@ import type {
   NavItemConfig,
 } from "../../types";
 
-import SearchIcon from "~icons/boxicons/search";
-import MoonIcon from "~icons/solar/moon-bold";
-import SunIcon from "~icons/solar/sun-bold";
-import LogoutIcon from "~icons/solar/logout-linear";
-import ArrowRightIcon from "~icons/solar/alt-arrow-right-linear";
-import CommandIcon from "~icons/solar/command-bold";
+import {
+  SearchIcon,
+  MoonIcon,
+  SunIcon,
+  LogoutIcon,
+  ArrowRightIcon,
+  CommandIcon,
+} from "./icons";
 
 const CommandSearchContext = createContext<
   CommandSearchContextValue | undefined

@@ -3,9 +3,7 @@ import type { ReactNode } from "react";
 import { Modal } from "./modal";
 import Button from "./button";
 import type { ButtonVariant } from "./button";
-import AlertTriangleIcon from "~icons/lucide/triangle-alert";
-import AlertCircleIcon from "~icons/lucide/circle-alert";
-import InfoIcon from "~icons/lucide/info";
+import { AlertTriangleIcon, AlertCircleIcon, InfoIcon } from "./icons";
 import { cn } from "../../utils/cn";
 
 export interface ConfirmModalProps {

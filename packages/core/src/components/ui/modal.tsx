@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { cn } from "../../utils/cn";
+import { CloseIcon } from "./icons";
 import Button from "./button";
-import CloseIcon from "~icons/lucide/x";
 
 export interface ModalProps {
   isOpen?: boolean;

@@ -3,8 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Button from "../button";
 import Checkbox from "../checkbox";
 import { cn } from "../../../libs/cn";
-import type { DefaultDataTableFeatures } from "./data-table";
-import ColumnIcon from "~icons/mingcute/column-fill";
+import { ColumnsIcon as ColumnIcon } from "../icons";
 
 interface DataTableViewOptionsProps<TData extends Record<string, any> = any> {
   table: ReactTable<DefaultDataTableFeatures, TData>;

@@ -11,9 +11,7 @@ import {
 import type { NavItemConfig, SideBarProps } from "..";
 import { cn } from "../libs/cn";
 import Keyboard from "./ui/keyboard";
-import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
-import SearchIcon from "~icons/boxicons/search";
-import MenuIcon from "~icons/ic/round-menu";
+import { ChevronUpIcon, SearchIcon, MenuIcon } from "./ui/icons";
 
 function MobileNav({
   navGroups,

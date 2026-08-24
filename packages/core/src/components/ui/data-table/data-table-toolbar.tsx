@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { ReactTable } from "@tanstack/react-table";
 import Button from "../button";
+import { CloseIcon } from "../icons";
 import { DataTableViewOptions } from "./data-table-view-options";
 import type { DefaultDataTableFeatures } from "./data-table";
 import { cn } from "../../../libs/cn";
@@ -58,7 +59,7 @@ export function DataTableToolbar<TData extends Record<string, any> = any>({
             className="h-9 px-2 text-xs flex items-center gap-1.5"
           >
             <span>Reset</span>
-            <span className="i-lucide-x size-3.5" />
+            <CloseIcon className="size-3.5" />
           </Button>
         )}
       </div>

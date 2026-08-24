@@ -1,8 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Button from "../button";
 import { cn } from "../../../libs/cn";
-import ArrowIcon from "~icons/solar/arrow-up-bold";
-import HideIcon from "~icons/bxs/hide";
+import { ArrowUpIcon as ArrowIcon, HideIcon } from "../icons";
 
 interface DataTableColumnHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   column: any;

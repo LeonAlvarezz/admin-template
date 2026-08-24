@@ -1,8 +1,10 @@
-import SunIcon from "~icons/solar/sun-bold";
-import MoonIcon from "~icons/solar/moon-bold";
-import LeftIcon from "~icons/mingcute/left-fill";
-import RightIcon from "~icons/mingcute/right-fill";
-import ComputerIcon from "~icons/material-symbols/computer";
+import {
+  SunIcon,
+  MoonIcon,
+  ChevronLeftIcon as LeftIcon,
+  ChevronRightIcon as RightIcon,
+  ComputerIcon,
+} from "./ui/icons";
 import { useState } from "react";
 import { useTheme } from "../hooks/theme";
 

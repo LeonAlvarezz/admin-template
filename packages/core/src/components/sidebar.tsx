@@ -8,16 +8,18 @@ import Avatar from "./ui/avatar";
 import { cn } from "../libs/cn";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-import SearchIcon from "~icons/boxicons/search";
-import DashboardIcon from "~icons/boxicons/dashboard-filled";
-import ShopIcon from "~icons/solar/cart-4-bold";
-import CuidaSideBarCollapse from "~icons/cuida/sidebar-collapse-outline";
-import CuidaSideBarExpand from "~icons/cuida/sidebar-expand-outline";
-import GearIcon from "~icons/icon-park-solid/setting";
-import TimeIcon from "~icons/mingcute/time-fill";
-import MoonIcon from "~icons/solar/moon-bold";
-import LogoutIcon from "~icons/solar/logout-linear";
-import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
+import {
+  SearchIcon,
+  DashboardIcon,
+  ShopIcon,
+  SidebarCollapseIcon as CuidaSideBarCollapse,
+  SidebarExpandIcon as CuidaSideBarExpand,
+  SettingsAltIcon as GearIcon,
+  TimeIcon,
+  MoonIcon,
+  LogoutIcon,
+  ChevronUpIcon,
+} from "./ui/icons";
 
 import type {
   NavGroupConfig,

@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Button from "../button";
 import { cn } from "../../../libs/cn";
-import MoreIcon from "~icons/mingcute/more-4-line";
+import { MoreHorizontalIcon as MoreIcon } from "../icons";
 import type { ReactNode } from "react";
 
 export interface DataTableRowActionItem {
@@ -23,12 +23,12 @@ export function DataTableRowActions({
   if (actions.length === 0) return null;
 
   return (
-    <Menu as="div" className={cn("relative flex justify-end", className)}>
+    <Menu as="div" className={cn("relative flex justify-center", className)}>
       <MenuButton
         as={Button}
         variant="ghost"
         size="sm"
-        className="p-1 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
+        className="p-1 flex sticky top-0 right-0 items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
       >
         <MoreIcon className="size-5" />
       </MenuButton>
