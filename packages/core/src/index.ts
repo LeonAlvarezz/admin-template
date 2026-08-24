@@ -26,6 +26,14 @@ export type {
   NativeSelectProps,
   NativeSelectOption,
 } from "./components/ui/native-select";
+export { default as Select } from "./components/ui/select";
+export type {
+  SelectProps,
+  SelectOption,
+  SelectGroup,
+  RawSelectOption,
+  SelectOptionProps,
+} from "./components/ui/select";
 export { default as Pagination } from "./components/ui/pagination";
 export type { PaginationProps } from "./components/ui/pagination";
 export {

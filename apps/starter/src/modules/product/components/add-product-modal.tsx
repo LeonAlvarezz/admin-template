@@ -10,6 +10,7 @@ import {
   Input,
   Modal,
   NativeSelect,
+  Select,
   toast,
 } from "@admin/core";
 
@@ -42,9 +43,21 @@ const CATEGORIES = [
 ];
 
 const STATUS_OPTIONS = [
-  { label: "Active", value: "active" },
-  { label: "Draft", value: "draft" },
-  { label: "Archived", value: "archived" },
+  {
+    label: "Active",
+    value: "active",
+    icon: <span className="size-2 rounded-full bg-emerald-500 shrink-0" />,
+  },
+  {
+    label: "Draft",
+    value: "draft",
+    icon: <span className="size-2 rounded-full bg-amber-500 shrink-0" />,
+  },
+  {
+    label: "Archived",
+    value: "archived",
+    icon: <span className="size-2 rounded-full bg-muted-foreground shrink-0" />,
+  },
 ];
 
 export function ProductModal({
@@ -62,7 +75,7 @@ export function ProductModal({
       sku: product?.sku ?? "",
       price: product ? product.price : ("" as unknown as number),
       stock: product ? product.stock : ("" as unknown as number),
-      status: product?.status ?? ("active"),
+      status: product?.status ?? "active",
     },
     onSubmit: async ({ value }) => {
       const trimmedName = value.name.trim();
@@ -113,8 +126,7 @@ export function ProductModal({
         sku: product?.sku ?? "",
         price: product ? product.price : ("" as unknown as number),
         stock: product ? product.stock : ("" as unknown as number),
-        status:
-          product?.status ?? ("active"),
+        status: product?.status ?? "active",
       });
     }
   }, [product, isOpen]);
@@ -316,14 +328,14 @@ export function ProductModal({
                 {(field) => (
                   <Field>
                     <FieldLabel htmlFor={field.name}>Status</FieldLabel>
-                    <NativeSelect
+                    <Select
+                      searchable={true}
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) =>
+                      onChange={(val) =>
                         field.handleChange(
-                          e.target.value as "active" | "draft" | "archived",
+                          val as "active" | "draft" | "archived",
                         )
                       }
                       options={STATUS_OPTIONS}

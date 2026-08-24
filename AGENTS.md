@@ -65,6 +65,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<Input>`, `<InputPassword>` | `import { Input, InputPassword } from "@admin/core"` | `packages/core/src/components/ui/input.tsx` |
 | `<Checkbox>` | `import { Checkbox } from "@admin/core"` | `packages/core/src/components/ui/checkbox.tsx` |
 | `<NativeSelect>` | `import { NativeSelect } from "@admin/core"` | `packages/core/src/components/ui/native-select.tsx` |
+| `<Select>`, `<Select.Option>` | `import { Select } from "@admin/core"` | `packages/core/src/components/ui/select.tsx` |
 | `<Field>`, `<FieldSet>`, `<FieldLabel>` | `import { Field, FieldSet, FieldLabel } from "@admin/core"` | `packages/core/src/components/ui/field.tsx` |
 | `<Tooltip>` | `import { Tooltip } from "@admin/core"` | `packages/core/src/components/ui/tooltip.tsx` |
 | `<DataTable>` | `import { DataTable } from "@admin/core"` | `packages/core/src/components/ui/data-table/` |
