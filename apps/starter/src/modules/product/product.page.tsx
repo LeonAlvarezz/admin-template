@@ -16,8 +16,9 @@ import {
   toast,
   formatCurrency,
   copyToClipboard,
-  Modal,
 } from "@admin/core";
+import { ProductModal } from "./components/add-product-modal";
+import type { ProductFormData } from "./components/add-product-modal";
 
 import type { DefaultDataTableFeatures } from "@admin/core";
 
@@ -265,7 +266,10 @@ function ProductPage() {
               {
                 label: "Edit",
                 icon: <EditIcon />,
-                onClick: () => toast.info(`Editing ${product.name}`),
+                onClick: () => {
+                  setSelectedProduct(product);
+                  setIsModalOpen(true);
+                },
               },
               {
                 label: "Copy SKU",
@@ -294,7 +298,27 @@ function ProductPage() {
     },
   ];
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
+    null,
+  );
+
+  const handleSaveProduct = (formData: ProductFormData) => {
+    if (selectedProduct) {
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === selectedProduct.id ? { ...p, ...formData } : p,
+        ),
+      );
+    } else {
+      const product: Product = {
+        id: `prod-${Date.now()}`,
+        ...formData,
+        createdAt: new Date().toISOString(),
+      };
+      setProducts((prev) => [product, ...prev]);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -327,7 +351,10 @@ function ProductPage() {
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => setIsOpen(true)}
+                onClick={() => {
+                  setSelectedProduct(null);
+                  setIsModalOpen(true);
+                }}
                 className="h-8 px-3 text-xs flex items-center gap-1.5"
               >
                 <PlusIcon />
@@ -337,7 +364,12 @@ function ProductPage() {
           </DataTable.Toolbar>
         )}
       />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ProductModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        product={selectedProduct}
+        onSave={handleSaveProduct}
+      />
     </div>
   );
 }

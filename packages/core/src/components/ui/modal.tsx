@@ -1,5 +1,5 @@
 import React from "react";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import {
   Description,
   Dialog,
@@ -24,6 +24,10 @@ export interface ModalProps {
   showCloseButton?: boolean;
 }
 
+export interface ModalHeaderProps extends ComponentPropsWithoutRef<"div"> {}
+export interface ModalBodyProps extends ComponentPropsWithoutRef<"div"> {}
+export interface ModalFooterProps extends ComponentPropsWithoutRef<"div"> {}
+
 const sizeClasses = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -31,7 +35,59 @@ const sizeClasses = {
   xl: "max-w-xl",
 };
 
-export function Modal({
+export function ModalHeader({ className, ...props }: ModalHeaderProps) {
+  return (
+    <div
+      className={cn("flex flex-col space-y-1.5 text-left", className)}
+      {...props}
+    />
+  );
+}
+
+export function ModalTitle({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<typeof DialogTitle>) {
+  return (
+    <DialogTitle
+      className={cn(
+        "text-lg sm:text-xl font-bold tracking-tight text-foreground",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function ModalDescription({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<typeof Description>) {
+  return (
+    <Description
+      className={cn("text-xs sm:text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  );
+}
+
+export function ModalBody({ className, ...props }: ModalBodyProps) {
+  return <div className={cn("py-2", className)} {...props} />;
+}
+
+export function ModalFooter({ className, ...props }: ModalFooterProps) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-4",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function ModalRoot({
   isOpen,
   setIsOpen,
   open,
@@ -82,16 +138,27 @@ export function Modal({
             children
           ) : (
             <>
-              {title && (
-                <DialogTitle className="font-bold text-lg text-foreground">
-                  {title}
-                </DialogTitle>
+              {(title || description) && (
+                <ModalHeader>
+                  {title && <ModalTitle>{title}</ModalTitle>}
+                  {description && (
+                    <ModalDescription>{description}</ModalDescription>
+                  )}
+                </ModalHeader>
               )}
-              {description && (
-                <Description className="text-sm text-muted-foreground">
-                  {description}
-                </Description>
-              )}
+              <ModalBody>
+                <p className="text-sm text-muted-foreground">
+                  Are you sure you want to proceed with this action?
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button variant="outline" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button variant="default" onClick={handleClose}>
+                  Confirm
+                </Button>
+              </ModalFooter>
             </>
           )}
         </DialogPanel>
@@ -100,8 +167,13 @@ export function Modal({
   );
 }
 
-Modal.Title = DialogTitle;
-Modal.Description = Description;
-Modal.Panel = DialogPanel;
+export const Modal = Object.assign(ModalRoot, {
+  Header: ModalHeader,
+  Title: ModalTitle,
+  Description: ModalDescription,
+  Body: ModalBody,
+  Footer: ModalFooter,
+  Panel: DialogPanel,
+});
 
 export default Modal;

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { cn } from "../../libs/cn";
@@ -8,6 +8,12 @@ import {
   Label as HeadlessLabel,
   Legend as HeadlessLegend,
 } from "@headlessui/react";
+
+interface FieldContextValue {
+  required?: boolean;
+}
+
+const FieldContext = createContext<FieldContextValue>({});
 
 function FieldSet({
   className,
@@ -62,7 +68,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const fieldVariants = cva(
-  "group/field flex w-full gap-3 data-[invalid=true]:text-destructive",
+  "group/field text-xs flex w-full gap-3 data-[invalid=true]:text-destructive",
   {
     variants: {
       orientation: {
@@ -85,19 +91,32 @@ const fieldVariants = cva(
   },
 );
 
+export interface FieldProps
+  extends
+    React.ComponentProps<typeof HeadlessField>,
+    VariantProps<typeof fieldVariants> {
+  required?: boolean;
+}
+
 function Field({
   className,
   orientation = "vertical",
+  required,
+  children,
   ...props
-}: React.ComponentProps<typeof HeadlessField> &
-  VariantProps<typeof fieldVariants>) {
+}: FieldProps) {
   return (
-    <HeadlessField
-      data-slot="field"
-      data-orientation={orientation}
-      className={cn(fieldVariants({ orientation }), className)}
-      {...props}
-    />
+    <FieldContext.Provider value={{ required }}>
+      <HeadlessField
+        data-slot="field"
+        data-orientation={orientation}
+        data-required={required}
+        className={cn(fieldVariants({ orientation }), className)}
+        {...props}
+      >
+        {children}
+      </HeadlessField>
+    </FieldContext.Provider>
   );
 }
 
@@ -114,21 +133,40 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+export interface FieldLabelProps extends React.ComponentProps<
+  typeof HeadlessLabel
+> {
+  required?: boolean;
+  showAsterisk?: boolean;
+}
+
 function FieldLabel({
   className,
+  required,
+  showAsterisk = true,
+  children,
   ...props
-}: React.ComponentProps<typeof HeadlessLabel>) {
+}: FieldLabelProps) {
+  const context = useContext(FieldContext);
+  const isRequired = required ?? context.required;
+
   return (
     <HeadlessLabel
       data-slot="field-label"
+      data-required={isRequired}
+      data-show-asterisk={showAsterisk}
       className={cn(
-        "group/field-label peer/field-label flex w-fit gap-2 text-foreground leading-snug group-data-[disabled=true]/field:opacity-50",
+        "group/field-label peer/field-label flex w-fit items-center gap-1 text-foreground/60 leading-snug group-data-[disabled=true]/field:opacity-50",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4",
         "has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10",
+        "group-has-required/field:data-[show-asterisk=true]:after:content-['*'] group-has-required/field:data-[show-asterisk=true]:after:text-destructive group-has-required/field:data-[show-asterisk=true]:after:ml-0.5",
+        "data-[required=true]:data-[show-asterisk=true]:after:content-['*'] data-[required=true]:data-[show-asterisk=true]:after:text-destructive data-[required=true]:data-[show-asterisk=true]:after:ml-0.5",
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </HeadlessLabel>
   );
 }
 

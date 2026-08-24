@@ -42,8 +42,20 @@ export { useWorkspaceTabsStore } from "./store/workspace-tabs";
 export type { WorkspaceTabsState } from "./store/workspace-tabs";
 export { default as Avatar } from "./components/ui/avatar";
 export { default as Keyboard } from "./components/ui/keyboard";
-export { default as Modal } from "./components/ui/modal";
-export type { ModalProps } from "./components/ui/modal";
+export {
+  default as Modal,
+  ModalHeader,
+  ModalTitle,
+  ModalDescription,
+  ModalBody,
+  ModalFooter,
+} from "./components/ui/modal";
+export type {
+  ModalProps,
+  ModalHeaderProps,
+  ModalBodyProps,
+  ModalFooterProps,
+} from "./components/ui/modal";
 export type {
   ModifierKey,
   SpecialKey,

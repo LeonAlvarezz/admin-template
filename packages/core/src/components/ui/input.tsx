@@ -24,7 +24,7 @@ function InputRoot({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-foreground transition-all input-focus",
+        "flex h-9 items-center gap-2 rounded-md border border-border px-3 py-1.5 text-foreground transition-all input-focus",
         containerClassName,
       )}
     >
@@ -91,4 +91,3 @@ export const Input = Object.assign(InputRoot, {
 });
 
 export default Input;
-

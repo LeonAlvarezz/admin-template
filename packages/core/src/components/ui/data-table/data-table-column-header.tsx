@@ -51,7 +51,7 @@ export function DataTableColumnHeader({
         <MenuItems
           transition
           anchor="bottom start"
-          className="z-50 min-w-36 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+          className="z-50 min-w-36 rounded-md border border-border bg-sidebar p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
         >
           <MenuItem>
             {({ focus }) => (
@@ -60,7 +60,7 @@ export function DataTableColumnHeader({
                 type="button"
                 onClick={() => column.toggleSorting(false)}
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer",
+                  "flex w-full justify-start items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer",
                   focus && "bg-accent text-accent-foreground",
                 )}
               >
@@ -76,7 +76,7 @@ export function DataTableColumnHeader({
                 type="button"
                 onClick={() => column.toggleSorting(true)}
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer",
+                  "flex w-full justify-start items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer",
                   focus && "bg-accent text-accent-foreground",
                 )}
               >
@@ -96,7 +96,7 @@ export function DataTableColumnHeader({
                     type="button"
                     onClick={() => column.toggleVisibility(false)}
                     className={cn(
-                      "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer text-destructive focus:text-destructive",
+                      "flex w-full items-center justify-start gap-2 rounded-sm px-2 py-1.5 text-xs text-left cursor-pointer text-destructive focus:text-destructive",
                       focus && "bg-destructive/10",
                     )}
                   >

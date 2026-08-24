@@ -77,7 +77,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<CommandSearch>` | `import { CommandSearch } from "@admin/core"` | `packages/core/src/components/ui/command-search.tsx` |
 | `<ContextMenu>` | `import { ContextMenu } from "@admin/core"` | `packages/core/src/components/ui/context-menu.tsx` |
 | `<WorkspaceTabs>` | `import { WorkspaceTabs } from "@admin/core"` | `packages/core/src/components/workspace-tabs.tsx` |
-| `<Modal>` | `import { Modal } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx` |
+| `<Modal>`, `<Modal.Header>`, `<Modal.Footer>` | `import { Modal, ModalHeader, ModalFooter } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
 
 ### Shared Utilities & Helpers (`@admin/core`)
