@@ -14,7 +14,10 @@ import {
   Input,
   Checkbox,
   toast,
+  formatCurrency,
+  copyToClipboard,
 } from "@admin/core";
+
 import type { DefaultDataTableFeatures } from "@admin/core";
 
 interface Product {
@@ -191,16 +194,13 @@ function ProductPage() {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Price" />
       ),
-      cell: ({ row }) => {
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(row.original.price);
-        return (
-          <span className="font-semibold text-foreground">{formatted}</span>
-        );
-      },
+      cell: ({ row }) => (
+        <span className="font-semibold text-foreground">
+          {formatCurrency(row.original.price)}
+        </span>
+      ),
     },
+
     {
       accessorKey: "stock",
       header: ({ column }) => (
@@ -268,8 +268,12 @@ function ProductPage() {
               {
                 label: "Copy SKU",
                 icon: <CopyIcon />,
-                onClick: () => toast.info(`Copied SKU: ${product.sku}`),
+                onClick: async () => {
+                  await copyToClipboard(product.sku);
+                  toast.info(`Copied SKU: ${product.sku}`);
+                },
               },
+
               {
                 label: "Delete",
                 icon: <DeleteIcon />,

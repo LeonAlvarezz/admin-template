@@ -10,8 +10,9 @@ export function useActiveUrl() {
 
   try {
     const location = useLocation();
-    pathname = location?.pathname ?? "";
+    pathname = location.pathname;
   } catch {
+
     // Fallback to window.location if router context is absent
     if (typeof window !== "undefined") {
       pathname = window.location.pathname;

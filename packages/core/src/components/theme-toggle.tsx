@@ -11,8 +11,9 @@ const themes = ["dark", "light", "system"] as const;
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
-  const currentIndex = themes.indexOf(theme as (typeof themes)[number]);
+  const currentIndex = themes.indexOf(theme);
   const safeIndex = currentIndex === -1 ? 0 : currentIndex;
+
 
   const [startX, setStartX] = useState<number | null>(null);
 

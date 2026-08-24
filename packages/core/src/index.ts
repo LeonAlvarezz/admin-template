@@ -28,4 +28,35 @@ export type {
 } from "./components/ui/native-select";
 export { default as Pagination } from "./components/ui/pagination";
 export type { PaginationProps } from "./components/ui/pagination";
-
+export {
+  default as WorkspaceTabs,
+  useWorkspaceTabsContext,
+} from "./components/workspace-tabs";
+export type {
+  WorkspaceTabsProps,
+  WorkspaceTabItem,
+  WorkspaceTabsContextValue,
+  ContextMenuState,
+} from "./components/workspace-tabs";
+export { default as Avatar } from "./components/ui/avatar";
+export { default as Keyboard } from "./components/ui/keyboard";
+export type {
+  ModifierKey,
+  SpecialKey,
+  KbdKey,
+  KeyboardProps,
+} from "./components/ui/keyboard";
+export {
+  default as ContextMenu,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuLabel,
+} from "./components/ui/context-menu";
+export type {
+  ContextMenuProps,
+  ContextMenuItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuLabelProps,
+  ContextMenuPosition,
+} from "./components/ui/context-menu";
+export * from "./utils";

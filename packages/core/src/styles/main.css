@@ -170,3 +170,33 @@
     transform: translate3d(0, -16px, 0) scale(0.92);
   }
 }
+
+/* Custom Thin Horizontal Scrollbar for Tab Bar */
+.tab-scrollbar {
+  overflow-y: hidden !important;
+}
+.tab-scrollbar::-webkit-scrollbar {
+  height: 3px;
+  width: 0px;
+}
+.tab-scrollbar::-webkit-scrollbar:vertical {
+  display: none;
+  width: 0px;
+}
+.tab-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tab-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+.tab-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+.tab-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+
+

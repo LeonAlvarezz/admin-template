@@ -2,6 +2,7 @@ import React from "react";
 import type { AdminLayoutProps } from "../types";
 import SideBar from "./sidebar";
 import { CommandSearch, CommandSearchProvider } from "./ui/command-search";
+import WorkspaceTabs from "./workspace-tabs";
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({
   title = "ZeroUI",
@@ -17,6 +18,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   sidebar,
   commandGroups,
   commandItems,
+  enableTabs = true,
   children,
 }) => {
   return (
@@ -44,10 +46,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               {headerActions}
             </header>
           )}
+          {enableTabs && (
+            <WorkspaceTabs navGroups={navGroups} navItems={navItems} />
+          )}
           <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto">
             {children}
           </main>
-
         </div>
       </div>
       <CommandSearch

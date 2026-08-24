@@ -74,6 +74,7 @@ export interface AdminLayoutProps {
   sidebar?: React.ReactNode;
   commandGroups?: CommandGroup[];
   commandItems?: CommandItem[];
+  enableTabs?: boolean;
   children: React.ReactNode;
 }
 
