@@ -5,7 +5,12 @@ import type { VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 
 export type ButtonVariant =
-  "default" | "outline" | "ghost" | "secondary" | "barebone";
+  | "default"
+  | "destructive"
+  | "outline"
+  | "ghost"
+  | "secondary"
+  | "barebone";
 export type ButtonSize = "icon" | "sm" | "base" | "md" | "lg" | "xl";
 
 export type ButtonProps = HeadlessButtonProps<"button"> &
@@ -17,6 +22,8 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground data-hover:opacity-90",
+        destructive:
+          "bg-destructive text-destructive-foreground data-hover:opacity-90",
         outline: "border data-hover:border-primary data-hover:text-primary",
         ghost: "data-hover:bg-muted/30 data-hover:text-accent-foreground",
         secondary:

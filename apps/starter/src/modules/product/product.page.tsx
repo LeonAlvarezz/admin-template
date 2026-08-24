@@ -16,6 +16,7 @@ import {
   toast,
   formatCurrency,
   copyToClipboard,
+  ConfirmModal,
 } from "@admin/core";
 import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
@@ -285,10 +286,8 @@ function ProductPage() {
                 icon: <DeleteIcon />,
                 variant: "destructive",
                 onClick: () => {
-                  setProducts((prev) =>
-                    prev.filter((p) => p.id !== product.id),
-                  );
-                  toast.warning(`Deleted product ${product.name}`);
+                  setProductToDelete(product);
+                  setIsDeleteOpen(true);
                 },
               },
             ]}
@@ -300,6 +299,10 @@ function ProductPage() {
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
+    null,
+  );
+  const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+  const [productToDelete, setProductToDelete] = React.useState<Product | null>(
     null,
   );
 
@@ -317,6 +320,14 @@ function ProductPage() {
         createdAt: new Date().toISOString(),
       };
       setProducts((prev) => [product, ...prev]);
+    }
+  };
+
+  const handleDeleteProduct = () => {
+    if (productToDelete) {
+      setProducts((prev) => prev.filter((p) => p.id !== productToDelete.id));
+      toast.warning(`Deleted product ${productToDelete.name}`);
+      setProductToDelete(null);
     }
   };
 
@@ -369,6 +380,15 @@ function ProductPage() {
         setIsOpen={setIsModalOpen}
         product={selectedProduct}
         onSave={handleSaveProduct}
+      />
+      <ConfirmModal
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        title={`Delete "${productToDelete?.name}"?`}
+        description="Are you sure you want to delete this product? This action cannot be undone."
+        confirmText="Delete Product"
+        variant="destructive"
+        onConfirm={handleDeleteProduct}
       />
     </div>
   );

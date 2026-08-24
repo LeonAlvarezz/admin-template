@@ -56,6 +56,8 @@ export type {
   ModalBodyProps,
   ModalFooterProps,
 } from "./components/ui/modal";
+export { default as ConfirmModal } from "./components/ui/confirm-modal";
+export type { ConfirmModalProps } from "./components/ui/confirm-modal";
 export type {
   ModifierKey,
   SpecialKey,
