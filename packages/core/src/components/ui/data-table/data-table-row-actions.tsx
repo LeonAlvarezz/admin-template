@@ -28,9 +28,9 @@ export function DataTableRowActions({
         as={Button}
         variant="ghost"
         size="sm"
-        className="h-8 w-8 p-0 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
+        className="p-1 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
       >
-        <MoreIcon />
+        <MoreIcon className="size-5" />
       </MenuButton>
 
       <MenuItems
@@ -52,7 +52,7 @@ export function DataTableRowActions({
                     action.onClick();
                   }}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-sm px-2 text-xs text-left cursor-pointer transition-colors",
+                    "flex w-full justify-start items-center gap-2 rounded-sm px-2 text-xs text-left cursor-pointer transition-colors",
                     isDestructive
                       ? "text-destructive focus:text-destructive"
                       : "text-foreground",

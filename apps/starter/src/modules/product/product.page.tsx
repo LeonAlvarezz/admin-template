@@ -16,6 +16,7 @@ import {
   toast,
   formatCurrency,
   copyToClipboard,
+  Modal,
 } from "@admin/core";
 
 import type { DefaultDataTableFeatures } from "@admin/core";
@@ -170,6 +171,7 @@ function ProductPage() {
           {row.original.sku}
         </span>
       ),
+      size: 100,
     },
     {
       accessorKey: "name",
@@ -292,6 +294,8 @@ function ProductPage() {
     },
   ];
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <div className="space-y-6">
       {/* Header section */}
@@ -323,7 +327,7 @@ function ProductPage() {
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => toast.success("Create Product Modal Triggered")}
+                onClick={() => setIsOpen(true)}
                 className="h-8 px-3 text-xs flex items-center gap-1.5"
               >
                 <PlusIcon />
@@ -333,6 +337,7 @@ function ProductPage() {
           </DataTable.Toolbar>
         )}
       />
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
