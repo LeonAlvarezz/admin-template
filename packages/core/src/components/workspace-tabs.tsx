@@ -27,6 +27,8 @@ import ContextMenu from "./ui/context-menu";
 import { cn } from "../libs/cn";
 import SearchIcon from "~icons/boxicons/search";
 
+import { useWorkspaceTabsStore } from "../store/workspace-tabs";
+
 export interface WorkspaceTabItem {
   id: string;
   title: string;
@@ -237,7 +239,7 @@ export const WorkspaceTabsList: React.FC<WorkspaceTabsListProps> = ({
     <div
       ref={tabContainerRef}
       className={cn(
-        "flex items-center gap-1 overflow-x-auto overflow-y-hidden tab-scrollbar flex-1 pr-2",
+        "flex items-center gap-1 scroll-fade-x overflow-x-auto overflow-y-hidden tab-scrollbar flex-1 pr-2",
         className,
       )}
     >
@@ -416,7 +418,8 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
 
   const tabContainerRef = useRef<HTMLDivElement>(null);
 
-  const [openTabs, setOpenTabs] = useState<WorkspaceTabItem[]>([]);
+  const { tabPaths, openTab, closeTab, closeOthers, closeToRight, closeAll } =
+    useWorkspaceTabsStore();
 
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     visible: false,
@@ -427,23 +430,28 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
 
   // Automatically track route changes and open tabs
   useEffect(() => {
-    // Ignore non-workspace path prefixes if needed
     if (!pathname || pathname === "/login") return;
+    openTab(pathname);
+  }, [pathname, openTab]);
 
-    setOpenTabs((prev) => {
-      const exists = prev.some((t) => t.path === pathname);
-      if (exists) return prev;
+  const openTabs: WorkspaceTabItem[] = React.useMemo(() => {
+    const paths =
+      tabPaths.length > 0
+        ? tabPaths
+        : pathname && pathname !== "/login"
+          ? [pathname]
+          : [];
 
-      const navInfo = findNavInfo(pathname, navGroups, navItems);
-      const newTab: WorkspaceTabItem = {
-        id: pathname,
+    return paths.map((path) => {
+      const navInfo = findNavInfo(path, navGroups, navItems);
+      return {
+        id: path,
+        path,
         title: navInfo.title,
-        path: pathname,
         icon: navInfo.icon,
       };
-      return [...prev, newTab];
     });
-  }, [pathname, navGroups, navItems]);
+  }, [tabPaths, pathname, navGroups, navItems]);
 
   // Don't render tab bar if no open tabs
   if (openTabs.length === 0) return null;
@@ -458,36 +466,33 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
     if (e) e.stopPropagation();
     if (openTabs.length <= 1) return;
 
-    const remaining = openTabs.filter((t) => t.path !== tabPath);
-    setOpenTabs(remaining);
+    const remaining = tabPaths.filter((t) => t !== tabPath);
+    closeTab(tabPath);
 
     // If active tab closed, navigate to closest tab
     if (tabPath === pathname) {
-      const lastTab = remaining[remaining.length - 1];
-      if (lastTab.id) {
-        navigate({ to: lastTab.path });
+      const target = remaining[remaining.length - 1] || remaining[0];
+      if (target) {
+        navigate({ to: target });
       }
     }
     setContextMenu((prev) => ({ ...prev, visible: false }));
   };
 
   const handleCloseOthers = (tabPath: string) => {
-    const target = openTabs.find((t) => t.path === tabPath);
-    if (target) {
-      setOpenTabs([target]);
-      if (pathname !== target.path) {
-        navigate({ to: target.path });
-      }
+    closeOthers(tabPath);
+    if (pathname !== tabPath) {
+      navigate({ to: tabPath });
     }
     setContextMenu((prev) => ({ ...prev, visible: false }));
   };
 
   const handleCloseToRight = (tabPath: string) => {
-    const index = openTabs.findIndex((t) => t.path === tabPath);
+    const index = tabPaths.indexOf(tabPath);
     if (index !== -1) {
-      const remaining = openTabs.slice(0, index + 1);
-      setOpenTabs(remaining);
-      if (!remaining.some((t) => t.path === pathname)) {
+      const remaining = tabPaths.slice(0, index + 1);
+      closeToRight(tabPath);
+      if (!remaining.includes(pathname)) {
         navigate({ to: tabPath });
       }
     }
@@ -496,10 +501,10 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
 
   const handleCloseAll = () => {
     if (openTabs.length > 0) {
-      const first = openTabs[0];
-      setOpenTabs([first]);
-      if (pathname !== first.path) {
-        navigate({ to: first.path });
+      const first = openTabs[0].path;
+      closeAll(first);
+      if (pathname !== first) {
+        navigate({ to: first });
       }
     }
     setContextMenu((prev) => ({ ...prev, visible: false }));
@@ -551,7 +556,7 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
     <WorkspaceTabsContext.Provider value={contextValue}>
       <div
         className={cn(
-          "bg-sidebar border-b border-border pt-2 px-4 flex items-center justify-between gap-2 relative select-none shrink-0",
+          "bg-sidebar border-b border-border pt-2 px-1 sm:px-4 flex items-center justify-between gap-2 relative select-none shrink-0",
           className,
         )}
       >

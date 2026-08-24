@@ -38,6 +38,8 @@ export type {
   WorkspaceTabsContextValue,
   ContextMenuState,
 } from "./components/workspace-tabs";
+export { useWorkspaceTabsStore } from "./store/workspace-tabs";
+export type { WorkspaceTabsState } from "./store/workspace-tabs";
 export { default as Avatar } from "./components/ui/avatar";
 export { default as Keyboard } from "./components/ui/keyboard";
 export type {
