@@ -1,4 +1,4 @@
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { DefaultDataTableFeatures } from "../src/components/ui/data-table/data-table";

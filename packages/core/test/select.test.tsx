@@ -12,10 +12,7 @@ describe("Select component", () => {
 
   test("renders with placeholder when no value is selected", () => {
     const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        placeholder="Choose fruit..."
-      />,
+      <Select options={options} placeholder="Choose fruit..." />,
     );
 
     expect(html).toContain("Choose fruit...");
@@ -24,10 +21,7 @@ describe("Select component", () => {
 
   test("renders selected single value label correctly", () => {
     const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        value="banana"
-      />,
+      <Select options={options} value="banana" />,
     );
 
     expect(html).toContain("Banana");
@@ -62,11 +56,7 @@ describe("Select component", () => {
 
   test("renders clear button when clearable and value exists", () => {
     const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        value="apple"
-        clearable
-      />,
+      <Select options={options} value="apple" clearable />,
     );
 
     expect(html).toContain('aria-label="Clear selection"');
@@ -74,11 +64,7 @@ describe("Select component", () => {
 
   test("does not render clear button when clearable but no value exists", () => {
     const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        value={null}
-        clearable
-      />,
+      <Select options={options} value={null} clearable />,
     );
 
     expect(html).not.toContain('aria-label="Clear selection"');
@@ -86,11 +72,7 @@ describe("Select component", () => {
 
   test("renders multi-select tags when multiple={true}", () => {
     const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        value={["apple", "banana"]}
-        multiple
-      />,
+      <Select options={options} value={["apple", "banana"]} multiple />,
     );
 
     expect(html).toContain("Apple");
@@ -99,12 +81,7 @@ describe("Select component", () => {
   });
 
   test("applies invalid error styles when invalid={true}", () => {
-    const html = renderToStaticMarkup(
-      <Select
-        options={options}
-        invalid
-      />,
-    );
+    const html = renderToStaticMarkup(<Select options={options} invalid />);
 
     expect(html).toContain("border-destructive");
   });

@@ -29,24 +29,8 @@ describe("generatePaginationItems", () => {
   });
 
   test("returns left dots when on late pages", () => {
-    expect(generatePaginationItems(9, 10)).toEqual([
-      1,
-      "...",
-      6,
-      7,
-      8,
-      9,
-      10,
-    ]);
-    expect(generatePaginationItems(10, 10)).toEqual([
-      1,
-      "...",
-      6,
-      7,
-      8,
-      9,
-      10,
-    ]);
+    expect(generatePaginationItems(9, 10)).toEqual([1, "...", 6, 7, 8, 9, 10]);
+    expect(generatePaginationItems(10, 10)).toEqual([1, "...", 6, 7, 8, 9, 10]);
   });
 });
 

@@ -43,8 +43,21 @@ admin-template/
 | **`SideBar`** | Collapsible sidebar supporting both **Convenience Props API** and **Compound Components API**. |
 | **`NavItem`** | Renders TanStack Router `<Link>` with active route styling, `<NavItem.Action>` slots, and **2-level nested sub-menu navigation** (accordion in expanded mode, Headless UI Popover flyout in collapsed mode). |
 | **`CommandSearch`** | Interactive command palette modal (`Cmd+K`) supporting auto route indexing, search filtering, and pluggable action registration. |
-| **`Input`** | Form input wrapper built on `@headlessui/react` supporting `startIcon`, `endIcon`, and `focus-within` styling. |
+| **`Select`** | Feature-rich select & combobox component supporting searchable filtering, multi-select tag chips, async remote data, grouped options, custom renderers, and compound elements. |
+| **`NativeSelect`** | Lightweight native `<select>` dropdown wrapper with consistent design tokens. |
+| **`Input` / `InputPassword`** | Accessible form input wrappers with `startIcon`, `endIcon`, password visibility toggle, and `focus-within` styling. |
+| **`Field` / `FieldSet` / `FieldLabel`** | Form layout wrappers with automatic required red asterisk indicator and error integration. |
+| **`Modal` / `ConfirmModal`** | Accessible dialogs built on Headless UI Dialog with smooth backdrop transitions, compound slots (`Header`, `Body`, `Footer`), and destructive/warning confirm dialogs. |
+| **`DataTable`** | High-performance table component powered by `@tanstack/react-table` with compound toolbar, search, column visibility toggle, pagination, and text truncation tooltips. |
+| **`WorkspaceTabs`** | Multi-tab workspace manager with Zustand persistence, tab reordering, close actions, overflow dropdown, and right-click context menu. |
+| **`ContextMenu`** | Viewport-aware popup context menu with portal rendering and keyboard dismiss listeners. |
+| **`Drawer`** | Slide-out sheet panel for side drawers and overlays. |
+| **`Tooltip`** | Accessible floating tooltip with portal positioning, automatic overflow-only detection (`showWhenTruncated`), and hover/focus triggers. |
+| **`Pagination`** | Page navigation controls with page numbers, jump buttons, and responsive item counts. |
 | **`Keyboard`** | Keycap component supporting modifier symbols (`⌘`, `⌥`, `⇧`, `ctrl`, `k`). |
+| **`Avatar`** | User profile avatar with fallback initials and image error handling. |
+| **`Toaster` / `toast`** | Vibrant Split Hero Glass Pillar notifications with `success`, `error`, `warning`, `info`, and promise toast support. |
+| **`ChartContainer` / `ChartTooltip`** | Accessible responsive chart container wrappers built on Recharts with semantic theme token integration. |
 | **`ThemeSwitch` / `ThemeToggle`** | Theme mode switchers for toggling dark/light mode. |
 
 ---
@@ -215,6 +228,288 @@ export function ProductsPage() {
   return <div>Products Management</div>;
 }
 ```
+
+---
+
+## 🔽 Select Component (`@admin/core`)
+
+`<Select>` is a fully accessible, high-performance dropdown and combobox component built on `@headlessui/react` v2. It eliminates the limitations of native `<select>` elements and custom dropdowns by unifying search filtering, multi-select tag chips, async remote data loading, grouped options, and compound markup.
+
+### 🌟 Key Highlights
+- **Single & Multi-Select**: Seamless switching with `multiple={true}` and chip badges with remove buttons.
+- **Searchable Combobox**: Live client-side filtering across labels, descriptions, and custom keywords (`searchable={true}`).
+- **Async Remote Data**: Built-in debounced fetching (`loadOptions`) with automatic spinner indicators.
+- **Rich Option Items**: Support for leading icons (`icon`), subtitles (`description`), and search `keywords`.
+- **Compound Components**: Build custom menus using `<Select.Option>`, `<Select.Group>`, `<Select.Label>`, and `<Select.Separator>`.
+- **Design Token Integration**: Native OKLCH dark/light theme support, `input-focus` glow rings, and smooth scroll fade masks.
+- **Accessible & Form Ready**: Compatible with `<Field>`, `<FieldLabel>`, `<FieldError>`, and `@tanstack/react-form`.
+
+---
+
+### 1. Basic Single Select
+
+Supports structured option objects (`SelectOption<T>`) or primitive strings/numbers:
+
+```tsx
+import { useState } from "react";
+import { Select, type SelectOption } from "@admin/core";
+
+const fruitOptions: SelectOption<string>[] = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "orange", label: "Orange" },
+  { value: "grape", label: "Grape", disabled: true },
+];
+
+export function BasicSelectDemo() {
+  const [fruit, setFruit] = useState("apple");
+
+  return (
+    <Select
+      options={fruitOptions}
+      value={fruit}
+      onChange={(val) => setFruit(val)}
+      placeholder="Select a fruit..."
+      clearable
+    />
+  );
+}
+```
+
+> **Tip:** You can also pass primitive arrays directly: `options={["Active", "Pending", "Archived"]}`.
+
+---
+
+### 2. Searchable Combobox Mode
+
+Enable `searchable={true}` to turn the select trigger into a live-filtering search input with instant keyboard autocomplete:
+
+```tsx
+import { Select } from "@admin/core";
+
+const countryOptions = [
+  { value: "us", label: "United States", description: "North America", keywords: ["usa", "america"] },
+  { value: "de", label: "Germany", description: "Europe", keywords: ["deutschland", "berlin"] },
+  { value: "jp", label: "Japan", description: "Asia", keywords: ["tokyo", "nihon"] },
+  { value: "id", label: "Indonesia", description: "Southeast Asia", keywords: ["jakarta", "bali"] },
+];
+
+export function SearchableSelectDemo() {
+  return (
+    <Select
+      searchable
+      clearable
+      options={countryOptions}
+      placeholder="Search countries by name, continent, or keyword..."
+      onChange={(value, option) => console.log("Selected:", value, option)}
+    />
+  );
+}
+```
+
+---
+
+### 3. Multi-Select (Tag / Chip Mode)
+
+Enable `multiple={true}` to allow selecting multiple values. Selected items appear as removable tag chips:
+
+```tsx
+import { useState } from "react";
+import { Select } from "@admin/core";
+
+const roleOptions = [
+  { value: "admin", label: "Admin" },
+  { value: "editor", label: "Editor" },
+  { value: "viewer", label: "Viewer" },
+  { value: "billing", label: "Billing Manager" },
+];
+
+export function MultiSelectDemo() {
+  const [roles, setRoles] = useState<string[]>(["editor", "viewer"]);
+
+  return (
+    <Select
+      multiple
+      searchable
+      clearable
+      options={roleOptions}
+      value={roles}
+      onChange={(val) => setRoles(val)}
+      placeholder="Assign roles..."
+    />
+  );
+}
+```
+
+---
+
+### 4. Async Remote Options (`loadOptions`)
+
+Fetch options on-the-fly from a backend API or search endpoint. Includes automatic debouncing (default: 250ms) and loading spinner:
+
+```tsx
+import { Select } from "@admin/core";
+
+export function AsyncSelectDemo() {
+  return (
+    <Select
+      searchable
+      placeholder="Search users from API..."
+      debounceMs={300}
+      loadOptions={async (query) => {
+        const response = await fetch(`/api/users?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        return data.users.map((user: any) => ({
+          value: user.id,
+          label: user.name,
+          description: user.email,
+        }));
+      }}
+      onChange={(userId) => console.log("Selected User ID:", userId)}
+    />
+  );
+}
+```
+
+---
+
+### 5. Grouped Options & Icons
+
+Group related options and render custom leading icons for each item or the select trigger:
+
+```tsx
+import { Select, type SelectGroup } from "@admin/core";
+import AppleIcon from "~icons/solar/apple-bold";
+import CupIcon from "~icons/solar/cup-bold";
+
+const groupedMenu: SelectGroup[] = [
+  {
+    group: "Fresh Fruits",
+    options: [
+      { value: "apple", label: "Honeycrisp Apple", icon: <AppleIcon className="size-4 text-red-500" /> },
+      { value: "banana", label: "Cavendish Banana", description: "Organic" },
+    ],
+  },
+  {
+    group: "Beverages",
+    options: [
+      { value: "coffee", label: "Espresso Roast", icon: <CupIcon className="size-4 text-amber-600" /> },
+      { value: "tea", label: "Green Tea" },
+    ],
+  },
+];
+
+export function GroupedSelectDemo() {
+  return (
+    <Select
+      options={groupedMenu}
+      placeholder="Choose menu item..."
+      clearable
+    />
+  );
+}
+```
+
+---
+
+### 6. Form Integration with `<Field>` & Validation
+
+Wrap `<Select>` inside `@admin/core`'s `<Field>` or connect with `@tanstack/react-form`:
+
+```tsx
+import { Field, FieldLabel, FieldError, Select } from "@admin/core";
+
+export function FormSelectExample({ field }: { field: any }) {
+  const isInvalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+
+  return (
+    <Field required>
+      <FieldLabel>Product Category</FieldLabel>
+      <Select
+        searchable
+        options={[
+          { value: "electronics", label: "Electronics" },
+          { value: "apparel", label: "Apparel & Fashion" },
+          { value: "home", label: "Home & Garden" },
+        ]}
+        value={field.state.value}
+        onChange={(val) => field.handleChange(val)}
+        invalid={isInvalid}
+        placeholder="Select category..."
+      />
+      {isInvalid && <FieldError>{field.state.meta.errors[0]}</FieldError>}
+    </Field>
+  );
+}
+```
+
+---
+
+### 7. Compound Components API
+
+For fully customized menus, you can declare options directly as JSX children:
+
+```tsx
+import { Select } from "@admin/core";
+
+export function CustomCompoundSelect() {
+  return (
+    <Select defaultValue="medium" placeholder="Select priority...">
+      <Select.Group>
+        <Select.Label>Ticket Priority</Select.Label>
+        <Select.Option value="low">🟢 Low Priority</Select.Option>
+        <Select.Option value="medium">🟡 Medium Priority</Select.Option>
+        <Select.Option value="high">🔴 High Priority</Select.Option>
+      </Select.Group>
+      <Select.Separator />
+      <Select.Group>
+        <Select.Label>Urgent Escalation</Select.Label>
+        <Select.Option value="critical">🔥 Critical Incident</Select.Option>
+      </Select.Group>
+    </Select>
+  );
+}
+```
+
+---
+
+### 8. API Reference
+
+#### `SelectProps<T>`
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `options` | `RawSelectOption<T>[]` | `[]` | Array of options, groups, or primitive strings/numbers. |
+| `value` | `any` | `undefined` | Controlled selected value (or array of values if `multiple`). |
+| `defaultValue` | `any` | `undefined` | Initial value for uncontrolled usage. |
+| `onChange` | `(value: any, option?: any) => void` | `undefined` | Callback fired when selection changes. |
+| `searchable` | `boolean` | `false` | Enables combobox input mode for live keyword filtering. |
+| `multiple` | `boolean` | `false` | Enables multi-select mode with tag badges. |
+| `clearable` | `boolean` | `false` | Displays a clear button (`x`) when a value is selected. |
+| `loadOptions` | `(query: string) => Promise<...>` | `undefined` | Async function to fetch options dynamically on query change. |
+| `debounceMs` | `number` | `250` | Debounce delay in ms for `loadOptions`. |
+| `loading` / `isLoading` | `boolean` | `false` | Shows a loading spinner in the trigger. |
+| `placeholder` | `string` | `"Select an option..."` | Placeholder text when no value is selected. |
+| `startIcon` | `ReactNode` | `undefined` | Leading icon slot inside the trigger input. |
+| `endIcon` | `ReactNode` | `<ChevronDownIcon />` | Trailing icon slot. |
+| `sizeVariant` | `"sm" \| "md" \| "lg"` | `"md"` | Trigger height and typography size variant. |
+| `invalid` | `boolean` | `false` | Applies destructive error border and ring styling. |
+| `disabled` | `boolean` | `false` | Disables interaction and dims the component. |
+| `filterOption` | `(opt, query) => boolean` | `undefined` | Custom filter function for client-side search. |
+| `renderOption` | `(opt, state) => ReactNode` | `undefined` | Custom render function for dropdown items. |
+| `renderValue` | `(val, selectedOpt) => ReactNode` | `undefined` | Custom render function for the trigger's selected value. |
+| `containerClassName`| `string` | `undefined` | Tailwind classes for the outer wrapper `div`. |
+| `className` | `string` | `undefined` | Tailwind classes for the select trigger button/input. |
+| `dropdownClassName` | `string` | `undefined` | Tailwind classes for the floating dropdown menu. |
+
+#### `SelectOption<T>`
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `value` | `T` (required) | Unique value of the option. |
+| `label` | `ReactNode` (required) | Primary title displayed for the option. |
+| `description` | `ReactNode` | Secondary subtitle or helper text. |
+| `icon` | `ReactNode` | Leading icon element for the option. |
+| `disabled` | `boolean` | Prevents selection if `true`. |
+| `keywords` | `string[]` | Additional search search terms used for client filtering. |
 
 ---
 
