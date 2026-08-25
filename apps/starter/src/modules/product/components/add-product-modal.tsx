@@ -9,18 +9,21 @@ import {
   FieldLabel,
   Input,
   Modal,
-  NativeSelect,
   Select,
+  slugify,
   toast,
 } from "@admin/core";
+import { PRODUCT_STATUS } from "@admin/types";
+import type { Product } from "@admin/types";
 
 export interface ProductFormData {
   name: string;
-  category: string;
-  sku: string;
+  slug: string;
+  description?: string | null;
   price: number;
   stock: number;
-  status: "active" | "draft" | "archived";
+  status: PRODUCT_STATUS;
+  image?: string | null;
 }
 
 export type NewProductData = ProductFormData;
@@ -28,35 +31,27 @@ export type NewProductData = ProductFormData;
 export interface ProductModalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  product?: (ProductFormData & { id?: string }) | null;
+  product?: Product | null;
   onSave: (product: ProductFormData) => void;
 }
 
 export type AddProductModalProps = ProductModalProps;
 
-const CATEGORIES = [
-  "Audio",
-  "Electronics",
-  "Accessories",
-  "Home & Kitchen",
-  "Apparel",
-];
-
 const STATUS_OPTIONS = [
   {
     label: "Active",
-    value: "active",
+    value: PRODUCT_STATUS.ACTIVE,
     icon: <span className="size-2 rounded-full bg-emerald-500 shrink-0" />,
   },
   {
     label: "Draft",
-    value: "draft",
+    value: PRODUCT_STATUS.DRAFT,
     icon: <span className="size-2 rounded-full bg-amber-500 shrink-0" />,
   },
   {
-    label: "Archived",
-    value: "archived",
-    icon: <span className="size-2 rounded-full bg-muted-foreground shrink-0" />,
+    label: "Inactive",
+    value: PRODUCT_STATUS.INACTIVE,
+    icon: <span className="size-2 rounded-full bg-rose-500 shrink-0" />,
   },
 ];
 
@@ -71,16 +66,23 @@ export function ProductModal({
   const form = useForm({
     defaultValues: {
       name: product?.name ?? "",
-      category: product?.category ?? "Electronics",
-      sku: product?.sku ?? "",
+      slug: product?.slug ?? "",
+      description: product?.description ?? "",
       price: product ? product.price : ("" as unknown as number),
       stock: product ? product.stock : ("" as unknown as number),
-      status: product?.status ?? "active",
+      status: product?.status ?? PRODUCT_STATUS.ACTIVE,
+      image: product?.image ?? "",
     },
     onSubmit: async ({ value }) => {
       const trimmedName = value.name.trim();
       if (!trimmedName) {
         toast.error("Please enter a product name");
+        return;
+      }
+
+      const trimmedSlug = (value.slug.trim() || slugify(trimmedName)).trim();
+      if (!trimmedSlug) {
+        toast.error("Please enter a product slug");
         return;
       }
 
@@ -96,17 +98,14 @@ export function ProductModal({
         return;
       }
 
-      const generatedSku =
-        value.sku.trim() ||
-        `${value.category.slice(0, 3).toUpperCase()}-${Math.floor(10000 + Math.random() * 90000)}`;
-
       onSave({
         name: trimmedName,
-        category: value.category,
-        sku: generatedSku,
+        slug: trimmedSlug,
+        description: value.description?.trim() || null,
         price: numPrice,
-        stock: numStock,
+        stock: Math.floor(numStock),
         status: value.status,
+        image: value.image?.trim() || null,
       });
 
       toast.success(
@@ -122,11 +121,12 @@ export function ProductModal({
     if (isOpen) {
       form.reset({
         name: product?.name ?? "",
-        category: product?.category ?? "Electronics",
-        sku: product?.sku ?? "",
+        slug: product?.slug ?? "",
+        description: product?.description ?? "",
         price: product ? product.price : ("" as unknown as number),
         stock: product ? product.stock : ("" as unknown as number),
-        status: product?.status ?? "active",
+        status: product?.status ?? PRODUCT_STATUS.ACTIVE,
+        image: product?.image ?? "",
       });
     }
   }, [product, isOpen]);
@@ -159,72 +159,78 @@ export function ProductModal({
 
         <Modal.Body>
           <FieldGroup className="gap-4">
-            <form.Field
-              name="name"
-              validators={{
-                onBlur: v.pipe(
-                  v.string(),
-                  v.minLength(1, "Product name is required"),
-                ),
-              }}
-            >
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Product Name</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      placeholder="e.g. Ergonomic Bluetooth Mouse"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <form.Field name="category">
-                {(field) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Category</FieldLabel>
-                    <NativeSelect
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      options={CATEGORIES}
-                    />
-                  </Field>
-                )}
+              <form.Field
+                name="name"
+                validators={{
+                  onBlur: v.pipe(
+                    v.string(),
+                    v.minLength(1, "Product name is required"),
+                  ),
+                }}
+              >
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>Product Name</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        placeholder="e.g. Ergonomic Bluetooth Mouse"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => {
+                          const newName = e.target.value;
+                          field.handleChange(newName);
+                          // Auto-fill slug if currently empty or matches previous slugified value
+                          const currentSlug = form.getFieldValue("slug");
+                          if (!currentSlug || !isEdit) {
+                            form.setFieldValue("slug", slugify(newName));
+                          }
+                        }}
+                        required
+                        autoFocus
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
               </form.Field>
 
-              <form.Field name="sku">
-                {(field) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>
-                      SKU (Stock Keeping Unit)
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      placeholder="e.g. ELE-84920 (Auto if empty)"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                    />
-                  </Field>
-                )}
+              <form.Field
+                name="slug"
+                validators={{
+                  onBlur: v.pipe(
+                    v.string(),
+                    v.minLength(1, "Slug is required"),
+                  ),
+                }}
+              >
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>Slug</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        placeholder="e.g. ergonomic-bluetooth-mouse"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        required
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
               </form.Field>
             </div>
 
@@ -334,9 +340,7 @@ export function ProductModal({
                       name={field.name}
                       value={field.state.value}
                       onChange={(val) =>
-                        field.handleChange(
-                          val as "active" | "draft" | "archived",
-                        )
+                        field.handleChange(val as PRODUCT_STATUS)
                       }
                       options={STATUS_OPTIONS}
                     />
@@ -344,6 +348,38 @@ export function ProductModal({
                 )}
               </form.Field>
             </div>
+
+            <form.Field name="image">
+              {(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Image URL (Optional)</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    placeholder="https://images.unsplash.com/..."
+                    value={field.state.value ?? ""}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </Field>
+              )}
+            </form.Field>
+
+            <form.Field name="description">
+              {(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Description (Optional)</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    placeholder="Brief description of the product features and specs..."
+                    value={field.state.value ?? ""}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </Field>
+              )}
+            </form.Field>
           </FieldGroup>
         </Modal.Body>
 

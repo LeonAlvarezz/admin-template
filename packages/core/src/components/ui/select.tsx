@@ -16,12 +16,7 @@ import {
 } from "@headlessui/react";
 import { cn } from "../../utils/cn";
 import Button from "./button";
-import {
-  ChevronDownIcon,
-  CheckIcon,
-  CloseIcon,
-  SpinnerIcon,
-} from "./icons";
+import { ChevronDownIcon, CheckIcon, CloseIcon, SpinnerIcon } from "./icons";
 
 export interface SelectOption<T = any> {
   /** Unique value of the option */
@@ -134,7 +129,6 @@ function normalizeOption<T>(
   }
   return item;
 }
-
 
 const sizeClasses = {
   sm: "min-h-8 text-xs py-1 px-2.5 gap-1.5",
@@ -642,7 +636,7 @@ export function Select<T = any>({
                   <span>{loadingText}</span>
                 </div>
               ) : filteredOptions.length === 0 ? (
-                <div className="py-6 text-center text-sm text-muted-foreground select-none">
+                <div className="py-6 text-center text-xs text-muted-foreground select-none">
                   {emptyText}
                 </div>
               ) : (

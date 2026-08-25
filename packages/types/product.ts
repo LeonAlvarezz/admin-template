@@ -1,11 +1,18 @@
 import * as v from "valibot";
 
+export enum PRODUCT_STATUS {
+  ACTIVE = "active",
+  DRAFT = "draft ",
+  INACTIVE = "inactive",
+}
+
 export const ProductSchema = v.object({
   id: v.pipe(v.number(), v.integer()),
   name: v.string(),
   slug: v.string(),
   description: v.optional(v.nullable(v.string())),
   price: v.number(),
+  status: v.enum(PRODUCT_STATUS),
   stock: v.pipe(v.number(), v.integer()),
   image: v.optional(v.nullable(v.string())),
   createdAt: v.union([v.date(), v.string()]),

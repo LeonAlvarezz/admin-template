@@ -1,19 +1,7 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import OrderPage from "@/modules/order/order.page";
 
 export const Route = createFileRoute("/_authenticated/shop/orders")({
-  component: ShopOrdersPage,
+  component: OrderPage,
 });
-
-function ShopOrdersPage() {
-  return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold tracking-tight text-foreground">
-        Customer Orders
-      </h1>
-      <p className="text-muted-foreground text-sm">
-        Track fulfillment status, shipments, and customer payments.
-      </p>
-    </div>
-  );
-}

@@ -1,304 +1,238 @@
 import * as React from "react";
-import type { ColumnDef } from "@tanstack/react-table";
 import {
   DataTable,
-  DataTableColumnHeader,
-  DataTableRowActions,
   Button,
   Input,
-  Checkbox,
   toast,
-  formatCurrency,
-  copyToClipboard,
   ConfirmModal,
   SearchIcon,
   PlusIcon,
-  EditIcon,
-  CopyIcon,
-  DeleteIcon,
 } from "@admin/core";
 import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
-
-import type { DefaultDataTableFeatures } from "@admin/core";
-
-interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: "active" | "draft" | "archived";
-  createdAt: string;
-}
+import { createProductColumn } from "./components/product.column";
+import { PRODUCT_STATUS } from "@admin/types";
+import type { Product } from "@admin/types";
 
 const BASE_PRODUCTS = [
   {
     name: "Wireless Noise-Canceling Headphones",
-    category: "Audio",
+    slug: "wireless-noise-canceling-headphones",
+    description:
+      "Premium over-ear wireless headphones with active noise cancellation and 30h battery.",
     price: 299.99,
+    image:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Ergonomic Mechanical Keyboard",
-    category: "Electronics",
+    slug: "ergonomic-mechanical-keyboard",
+    description:
+      "Custom mechanical keyboard with hot-swappable switches and RGB backlighting.",
     price: 149.5,
+    image:
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Minimalist Leather Backpack",
-    category: "Accessories",
+    slug: "minimalist-leather-backpack",
+    description:
+      "Handcrafted full-grain leather everyday backpack with 15-inch laptop compartment.",
     price: 185.0,
+    image:
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&auto=format&fit=crop&q=60",
   },
-  { name: "Smart Fitness Watch Ultra", category: "Electronics", price: 349.0 },
+  {
+    name: "Smart Fitness Watch Ultra",
+    slug: "smart-fitness-watch-ultra",
+    description:
+      "Rugged GPS sports watch with continuous heart rate monitoring and titanium case.",
+    price: 349.0,
+    image:
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&auto=format&fit=crop&q=60",
+  },
   {
     name: "Ceramic Coffee Mug (Set of 4)",
-    category: "Home & Kitchen",
+    slug: "ceramic-coffee-mug-set-of-4",
+    description:
+      "Artisan stoneware ceramic mugs, microwave and dishwasher safe.",
     price: 34.99,
+    image:
+      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=100&auto=format&fit=crop&q=60",
   },
-  { name: "USB-C Multi-Port Hub Pro", category: "Accessories", price: 59.99 },
-  { name: "Organic Cotton T-Shirt", category: "Apparel", price: 24.95 },
-  { name: "Portable Bluetooth Speaker", category: "Audio", price: 89.99 },
+  {
+    name: "USB-C Multi-Port Hub Pro",
+    slug: "usb-c-multi-port-hub-pro",
+    description:
+      "7-in-1 aluminum USB-C hub with 4K HDMI, 100W Power Delivery, and SD card reader.",
+    price: 59.99,
+    image:
+      "https://images.unsplash.com/photo-1625842268584-8f3296236761?w=100&auto=format&fit=crop&q=60",
+  },
+  {
+    name: "Organic Cotton T-Shirt",
+    slug: "organic-cotton-t-shirt",
+    description:
+      "100% certified organic heavyweight cotton classic crewneck tee.",
+    price: 24.95,
+    image:
+      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=100&auto=format&fit=crop&q=60",
+  },
+  {
+    name: "Portable Bluetooth Speaker",
+    slug: "portable-bluetooth-speaker",
+    description:
+      "IPX7 waterproof portable speaker with 360-degree deep bass sound.",
+    price: 89.99,
+    image:
+      "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=100&auto=format&fit=crop&q=60",
+  },
   {
     name: "Stainless Steel Water Bottle 1L",
-    category: "Home & Kitchen",
+    slug: "stainless-steel-water-bottle-1l",
+    description:
+      "Double-walled vacuum insulated bottle keeping drinks cold for 24 hours.",
     price: 29.0,
+    image:
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Adjustable Desk Lamp LED",
-    category: "Home & Kitchen",
+    slug: "adjustable-desk-lamp-led",
+    description:
+      "Dimmable architect LED task light with touch control and eye-care diffuser.",
     price: 49.99,
+    image:
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: 'Ultra-Wide Curved Gaming Monitor 34"',
-    category: "Electronics",
+    slug: "ultra-wide-curved-gaming-monitor-34",
+    description:
+      "144Hz 1ms WQHD curved gaming monitor with HDR400 and FreeSync Premium.",
     price: 699.99,
+    image:
+      "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Wireless Ergonomic Vertical Mouse",
-    category: "Electronics",
+    slug: "wireless-ergonomic-vertical-mouse",
+    description:
+      "Natural handshake angle vertical mouse reducing forearm strain and wrist pressure.",
     price: 69.95,
+    image:
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Aluminum Laptop Stand Riser",
-    category: "Accessories",
+    slug: "aluminum-laptop-stand-riser",
+    description:
+      "Ergonomic ventilated aluminum stand compatible with all MacBook and PC laptops.",
     price: 39.99,
+    image:
+      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=100&auto=format&fit=crop&q=60",
   },
-  { name: "Noise-Isolating In-Ear Earbuds", category: "Audio", price: 49.99 },
+  {
+    name: "Noise-Isolating In-Ear Earbuds",
+    slug: "noise-isolating-in-ear-earbuds",
+    description:
+      "True wireless earbuds with transparency mode and wireless charging case.",
+    price: 49.99,
+    image:
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=100&auto=format&fit=crop&q=60",
+  },
   {
     name: "Standing Desk Converter",
-    category: "Office & Stationery",
+    slug: "standing-desk-converter",
+    description:
+      "Gas spring dual-tier height-adjustable sit-stand workstation riser.",
     price: 219.0,
+    image:
+      "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Leather Desk Pad Protector",
-    category: "Office & Stationery",
+    slug: "leather-desk-pad-protector",
+    description:
+      "Waterproof dual-sided PU leather oversized desk blotter and mouse pad.",
     price: 29.5,
+    image:
+      "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Smart Home Security Camera",
-    category: "Electronics",
+    slug: "smart-home-security-camera",
+    description:
+      "2K indoor Wi-Fi camera with 360-degree pan/tilt and AI motion detection.",
     price: 129.99,
+    image:
+      "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Mechanical Pencil Set 0.5mm",
-    category: "Office & Stationery",
+    slug: "mechanical-pencil-set-0-5mm",
+    description:
+      "Drafting metal mechanical pencil with extra polymer lead refills and erasers.",
     price: 15.99,
+    image:
+      "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Fast Wireless Charging Pad 15W",
-    category: "Accessories",
+    slug: "fast-wireless-charging-pad-15w",
+    description:
+      "Qi-certified ultra-slim fast inductive charging station with LED indicator.",
     price: 32.5,
+    image:
+      "https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?w=100&auto=format&fit=crop&q=60",
   },
   {
     name: "Thermal Insulated Travel Flask",
-    category: "Home & Kitchen",
+    slug: "thermal-insulated-travel-flask",
+    description:
+      "Leak-proof travel tumbler with flip lid and tea infuser basket.",
     price: 27.99,
+    image:
+      "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=100&auto=format&fit=crop&q=60",
   },
 ];
 
-const STATUSES: Array<Product["status"]> = ["active", "draft", "archived"];
+const STATUSES: Array<Product["status"]> = [
+  PRODUCT_STATUS.ACTIVE,
+  PRODUCT_STATUS.DRAFT,
+  PRODUCT_STATUS.INACTIVE,
+];
 
 const SAMPLE_PRODUCTS: Product[] = Array.from({ length: 65 }, (_, index) => {
   const base = BASE_PRODUCTS[index % BASE_PRODUCTS.length];
-  const idNum = String(index + 1).padStart(3, "0");
-  const skuPrefix = base.category.substring(0, 3).toUpperCase();
+  const id = index + 1;
   const status = STATUSES[index % 3];
   const stock = (index * 7 + 3) % 120;
   const version = Math.floor(index / BASE_PRODUCTS.length);
+  const name = version > 0 ? `${base.name} (V${version + 1})` : base.name;
+  const slug =
+    version > 0 ? `${base.slug}-v${version + 1}` : `${base.slug}-${id}`;
+  const dateMonth = String((index % 6) + 1).padStart(2, "0");
+  const dateDay = String((index % 28) + 1).padStart(2, "0");
+  const createdAt = `2026-${dateMonth}-${dateDay}T10:00:00.000Z`;
+  const updatedAt = `2026-${dateMonth}-${dateDay}T12:30:00.000Z`;
 
   return {
-    id: `PROD-${idNum}`,
-    name: version > 0 ? `${base.name} (V${version + 1})` : base.name,
-    sku: `${skuPrefix}-${idNum}`,
-    category: base.category,
+    id,
+    name,
+    slug,
+    description: base.description,
     price: parseFloat((base.price + (index % 5) * 5).toFixed(2)),
-    stock: stock,
-    status: stock === 0 ? "archived" : status,
-    createdAt: `2026-0${(index % 6) + 1}-${String((index % 28) + 1).padStart(2, "0")}`,
+    status,
+    stock,
+    image: base.image,
+    createdAt,
+    updatedAt,
   };
 });
 
 function ProductPage() {
   const [products, setProducts] = React.useState<Product[]>(SAMPLE_PRODUCTS);
-
-  const columns: ColumnDef<DefaultDataTableFeatures, Product>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={table.getIsAllPageRowsSelected()}
-    //       onChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    //   size: 40,
-    // },
-    {
-      accessorKey: "sku",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="SKU / ID" />
-      ),
-      cell: ({ row }) => (
-        <span className="font-mono text-xs font-medium text-muted-foreground">
-          {row.original.sku}
-        </span>
-      ),
-      size: 100,
-    },
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Product Name" />
-      ),
-      size: 300,
-    },
-    {
-      accessorKey: "category",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Category" />
-      ),
-      cell: ({ row }) => (
-        <span className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
-          {row.original.category}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "price",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Price" />
-      ),
-      cell: ({ row }) => (
-        <span className="font-semibold text-foreground">
-          {formatCurrency(row.original.price)}
-        </span>
-      ),
-    },
-
-    {
-      accessorKey: "stock",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Stock" />
-      ),
-      cell: ({ row }) => {
-        const stock = row.original.stock;
-        return (
-          <div className="flex items-center gap-2">
-            <span
-              className={`h-2 w-2 rounded-full ${
-                stock > 20
-                  ? "bg-emerald-500"
-                  : stock > 0
-                    ? "bg-amber-500"
-                    : "bg-rose-500"
-              }`}
-            />
-            <span className="text-xs font-medium">{stock} units</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
-      meta: {
-        className: "w-28",
-      },
-      cell: ({ row }) => {
-        const status = row.original.status;
-        const colorMap: Record<Product["status"], string> = {
-          active:
-            "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-          draft:
-            "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-          archived: "bg-muted text-muted-foreground border-border",
-        };
-
-        return (
-          <span
-            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${colorMap[status]}`}
-          >
-            {status}
-          </span>
-        );
-      },
-    },
-    {
-      id: "actions",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Action" />
-      ),
-      size: 100,
-      enableHiding: true,
-      cell: ({ row }) => {
-        const product = row.original;
-
-        return (
-          <DataTableRowActions
-            actions={[
-              {
-                label: "Edit",
-                icon: <EditIcon />,
-                onClick: () => {
-                  setSelectedProduct(product);
-                  setIsModalOpen(true);
-                },
-              },
-              {
-                label: "Copy SKU",
-                icon: <CopyIcon />,
-                onClick: async () => {
-                  await copyToClipboard(product.sku);
-                  toast.info(`Copied SKU: ${product.sku}`);
-                },
-              },
-
-              {
-                label: "Delete",
-                icon: <DeleteIcon />,
-                variant: "destructive",
-                onClick: () => {
-                  setProductToDelete(product);
-                  setIsDeleteOpen(true);
-                },
-              },
-            ]}
-          />
-        );
-      },
-    },
-  ];
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
@@ -310,19 +244,29 @@ function ProductPage() {
   );
 
   const handleSaveProduct = (formData: ProductFormData) => {
+    const now = new Date().toISOString();
     if (selectedProduct) {
       setProducts((prev) =>
         prev.map((p) =>
-          p.id === selectedProduct.id ? { ...p, ...formData } : p,
+          p.id === selectedProduct.id
+            ? {
+                ...p,
+                ...formData,
+                updatedAt: now,
+              }
+            : p,
         ),
       );
     } else {
-      const product: Product = {
-        id: `prod-${Date.now()}`,
+      const nextId =
+        products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
+      const newProduct: Product = {
+        id: nextId,
         ...formData,
-        createdAt: new Date().toISOString(),
+        createdAt: now,
+        updatedAt: now,
       };
-      setProducts((prev) => [product, ...prev]);
+      setProducts((prev) => [newProduct, ...prev]);
     }
   };
 
@@ -333,6 +277,19 @@ function ProductPage() {
       setProductToDelete(null);
     }
   };
+
+  const columns = createProductColumn({
+    onDelete: (p) => {
+      if (!p) return;
+      setProductToDelete(p);
+      setIsDeleteOpen(true);
+    },
+    onEdit: (p) => {
+      if (!p) return;
+      setSelectedProduct(p);
+      setIsModalOpen(true);
+    },
+  });
 
   return (
     <div className="space-y-6">

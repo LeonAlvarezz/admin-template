@@ -11,7 +11,7 @@ export const UserSchema = v.object({
   name: v.string(),
   email: v.pipe(v.string(), v.email()),
   emailVerified: v.boolean(),
-  image: v.nullable(v.string()),
+  image: v.optional(v.nullable(v.string())),
   createdAt: v.union([v.date(), v.string()]),
   updatedAt: v.union([v.date(), v.string()]),
   role: v.optional(v.nullable(v.string())),

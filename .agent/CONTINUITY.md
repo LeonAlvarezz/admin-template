@@ -13,7 +13,7 @@
 - 2026-08-21T11:38Z [CODE] Switched `apps/backend` dev watcher script to `nodemon` (`nodemon --watch src --watch main.ts -e ts --exec bun run main.ts`) to prevent watcher exits on syntax errors.
 - 2026-08-21T13:46Z [USER] Created implementation plan for DataTable component in `@admin/core` using `@tanstack/react-table` v8.
 - 2026-08-21T14:07Z [USER] Standardized interactive element hover/focus states to `bg-accent text-accent-foreground` across `@admin/core`.
-- 2026-08-24T16:13:00+07:00 [USER] Created implementation plan to centralize all icons into `@admin/core` (`packages/core/src/components/ui/icons.tsx`), export via `@admin/core`, and refactor all consumers in core & starter.
+- 2026-08-24T18:07:00+07:00 [USER] Created implementation plan to rework sample products and product management UI in `apps/starter` (`product.page.tsx`, `product.column.tsx`, `add-product-modal.tsx`) to strictly follow `@admin/types` `Product` schema (`packages/types/product.ts`).
 
 - 2026-08-24T16:12:00+07:00 [CODE] Implemented advanced [`Select`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/select.tsx) component in `@admin/core` supporting icon slots (`startIcon`, `endIcon`, `option.icon`), combobox searchable filtering (`searchable={true}`), async option fetching (`loadOptions`), custom items (`renderOption`, `renderValue`, compound `Select.Option`/`Group`/`Label`/`Separator`), single & multiple select with tag chips, and clearable support. Added 14 unit tests in `select.test.tsx`, exported from `index.ts`, and documented in `AGENTS.md`. All 46 monorepo tests, lint, typechecks, and starter build pass with 0 errors.
 - 2026-08-24T10:48:00+07:00 [USER] Centralized shared utilities in `@admin/core` (`packages/core/src/utils/`) with barrel export and documented them in `AGENTS.md` quick reference table. Disallowed creating scattered local `utils/` or helper files in feature modules; all shared formatters, string helpers, and DOM utils must be exported from `@admin/core`.
@@ -58,9 +58,10 @@
 - 2026-08-20T12:07:33+07:00 [USER] Login validation contract: fields give feedback on blur, the full schema validates on submit, and users can submit by click or Enter without first blurring the password field.
 - 2026-08-20T13:11:18+07:00 [USER] Place `LoginForm` in `apps/starter/src/modules/auth/components/login-form.tsx`; do not add a test file.
 - 2026-08-20T14:12:26+07:00 [USER] Nested sidebar active state uses a round marker and a bright animated rail that ends at the marker center; no faint rail tail may extend below it.
-- 2026-08-20T14:16:37+07:00 [USER] Supersedes the 14:12 rail detail: retain a faint background track from the list top to the final sub-item center, while the brighter selected segment ends at the active round marker; neither reaches the row bottom.
+- 2026-08-25T10:51:00+07:00 [USER] Approved implementation plan for Order and OrderItem schemas, Drizzle relations, and Valibot validation types.
 
 ## [PROGRESS]
+- 2026-08-25T10:51:30+07:00 [CODE] Implemented Order and OrderItem Valibot schemas & types in `packages/types/order.ts` and exported via `packages/types/index.ts`. Implemented `order` and `orderItem` Drizzle ORM schemas in `apps/backend/src/db/schema/order.schema.ts`, wired relations in `relations.schema.ts`, exported via `db/schema/index.ts`, and generated migration `0005_tan_phil_sheldon.sql`. All monorepo packages check-types and build cleanly.
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
 - 2026-08-14T15:22Z [CODE] Fixed Tailwind v4 processing for `@admin/core` components in Vite.
 - 2026-08-14T15:26Z [CODE] Added Tailwind CSS v4 `@theme` design tokens with dark mode support.
