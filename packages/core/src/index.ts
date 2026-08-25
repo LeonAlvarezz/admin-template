@@ -86,4 +86,8 @@ export type {
   ContextMenuPosition,
 } from "./components/ui/context-menu";
 export * from "./components/ui/icons";
+export { default as Tag, colorVariants, TAILWIND_COLORS } from "./components/ui/tag";
+export type { TagProps, Color, Color as TagColor } from "./components/ui/tag";
 export * from "./utils";
+
+

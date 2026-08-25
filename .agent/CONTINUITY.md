@@ -61,6 +61,8 @@
 - 2026-08-25T10:51:00+07:00 [USER] Approved implementation plan for Order and OrderItem schemas, Drizzle relations, and Valibot validation types.
 
 ## [PROGRESS]
+- 2026-08-25T11:23:00+07:00 [CODE] Created mock order dataset `SAMPLE_ORDERS` in `apps/starter/src/modules/order/constant/mock_order.ts` containing 50 typed `Order` records with nested `OrderItem` lines, realistic customer data, calculated pricing (subtotal/tax/shipping), payment methods, and status rotations matching `@admin/types`.
+- 2026-08-25T11:18:00+07:00 [CODE] Implemented `<Tag>` component in `@admin/core` (`packages/core/src/components/ui/tag.tsx`) with `Color` type & `TAILWIND_COLORS` const supporting all 22 Tailwind colors (`violet`, `emerald`, `amber`, `rose`, etc.) with static class maps for badge and dot styling. Exported from `@admin/core`, documented in `AGENTS.md`, added unit tests, and verified typecheck across monorepo.
 - 2026-08-25T10:51:30+07:00 [CODE] Implemented Order and OrderItem Valibot schemas & types in `packages/types/order.ts` and exported via `packages/types/index.ts`. Implemented `order` and `orderItem` Drizzle ORM schemas in `apps/backend/src/db/schema/order.schema.ts`, wired relations in `relations.schema.ts`, exported via `db/schema/index.ts`, and generated migration `0005_tan_phil_sheldon.sql`. All monorepo packages check-types and build cleanly.
 - 2026-08-14T15:17Z [CODE] Fixed workspace resolution so Bun resolves `@admin/core` locally instead of searching npm registry.
 - 2026-08-14T15:22Z [CODE] Fixed Tailwind v4 processing for `@admin/core` components in Vite.

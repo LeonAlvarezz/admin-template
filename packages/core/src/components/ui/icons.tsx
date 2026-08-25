@@ -45,6 +45,7 @@ import AlertTriangleIcon from "~icons/lucide/triangle-alert";
 import AlertCircleIcon from "~icons/lucide/circle-alert";
 import InfoIcon from "~icons/lucide/info";
 import InfoAltIcon from "~icons/mdi/error";
+import ViewIcon from "~icons/lets-icons/view-fill";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -137,6 +138,7 @@ export {
   AlertCircleIcon,
   InfoIcon,
   InfoAltIcon,
+  ViewIcon,
 };
 
 export const Icons = {
@@ -193,4 +195,5 @@ export const Icons = {
   Info: InfoIcon,
   InfoAlt: InfoAltIcon,
   Spinner: SpinnerIcon,
+  View: ViewIcon,
 };

@@ -80,7 +80,9 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<WorkspaceTabs>` | `import { WorkspaceTabs } from "@admin/core"` | `packages/core/src/components/workspace-tabs.tsx` |
 | `<Modal>`, `<Modal.Header>`, `<Modal.Footer>` | `import { Modal, ModalHeader, ModalFooter } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx` |
 | `<ConfirmModal>` | `import { ConfirmModal } from "@admin/core"` | `packages/core/src/components/ui/confirm-modal.tsx` |
+| `<Tag>` | `import { Tag } from "@admin/core"` | `packages/core/src/components/ui/tag.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
+
 
 ### Shared Utilities & Helpers (`@admin/core`)
 
