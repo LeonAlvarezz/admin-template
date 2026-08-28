@@ -1,11 +1,11 @@
 import React from "react";
 import type { NavGroupConfig } from "@admin/core";
+import { ProductIcon, OrderIcon } from "@admin/core";
 
 import DashboardIcon from "~icons/boxicons/dashboard-filled";
 import ShopIcon from "~icons/solar/cart-4-bold";
 import TimeIcon from "~icons/mingcute/time-fill";
 import GearIcon from "~icons/solar/settings-bold";
-
 
 export const navGroups: NavGroupConfig[] = [
   {
@@ -27,19 +27,15 @@ export const navGroups: NavGroupConfig[] = [
             id: "products",
             label: "Products",
             path: "/shop/products",
+            icon: <ProductIcon />,
           },
           {
             id: "orders",
             label: "Orders",
             path: "/shop/orders",
+            icon: <OrderIcon />,
           },
         ],
-      },
-      {
-        id: "schedule",
-        label: "Schedule",
-        path: "/schedule",
-        icon: <TimeIcon />,
       },
     ],
   },
@@ -67,4 +63,3 @@ export const navGroups: NavGroupConfig[] = [
     ],
   },
 ];
-

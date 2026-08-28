@@ -48,6 +48,8 @@ import InfoAltIcon from "~icons/mdi/error";
 import ViewIcon from "~icons/lets-icons/view-fill";
 import MaximizeIcon from "~icons/lucide/maximize-2";
 import MinimizeIcon from "~icons/lucide/minimize-2";
+import ProductIcon from "~icons/solar/box-bold";
+import OrderIcon from "~icons/solar/clipboard-list-bold";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -86,6 +88,8 @@ const GearIcon = SettingsIcon;
 const CartIcon = ShopIcon;
 const ClockIcon = TimeIcon;
 const MonitorIcon = ComputerIcon;
+const BoxIcon = ProductIcon;
+const ClipboardListIcon = OrderIcon;
 
 export {
   SearchIcon,
@@ -143,6 +147,10 @@ export {
   ViewIcon,
   MaximizeIcon,
   MinimizeIcon,
+  ProductIcon,
+  BoxIcon,
+  OrderIcon,
+  ClipboardListIcon,
 };
 
 export const Icons = {
@@ -202,4 +210,8 @@ export const Icons = {
   View: ViewIcon,
   Maximize: MaximizeIcon,
   Minimize: MinimizeIcon,
+  Product: ProductIcon,
+  Box: ProductIcon,
+  Order: OrderIcon,
+  ClipboardList: OrderIcon,
 };
