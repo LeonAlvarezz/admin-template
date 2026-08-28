@@ -3,9 +3,11 @@ import { fromNodeHeaders } from "better-auth/node";
 import { AuthService } from "./auth.service";
 import {
   ChangePasswordSchema,
+  DisableTwoFactorSchema,
   EnableTwoFactorSchema,
   SignInEmailSchema,
   UpdateUserInfoSchema,
+  VerifyTotpSchema,
 } from "@admin/types";
 import * as v from "valibot";
 import { UnauthorizedException } from "@/lib";
@@ -85,6 +87,30 @@ export class AuthController {
       const headers = fromNodeHeaders(req.headers);
       const payload = v.parse(EnableTwoFactorSchema, req.body);
       const result = await this.authService.enableTwoFactor(payload, headers);
+      if (!result) throw new UnauthorizedException();
+      res.success(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  verifyTOTP = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const headers = fromNodeHeaders(req.headers);
+      const payload = v.parse(VerifyTotpSchema, req.body);
+      const result = await this.authService.verifyTOTP(payload, headers);
+      if (!result) throw new UnauthorizedException();
+      res.success(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  disableTwoFactor = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const headers = fromNodeHeaders(req.headers);
+      const payload = v.parse(DisableTwoFactorSchema, req.body);
+      const result = await this.authService.disableTwoFactor(payload, headers);
       if (!result) throw new UnauthorizedException();
       res.success(result);
     } catch (error) {

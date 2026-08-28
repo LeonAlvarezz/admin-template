@@ -1,11 +1,13 @@
 import { auth, ForbiddenException, UnauthorizedException } from "@/lib";
 import type {
   ChangePassword,
+  DisableTwoFactor,
   EnableTwoFactor,
   SignInEmail,
   SignInEmailResponse,
   UpdateUserInfo,
   User,
+  VerifyTotp,
 } from "@admin/types";
 
 export class AuthService {
@@ -61,6 +63,20 @@ export class AuthService {
 
   async enableTwoFactor(payload: EnableTwoFactor, headers: HeadersInit) {
     return await auth.api.enableTwoFactor({
+      body: payload,
+      headers,
+    });
+  }
+
+  async verifyTOTP(payload: VerifyTotp, headers: HeadersInit) {
+    return await auth.api.verifyTOTP({
+      body: payload,
+      headers,
+    });
+  }
+
+  async disableTwoFactor(payload: DisableTwoFactor, headers: HeadersInit) {
+    return await auth.api.disableTwoFactor({
       body: payload,
       headers,
     });

@@ -1,6 +1,6 @@
-import type { Session, User } from "better-auth";
+import type { Session } from "better-auth";
 import * as v from "valibot";
-import { UserSchema } from "./user";
+import { type User, UserSchema } from "./user";
 
 export const SignInEmailSchema = v.object({
   email: v.pipe(v.string(), v.email("Invalid email address")),
