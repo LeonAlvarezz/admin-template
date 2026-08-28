@@ -1,6 +1,9 @@
 # CONTINUITY
 
 ## [PLANS]
+- 2026-08-28T15:46:00+07:00 [CODE] Removed nested `.git` directory from `apps/backend/`. Monorepo now has a single root git repository (`/.git`), enabling unified tracking across all packages and apps.
+- 2026-08-28T15:41:00+07:00 [CODE] Created workspace skill `gen-docs` in `.agent/skills/gen-docs/` (`SKILL.md` and `scripts/verify-docs.ts`) to automate OpenAPI 3.0 JSDoc annotations, schema registrations in `openapi.config.ts`, and verification for Scalar API reference.
+- 2026-08-28T15:36:00+07:00 [CODE] Generated OpenAPI and Scalar API reference for `/auth/update-user`: added `UpdateUserPayload` schema to `apps/backend/src/config/openapi.config.ts` and `@openapi` annotations to `apps/backend/src/modules/auth/auth.route.ts`. Tested generation verified in `openApiSpec.paths`.
 - 2026-08-28T15:10:00+07:00 [USER] Proposed consolidating `/settings/profile` and `/settings/security` into single unified `/settings` page, removing sub-tabs and flattening sidebar navigation item.
 - 2026-08-28T14:36:00+07:00 [CODE] Consolidated Avatar and Personal Info form into unified `PersonalInfoSection`, added avatar bottom-right edit button triggering hidden file input, removed dedicated upload/remove buttons and deleted `avatar-section.tsx`.
 - 2026-08-28T14:37:00+07:00 [CODE] Fixed active tab indicator in `SettingsNav`: replaced conflicting `border-transparent text-muted-foreground` in base `className` with TanStack Router `inactiveProps` and `activeProps`, and mounted `SettingsNav` in `profile.page.tsx`.

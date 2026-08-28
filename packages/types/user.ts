@@ -20,6 +20,8 @@ export const UserSchema = v.object({
   banExpires: v.optional(v.nullable(v.union([v.date(), v.string()]))),
 });
 
+export const UpdateUserInfoSchema = v.pick(UserSchema, ["name", "image"]);
+
 export type User = v.InferOutput<typeof UserSchema>;
 
 export const CreateUserSchema = v.object({
@@ -30,6 +32,4 @@ export const CreateUserSchema = v.object({
 
 export type CreateUser = v.InferOutput<typeof CreateUserSchema>;
 
-export const UpdateUserSchema = v.partial(CreateUserSchema);
-
-export type UpdateUser = v.InferOutput<typeof UpdateUserSchema>;
+export type UpdateUserInfo = v.InferOutput<typeof UpdateUserInfoSchema>;
