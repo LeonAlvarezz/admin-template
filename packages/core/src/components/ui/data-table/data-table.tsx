@@ -174,7 +174,7 @@ function DataTableRoot<
 
       {/* Main Table Shell */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto table-scrollbar">
           <table
             className="w-full table-fixed text-left text-sm text-foreground"
             style={{ minWidth: table.getTotalSize() }}
