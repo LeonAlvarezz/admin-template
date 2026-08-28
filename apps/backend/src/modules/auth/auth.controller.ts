@@ -7,6 +7,7 @@ import {
   EnableTwoFactorSchema,
   SignInEmailSchema,
   UpdateUserInfoSchema,
+  VerifyBackupCodeSchema,
   VerifyTotpSchema,
 } from "@admin/types";
 import * as v from "valibot";
@@ -98,9 +99,31 @@ export class AuthController {
     try {
       const headers = fromNodeHeaders(req.headers);
       const payload = v.parse(VerifyTotpSchema, req.body);
-      const result = await this.authService.verifyTOTP(payload, headers);
-      if (!result) throw new UnauthorizedException();
-      res.success(result);
+      const { data, cookies } = await this.authService.verifyTOTP(
+        payload,
+        headers,
+      );
+      cookies.forEach((cookie: string) => res.append("Set-Cookie", cookie));
+      res.success(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  verifyBackupCode = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const headers = fromNodeHeaders(req.headers);
+      const payload = v.parse(VerifyBackupCodeSchema, req.body);
+      const { data, cookies } = await this.authService.verifyBackupCode(
+        payload,
+        headers,
+      );
+      cookies.forEach((cookie: string) => res.append("Set-Cookie", cookie));
+      res.success(data);
     } catch (error) {
       next(error);
     }

@@ -227,4 +227,35 @@ export const authRoute = (app: Router) => {
    *         description: Unauthorized. Valid session required.
    */
   router.post("/two-factor/disable", controller.disableTwoFactor);
+
+  /**
+   * @openapi
+   * /auth/two-factor/verify-backup-code:
+   *   post:
+   *     summary: Verify backup recovery code
+   *     description: Verifies a single-use backup recovery code to complete sign-in or two-factor authentication challenge.
+   *     tags:
+   *       - Authentication
+   *     security:
+   *       - cookieAuth: []
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/VerifyBackupCodePayload'
+   *     responses:
+   *       200:
+   *         description: Backup code successfully verified. Sets session cookie and authenticates caller.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/ApiResponse'
+   *       400:
+   *         description: Invalid or already consumed backup code.
+   *       401:
+   *         description: Unauthorized. Invalid two-factor challenge cookie.
+   */
+  router.post("/two-factor/verify-backup-code", controller.verifyBackupCode);
 };

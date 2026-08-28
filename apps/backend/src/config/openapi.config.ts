@@ -166,6 +166,17 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+        VerifyBackupCodePayload: {
+          type: "object",
+          required: ["code"],
+          properties: {
+            code: {
+              type: "string",
+              description: "Emergency single-use backup recovery code.",
+              example: "a1b2c3d4",
+            },
+          },
+        },
         Product: {
           type: "object",
           properties: {

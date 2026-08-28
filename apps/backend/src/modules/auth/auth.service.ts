@@ -6,6 +6,7 @@ import type {
   SignInEmail,
   SignInEmailResponse,
   UpdateUserInfo,
+  VerifyBackupCode,
   VerifyTotp,
 } from "@admin/types";
 
@@ -68,10 +69,43 @@ export class AuthService {
   }
 
   async verifyTOTP(payload: VerifyTotp, headers: HeadersInit) {
-    return await auth.api.verifyTOTP({
+    const response = await auth.api.verifyTOTP({
       body: payload,
       headers,
+      asResponse: true,
     });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new UnauthorizedException({
+        message: err.message || "Invalid verification code",
+      });
+    }
+
+    const data = await response.json();
+    const cookies = response.headers.getSetCookie();
+
+    return { data, cookies };
+  }
+
+  async verifyBackupCode(payload: VerifyBackupCode, headers: HeadersInit) {
+    const response = await auth.api.verifyBackupCode({
+      body: payload,
+      headers,
+      asResponse: true,
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new UnauthorizedException({
+        message: err.message || "Invalid backup code",
+      });
+    }
+
+    const data = await response.json();
+    const cookies = response.headers.getSetCookie();
+
+    return { data, cookies };
   }
 
   async disableTwoFactor(payload: DisableTwoFactor, headers: HeadersInit) {
