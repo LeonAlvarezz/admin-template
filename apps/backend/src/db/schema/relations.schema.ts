@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { user } from "./user.schema";
 import { session } from "./session.schema";
 import { account } from "./account.schema";
+import { twoFactor } from "./two-factor.schema";
 import { product } from "./product.schema";
 import { order, orderItem } from "./order.schema";
 
@@ -9,6 +10,7 @@ export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   orders: many(order),
+  twoFactors: many(twoFactor),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -21,6 +23,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const twoFactorRelations = relations(twoFactor, ({ one }) => ({
+  user: one(user, {
+    fields: [twoFactor.userId],
     references: [user.id],
   }),
 }));

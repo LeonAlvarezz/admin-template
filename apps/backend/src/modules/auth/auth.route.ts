@@ -103,4 +103,66 @@ export const authRoute = (app: Router) => {
    *         description: Unauthorized. Valid session required.
    */
   router.post("/update-user", controller.updateUserInfo);
+
+  /**
+   * @openapi
+   * /auth/change-password:
+   *   post:
+   *     summary: Change user password
+   *     description: Updates the authenticated user's password using the current password for verification.
+   *     tags:
+   *       - Authentication
+   *     security:
+   *       - cookieAuth: []
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/ChangePasswordPayload'
+   *     responses:
+   *       200:
+   *         description: Password successfully changed.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/ApiResponse'
+   *       400:
+   *         description: Invalid payload or incorrect current password.
+   *       401:
+   *         description: Unauthorized. Valid session required.
+   */
+  router.post("/change-password", controller.changePassword);
+
+  /**
+   * @openapi
+   * /auth/two-factor/enable:
+   *   post:
+   *     summary: Enable two-factor authentication
+   *     description: Enables two-factor authentication (TOTP or OTP) for the authenticated user. When using TOTP, returns the totpURI for QR code display and backup codes.
+   *     tags:
+   *       - Authentication
+   *     security:
+   *       - cookieAuth: []
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/EnableTwoFactorPayload'
+   *     responses:
+   *       200:
+   *         description: Two-factor authentication initiated successfully.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/ApiResponse'
+   *       400:
+   *         description: Invalid password or validation error.
+   *       401:
+   *         description: Unauthorized. Valid session required.
+   */
+  router.post("/two-factor/enable", controller.enableTwoFactor);
 };

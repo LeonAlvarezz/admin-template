@@ -1,6 +1,9 @@
 # CONTINUITY
 
 ## [PLANS]
+- 2026-08-28T16:13:00+07:00 [CODE] Generated OpenAPI and Scalar documentation for `POST /auth/two-factor/enable`: registered `EnableTwoFactorPayload` and `EnableTwoFactorResponse` in `apps/backend/src/config/openapi.config.ts` and annotated route in `apps/backend/src/modules/auth/auth.route.ts`. Verified in Scalar registry (10 endpoints total).
+- 2026-08-28T16:07:00+07:00 [CODE] Updated database and validation schemas for Better Auth 2FA plugin: added `twoFactorEnabled` to `apps/backend/src/db/schema/user.schema.ts` and `packages/types/user.ts`, created `apps/backend/src/db/schema/two-factor.schema.ts`, wired relations in `relations.schema.ts` and exports in `index.ts`, and generated Drizzle migration `0006_reflective_titania.sql`.
+- 2026-08-28T15:54:00+07:00 [CODE] Generated OpenAPI and Scalar documentation for `POST /auth/change-password`: registered `ChangePasswordPayload` in `apps/backend/src/config/openapi.config.ts` and annotated route in `apps/backend/src/modules/auth/auth.route.ts`. Verified in Scalar registry (9 endpoints total).
 - 2026-08-28T15:46:00+07:00 [CODE] Removed nested `.git` directory from `apps/backend/`. Monorepo now has a single root git repository (`/.git`), enabling unified tracking across all packages and apps.
 - 2026-08-28T15:41:00+07:00 [CODE] Created workspace skill `gen-docs` in `.agent/skills/gen-docs/` (`SKILL.md` and `scripts/verify-docs.ts`) to automate OpenAPI 3.0 JSDoc annotations, schema registrations in `openapi.config.ts`, and verification for Scalar API reference.
 - 2026-08-28T15:36:00+07:00 [CODE] Generated OpenAPI and Scalar API reference for `/auth/update-user`: added `UpdateUserPayload` schema to `apps/backend/src/config/openapi.config.ts` and `@openapi` annotations to `apps/backend/src/modules/auth/auth.route.ts`. Tested generation verified in `openApiSpec.paths`.

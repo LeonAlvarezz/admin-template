@@ -1,5 +1,7 @@
 import { auth, ForbiddenException, UnauthorizedException } from "@/lib";
 import type {
+  ChangePassword,
+  EnableTwoFactor,
   SignInEmail,
   SignInEmailResponse,
   UpdateUserInfo,
@@ -45,6 +47,20 @@ export class AuthService {
 
   async updateUserInfo(payload: UpdateUserInfo, headers: HeadersInit) {
     return await auth.api.updateUser({
+      body: payload,
+      headers,
+    });
+  }
+
+  async changePassword(payload: ChangePassword, headers: HeadersInit) {
+    return await auth.api.changePassword({
+      body: payload,
+      headers,
+    });
+  }
+
+  async enableTwoFactor(payload: EnableTwoFactor, headers: HeadersInit) {
+    return await auth.api.enableTwoFactor({
       body: payload,
       headers,
     });

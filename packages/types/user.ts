@@ -18,6 +18,18 @@ export const UserSchema = v.object({
   banned: v.optional(v.nullable(v.boolean())),
   banReason: v.optional(v.nullable(v.string())),
   banExpires: v.optional(v.nullable(v.union([v.date(), v.string()]))),
+  twoFactorEnabled: v.optional(v.nullable(v.boolean())),
+});
+
+export const ChangePasswordSchema = v.object({
+  currentPassword: v.string(),
+  newPassword: v.string(),
+});
+
+export const EnableTwoFactorSchema = v.object({
+  password: v.string(),
+  method: v.union([v.literal("otp"), v.literal("totp")]),
+  issuer: v.optional(v.string()),
 });
 
 export const UpdateUserInfoSchema = v.pick(UserSchema, ["name", "image"]);
@@ -33,3 +45,5 @@ export const CreateUserSchema = v.object({
 export type CreateUser = v.InferOutput<typeof CreateUserSchema>;
 
 export type UpdateUserInfo = v.InferOutput<typeof UpdateUserInfoSchema>;
+export type ChangePassword = v.InferOutput<typeof ChangePasswordSchema>;
+export type EnableTwoFactor = v.InferOutput<typeof EnableTwoFactorSchema>;

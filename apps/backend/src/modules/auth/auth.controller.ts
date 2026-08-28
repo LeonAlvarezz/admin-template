@@ -1,7 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { AuthService } from "./auth.service";
-import { SignInEmailSchema, UpdateUserInfoSchema } from "@admin/types";
+import {
+  ChangePasswordSchema,
+  EnableTwoFactorSchema,
+  SignInEmailSchema,
+  UpdateUserInfoSchema,
+} from "@admin/types";
 import * as v from "valibot";
 import { UnauthorizedException } from "@/lib";
 
@@ -56,6 +61,30 @@ export class AuthController {
       const headers = fromNodeHeaders(req.headers);
       const payload = v.parse(UpdateUserInfoSchema, req.body);
       const result = await this.authService.updateUserInfo(payload, headers);
+      if (!result) throw new UnauthorizedException();
+      res.success(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const headers = fromNodeHeaders(req.headers);
+      const payload = v.parse(ChangePasswordSchema, req.body);
+      const result = await this.authService.changePassword(payload, headers);
+      if (!result) throw new UnauthorizedException();
+      res.success(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  enableTwoFactor = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const headers = fromNodeHeaders(req.headers);
+      const payload = v.parse(EnableTwoFactorSchema, req.body);
+      const result = await this.authService.enableTwoFactor(payload, headers);
       if (!result) throw new UnauthorizedException();
       res.success(result);
     } catch (error) {

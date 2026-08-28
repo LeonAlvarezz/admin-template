@@ -79,6 +79,70 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+        ChangePasswordPayload: {
+          type: "object",
+          required: ["currentPassword", "newPassword"],
+          properties: {
+            currentPassword: {
+              type: "string",
+              format: "password",
+              example: "CurrentPassword@123",
+            },
+            newPassword: {
+              type: "string",
+              format: "password",
+              example: "NewSecurePassword@456",
+            },
+          },
+        },
+        EnableTwoFactorPayload: {
+          type: "object",
+          required: ["password"],
+          properties: {
+            password: {
+              type: "string",
+              format: "password",
+              description: "Current password of the authenticated user.",
+              example: "Admin@123456",
+            },
+            method: {
+              type: "string",
+              enum: ["totp", "otp"],
+              default: "totp",
+              description: "Two-factor method to enable (defaults to totp).",
+              example: "totp",
+            },
+            issuer: {
+              type: "string",
+              description: "Custom issuer name for the TOTP URI.",
+              example: "Zero Admin",
+            },
+          },
+        },
+        EnableTwoFactorResponse: {
+          type: "object",
+          properties: {
+            method: {
+              type: "string",
+              enum: ["totp", "otp"],
+              example: "totp",
+            },
+            totpURI: {
+              type: "string",
+              nullable: true,
+              description: "TOTP URI for generating QR code in authenticator apps.",
+              example:
+                "otpauth://totp/Zero%20Admin:admin@admin.com?secret=JBSWY3DPEHPK3PXP&issuer=Zero%20Admin",
+            },
+            backupCodes: {
+              type: "array",
+              items: { type: "string" },
+              nullable: true,
+              description: "List of one-time emergency backup recovery codes.",
+              example: ["a1b2c3d4", "e5f6g7h8", "i9j0k1l2", "m3n4o5p6"],
+            },
+          },
+        },
         Product: {
           type: "object",
           properties: {
