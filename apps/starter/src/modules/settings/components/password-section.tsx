@@ -8,12 +8,14 @@ import {
   InputPassword,
   toast,
 } from "@admin/core";
+import { getErrorMessage } from "@/libs/api-client";
+import { useChangePasswordMutation } from "../api/settings.api";
 
 export function PasswordSection() {
+  const changePasswordMutation = useChangePasswordMutation();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
 
   // Criteria calculations
   const hasMinLength = newPassword.length >= 8;
@@ -59,7 +61,7 @@ export function PasswordSection() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!currentPassword) {
@@ -79,14 +81,18 @@ export function PasswordSection() {
       return;
     }
 
-    setIsUpdating(true);
-    setTimeout(() => {
-      setIsUpdating(false);
+    try {
+      await changePasswordMutation.mutateAsync({
+        currentPassword,
+        newPassword,
+      });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       toast.success("Password changed successfully.");
-    }, 400);
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Failed to change password."));
+    }
   };
 
   return (
@@ -114,6 +120,7 @@ export function PasswordSection() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="Enter current password"
+              disabled={changePasswordMutation.isPending}
               required
             />
           </Field>
@@ -129,6 +136,7 @@ export function PasswordSection() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Create new password"
+              disabled={changePasswordMutation.isPending}
               required
             />
           </Field>
@@ -142,6 +150,7 @@ export function PasswordSection() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Repeat new password"
+              disabled={changePasswordMutation.isPending}
               required
             />
           </Field>
@@ -255,14 +264,14 @@ export function PasswordSection() {
           <Button
             type="submit"
             disabled={
-              isUpdating ||
+              changePasswordMutation.isPending ||
               !currentPassword ||
               !newPassword ||
               passedCriteriaCount < 3 ||
               newPassword !== confirmPassword
             }
           >
-            {isUpdating ? "Updating..." : "Update Password"}
+            {changePasswordMutation.isPending ? "Updating..." : "Update Password"}
           </Button>
         </div>
       </form>

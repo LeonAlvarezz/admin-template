@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { PersonalInfoSection } from "./components/personal-info-section";
 import { PasswordSection } from "./components/password-section";
 import { TwoFactorSection } from "./components/two-factor-section";
-import { INITIAL_USER_PROFILE } from "./constant/mock_settings";
-import type { UserProfileData } from "./constant/mock_settings";
+import { useSessionQuery } from "./api/settings.api";
+import SettingSkeleton from "./components/setting-skeleton";
 
 export function SettingsPage() {
-  const [profile, setProfile] = useState<UserProfileData>(INITIAL_USER_PROFILE);
-
-  const handleProfileSave = (updated: UserProfileData) => {
-    setProfile(updated);
-  };
+  const sessionQuery = useSessionQuery();
 
   return (
     <div className="space-y-6 pb-12">
@@ -24,11 +20,15 @@ export function SettingsPage() {
         </p>
       </div>
 
-      <div className="space-y-6">
-        <PersonalInfoSection initialData={profile} onSave={handleProfileSave} />
-        <PasswordSection />
-        <TwoFactorSection />
-      </div>
+      {sessionQuery.isLoading ? (
+        <SettingSkeleton />
+      ) : (
+        <div className="space-y-6">
+          <PersonalInfoSection user={sessionQuery.data?.user} />
+          <PasswordSection />
+          <TwoFactorSection />
+        </div>
+      )}
     </div>
   );
 }
