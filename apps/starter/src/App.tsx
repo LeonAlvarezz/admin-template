@@ -1,6 +1,6 @@
 import React from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { AuthProvider, ThemeProvider, Toaster, useAuth } from "@admin/core";
+import { AuthProvider, ThemeProvider, Toaster, useAuth, NotFound } from "@admin/core";
 import { routeTree } from "./routeTree.gen";
 import { authStrategy } from "./config/auth";
 
@@ -9,6 +9,7 @@ export const router = createRouter({
   context: {
     auth: undefined!,
   },
+  defaultNotFoundComponent: () => <NotFound fullScreen />,
 });
 
 declare module "@tanstack/react-router" {

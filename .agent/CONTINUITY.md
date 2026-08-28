@@ -1,6 +1,7 @@
 # CONTINUITY
 
 ## [PLANS]
+- 2026-08-28T11:06:00+07:00 [USER] Created implementation plan for 404 Not Found handling: reusable `<NotFound />` component in `@admin/core`, authentication-aware 404 routing in `apps/starter` (`__root.tsx`, `_authenticated.tsx`, `App.tsx`), and robust catch-all 404 middleware in `apps/backend`.
 - 2026-08-14T15:17Z [CODE] Fix workspace dependency protocol (`workspace:*`) for Bun workspace packages.
 - 2026-08-18T11:57Z [CODE] Add 2-level nested navigation support to `@admin/core` `NavItem` and `SideBar` (accordion when expanded, popover flyout when collapsed).
 - 2026-08-18T14:10Z [CODE] Transition `apps/starter` to TanStack Router File-Based Routing using `@tanstack/router-plugin` and `src/routes/` tree.
@@ -223,6 +224,7 @@
 - 2026-08-21T16:48:00+07:00 [CODE] Created reusable `Pagination` component (`packages/core/src/components/ui/pagination.tsx`) with smart `...` ellipsis truncation and Previous (`<`) / Next (`>`) buttons (omitting first `<<` and last `>>` buttons). Exported from `@admin/core`, updated `DataTablePagination` to use `Pagination`, added unit tests (`pagination.test.tsx`), and verified 15 unit tests, typechecks, and production build with 0 errors.
 - 2026-08-21T17:01:00+07:00 [CODE] Expanded product mock dataset in [`product.page.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/modules/product/product.page.tsx) to 65 items across 6 categories to enable multi-page pagination and page-size selector testing in the browser. Starter check-types and build passed cleanly.
 - 2026-08-21T17:10:00+07:00 [CODE] Completely removed `globalFilteringFeature` and `createFilteredRowModel` from [`data-table.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table.tsx) and search input from [`data-table-toolbar.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table-toolbar.tsx). Removed ~8.6 kB of client-side filtering code from the bundle. Monorepo typechecks, unit tests, and production build passed with 0 errors.
+- 2026-08-28T11:10:00+07:00 [CODE] Implemented comprehensive 404 Not Found handling: created reusable, responsive `<NotFound />` component in `@admin/core` (`not-found.tsx`) with full-screen & layout-embedded support, theme tokens, and back/home actions. Configured authentication-aware 404 routing in `apps/starter` (`__root.tsx`, `_authenticated.tsx`, `App.tsx`) preserving `AdminLayout` for authenticated users with `enableTabs={false}` and rendering full-screen 404 for unauthenticated visitors. Standardized backend Express 404 catch-all middleware in `apps/backend/src/loaders/loader.ts`. Exported from `@admin/core`, documented in `AGENTS.md`. All monorepo typechecks, ESLint on changed files, unit tests, and production builds pass cleanly with 0 errors.
 
 
 

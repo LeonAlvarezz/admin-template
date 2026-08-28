@@ -14,9 +14,13 @@ import ChevronDownIcon from "~icons/lucide/chevron-down";
 import ChevronUpIcon from "~icons/griddy-icons/chevron-up-filled";
 import ChevronLeftIcon from "~icons/mingcute/left-fill";
 import ChevronRightIcon from "~icons/mingcute/right-fill";
+import ArrowLeftIcon from "~icons/solar/arrow-left-linear";
 import ArrowRightIcon from "~icons/solar/alt-arrow-right-linear";
 import ArrowRightLinearIcon from "~icons/solar/arrow-right-linear";
 import ArrowUpIcon from "~icons/solar/arrow-up-bold";
+import HomeIcon from "~icons/solar/home-2-bold";
+import CompassIcon from "~icons/solar/compass-bold";
+import FileQuestionIcon from "~icons/solar/file-remove-bold";
 import CheckIcon from "~icons/boxicons/check";
 import CloseIcon from "~icons/lucide/x";
 import CloseCircleIcon from "~icons/solar/close-circle-linear";
@@ -111,9 +115,13 @@ export {
   ChevronUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ArrowLeftIcon,
   ArrowRightIcon,
   ArrowRightLinearIcon,
   ArrowUpIcon,
+  HomeIcon,
+  CompassIcon,
+  FileQuestionIcon,
   CheckIcon,
   CloseIcon,
   XIcon,
@@ -173,9 +181,13 @@ export const Icons = {
   ChevronUp: ChevronUpIcon,
   ChevronLeft: ChevronLeftIcon,
   ChevronRight: ChevronRightIcon,
+  ArrowLeft: ArrowLeftIcon,
   ArrowRight: ArrowRightIcon,
   ArrowRightLinear: ArrowRightLinearIcon,
   ArrowUp: ArrowUpIcon,
+  Home: HomeIcon,
+  Compass: CompassIcon,
+  FileQuestion: FileQuestionIcon,
   Check: CheckIcon,
   Close: CloseIcon,
   X: CloseIcon,

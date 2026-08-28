@@ -82,6 +82,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<ConfirmModal>` | `import { ConfirmModal } from "@admin/core"` | `packages/core/src/components/ui/confirm-modal.tsx` |
 | `<Tag>` | `import { Tag } from "@admin/core"` | `packages/core/src/components/ui/tag.tsx` |
 | `<NumberStepper>`, `<Stepper>` | `import { NumberStepper, Stepper } from "@admin/core"` | `packages/core/src/components/ui/number-stepper.tsx` |
+| `<NotFound>` | `import { NotFound } from "@admin/core"` | `packages/core/src/components/ui/not-found.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
 
 

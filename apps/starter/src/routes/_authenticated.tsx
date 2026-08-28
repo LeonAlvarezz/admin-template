@@ -4,8 +4,9 @@ import {
   Navigate,
   Outlet,
   redirect,
+  useNavigate,
 } from "@tanstack/react-router";
-import { AdminLayout, useAuth } from "@admin/core";
+import { AdminLayout, NotFound, useAuth } from "@admin/core";
 import { navGroups } from "../config/navigation";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -18,7 +19,22 @@ export const Route = createFileRoute("/_authenticated")({
     }
   },
   component: AuthenticatedLayout,
+  notFoundComponent: AuthenticatedNotFound,
 });
+
+function AuthenticatedNotFound() {
+  const navigate = useNavigate();
+  return (
+    <NotFound
+      onHome={() => navigate({ to: "/" })}
+      onBack={() => {
+        if (typeof window !== "undefined") {
+          window.history.back();
+        }
+      }}
+    />
+  );
+}
 
 function AuthenticatedLayout() {
   const { user, logout, isLoading, isAuthenticated } = useAuth();

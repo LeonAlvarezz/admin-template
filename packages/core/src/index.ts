@@ -96,6 +96,8 @@ export type {
   NumberStepperProps,
   StepperProps,
 } from "./components/ui/number-stepper";
+export { default as NotFound } from "./components/ui/not-found";
+export type { NotFoundProps } from "./components/ui/not-found";
 export * from "./utils";
 
 
