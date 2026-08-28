@@ -133,9 +133,12 @@ export class AuthController {
     try {
       const headers = fromNodeHeaders(req.headers);
       const payload = v.parse(DisableTwoFactorSchema, req.body);
-      const result = await this.authService.disableTwoFactor(payload, headers);
-      if (!result) throw new UnauthorizedException();
-      res.success(result);
+      const { data, cookies } = await this.authService.disableTwoFactor(
+        payload,
+        headers,
+      );
+      cookies.forEach((cookie: string) => res.append("Set-Cookie", cookie));
+      res.success(data);
     } catch (error) {
       next(error);
     }

@@ -52,22 +52,26 @@ export function useEnableTwoFactorMutation() {
 
 export function useVerifyTotpMutation() {
   const queryClient = useQueryClient();
+  const auth = useAuth();
   return useMutation({
     mutationFn: (payload: { code: string }) =>
       apiClient.post("/auth/two-factor/verify-totp", payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: authKeys.session() });
+      await auth.initialize();
     },
   });
 }
 
 export function useDisableTwoFactorMutation() {
   const queryClient = useQueryClient();
+  const auth = useAuth();
   return useMutation({
     mutationFn: (payload: { password: string }) =>
       apiClient.post("/auth/two-factor/disable", payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: authKeys.session() });
+      await auth.initialize();
     },
   });
 }

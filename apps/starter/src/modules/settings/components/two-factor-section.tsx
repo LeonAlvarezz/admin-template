@@ -187,7 +187,7 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
 
   return (
     <div className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
             <h2 className="text-base font-semibold text-foreground">
@@ -201,7 +201,7 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
             Add an extra layer of security to your account using an
-            authenticator app (Google Authenticator, 1Password, Authy).
+            authenticator app
           </p>
         </div>
 
@@ -235,34 +235,6 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between p-3.5 rounded-lg bg-muted/20 border border-border">
-        <div className="flex items-center gap-3">
-          <div className="size-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <ShieldCheckIcon className="size-5" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-foreground">
-              Authenticator App Protection
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {is2FAActive
-                ? "Your account requires a TOTP code during sign-in."
-                : "Not configured yet. Recommended for all administrators."}
-            </p>
-          </div>
-        </div>
-        <Switch
-          checked={is2FAActive}
-          onChange={(checked) => {
-            if (checked) {
-              handleStartSetup();
-            } else {
-              setIsDisableModalOpen(true);
-            }
-          }}
-        />
-      </div>
-
       {/* Setup 2FA Modal */}
       <Modal
         isOpen={isSetupOpen}
@@ -271,9 +243,6 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
       >
         <ModalHeader>
           <div className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <QrCodeIcon className="size-5" />
-            </div>
             <div>
               <ModalTitle>Set Up Two-Factor Authentication</ModalTitle>
               <ModalDescription>
@@ -288,11 +257,6 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
         {setupStep === 1 ? (
           <form onSubmit={handlePasswordSubmit}>
             <ModalBody className="space-y-4">
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                To ensure account ownership, please confirm your current account
-                password before generating your two-factor security keys.
-              </p>
-
               <Field>
                 <FieldLabel htmlFor="setup-password" required>
                   Current Password
@@ -321,9 +285,7 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
                 type="submit"
                 disabled={enable2FAMutation.isPending || !setupPassword}
               >
-                {enable2FAMutation.isPending
-                  ? "Generating..."
-                  : "Next: Scan QR Code"}
+                {enable2FAMutation.isPending ? "Generating..." : "Next"}
               </Button>
             </ModalFooter>
           </form>

@@ -109,9 +109,22 @@ export class AuthService {
   }
 
   async disableTwoFactor(payload: DisableTwoFactor, headers: HeadersInit) {
-    return await auth.api.disableTwoFactor({
+    const response = await auth.api.disableTwoFactor({
       body: payload,
       headers,
+      asResponse: true,
     });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new UnauthorizedException({
+        message: err.message || "Failed to disable two-factor authentication",
+      });
+    }
+
+    const data = await response.json();
+    const cookies = response.headers.getSetCookie();
+
+    return { data, cookies };
   }
 }

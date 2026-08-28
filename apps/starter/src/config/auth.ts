@@ -5,6 +5,7 @@ import type {
   SessionResponse,
   SignInEmail,
   SignInEmailResponse,
+  SignInEmailTotpRedirectResponse,
 } from "@admin/types";
 
 export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
@@ -22,14 +23,23 @@ export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
     }
   },
 
-  onLogin: async (payload: SignInEmail) => {
+  onLogin: async (payload: SignInEmail): Promise<UserProfile> => {
     const data = await apiClient.post<SignInEmailResponse>(
       "/auth/sign-in/email",
       payload,
     );
+
+    if ("twoFactorRedirect" in data) {
+      const error = new Error("TWO_FACTOR_REDIRECT");
+      (error as any).twoFactorRedirect = true;
+      (error as any).twoFactorMethods = data.twoFactorMethods;
+      throw error;
+    }
+
     return {
       email: data.user.email,
       name: data.user.name,
+      avatarUrl: data.user.image ?? undefined,
     };
   },
 

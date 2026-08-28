@@ -47,4 +47,3 @@ export type CreateUser = v.InferOutput<typeof CreateUserSchema>;
 export type UpdateUserInfo = v.InferOutput<typeof UpdateUserInfoSchema>;
 export type ChangePassword = v.InferOutput<typeof ChangePasswordSchema>;
 export type EnableTwoFactor = v.InferOutput<typeof EnableTwoFactorSchema>;
-

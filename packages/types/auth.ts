@@ -32,12 +32,37 @@ export const DisableTwoFactorSchema = v.object({
   password: v.string(),
 });
 
+export const VerifyBackupCodeSchema = v.object({
+  code: v.pipe(v.string(), v.minLength(1, "Backup code is required")),
+});
+
 export type VerifyTotp = v.InferOutput<typeof VerifyTotpSchema>;
 export type DisableTwoFactor = v.InferOutput<typeof DisableTwoFactorSchema>;
+export type VerifyBackupCode = v.InferOutput<typeof VerifyBackupCodeSchema>;
 
-export type SignInEmailResponse = v.InferOutput<
+export const TotpMethodSchema = v.union([
+  v.literal("totp"),
+  v.literal("otp"),
+]);
+
+export type TotpMethod = v.InferOutput<typeof TotpMethodSchema>;
+
+export const SignInEmailTotpRedirectResponseSchema = v.object({
+  twoFactorRedirect: v.boolean(),
+  twoFactorMethods: v.array(TotpMethodSchema),
+});
+
+export type SignInEmailTotpRedirectResponse = v.InferOutput<
+  typeof SignInEmailTotpRedirectResponseSchema
+>;
+
+export type SignInEmailSuccessResponse = v.InferOutput<
   typeof SignInEmailResponseSchema
 >;
+
+export type SignInEmailResponse =
+  | SignInEmailSuccessResponse
+  | SignInEmailTotpRedirectResponse;
 
 export type SessionResponse = {
   user: User;
