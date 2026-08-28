@@ -88,6 +88,14 @@ export type {
 export * from "./components/ui/icons";
 export { default as Tag, colorVariants, TAILWIND_COLORS } from "./components/ui/tag";
 export type { TagProps, Color, Color as TagColor } from "./components/ui/tag";
+export {
+  default as NumberStepper,
+  Stepper,
+} from "./components/ui/number-stepper";
+export type {
+  NumberStepperProps,
+  StepperProps,
+} from "./components/ui/number-stepper";
 export * from "./utils";
 
 

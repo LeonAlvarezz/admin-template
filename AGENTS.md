@@ -81,6 +81,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<Modal>`, `<Modal.Header>`, `<Modal.Footer>` | `import { Modal, ModalHeader, ModalFooter } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx` |
 | `<ConfirmModal>` | `import { ConfirmModal } from "@admin/core"` | `packages/core/src/components/ui/confirm-modal.tsx` |
 | `<Tag>` | `import { Tag } from "@admin/core"` | `packages/core/src/components/ui/tag.tsx` |
+| `<NumberStepper>`, `<Stepper>` | `import { NumberStepper, Stepper } from "@admin/core"` | `packages/core/src/components/ui/number-stepper.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
 
 

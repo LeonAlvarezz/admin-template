@@ -1,4 +1,8 @@
 import {
+  OrderStatusColor,
+  PaymentStatusColor,
+} from "@/modules/shared/status-color";
+import {
   DataTableColumnHeader,
   DataTableRowActions,
   EditIcon,
@@ -11,8 +15,8 @@ import type { Order, ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 type Props = {
-  onView: (order: Order) => void;
-  onEdit: (order: Order) => void;
+  onView: (order?: Order) => void;
+  onEdit: (order?: Order) => void;
 };
 export const createOrderColumn = ({
   onView,
@@ -44,17 +48,10 @@ export const createOrderColumn = ({
         <DataTableColumnHeader title="Status" column={column} />
       ),
       cell: ({ row }) => {
-        const orderStatus: Record<ORDER_STATUS, Color> = {
-          cancelled: "red",
-          delivered: "emerald",
-          pending: "sky",
-          processing: "indigo",
-          shipped: "green",
-        };
         return (
           <Tag
             label={row.original.status}
-            color={orderStatus[row.original.status]}
+            color={OrderStatusColor[row.original.status]}
           />
         );
       },
@@ -74,7 +71,7 @@ export const createOrderColumn = ({
         return (
           <Tag
             label={row.original.paymentStatus}
-            color={paymentStatus[row.original.paymentStatus]}
+            color={PaymentStatusColor[row.original.paymentStatus]}
           />
         );
       },

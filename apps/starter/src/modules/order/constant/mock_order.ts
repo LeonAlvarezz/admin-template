@@ -64,7 +64,7 @@ const CUSTOMERS = [
   },
 ];
 
-const ORDER_ITEMS_POOL = [
+export const ORDER_ITEMS_POOL = [
   {
     productId: 1,
     productName: "Wireless Noise-Canceling Headphones",

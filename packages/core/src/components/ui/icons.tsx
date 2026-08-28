@@ -46,6 +46,8 @@ import AlertCircleIcon from "~icons/lucide/circle-alert";
 import InfoIcon from "~icons/lucide/info";
 import InfoAltIcon from "~icons/mdi/error";
 import ViewIcon from "~icons/lets-icons/view-fill";
+import MaximizeIcon from "~icons/lucide/maximize-2";
+import MinimizeIcon from "~icons/lucide/minimize-2";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -139,6 +141,8 @@ export {
   InfoIcon,
   InfoAltIcon,
   ViewIcon,
+  MaximizeIcon,
+  MinimizeIcon,
 };
 
 export const Icons = {
@@ -196,4 +200,6 @@ export const Icons = {
   InfoAlt: InfoAltIcon,
   Spinner: SpinnerIcon,
   View: ViewIcon,
+  Maximize: MaximizeIcon,
+  Minimize: MinimizeIcon,
 };

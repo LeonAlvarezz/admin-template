@@ -11,7 +11,6 @@ import {
 import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
 import { createProductColumn } from "./components/product.column";
-import { PRODUCT_STATUS } from "@admin/types";
 import type { Product } from "@admin/types";
 import { SAMPLE_PRODUCTS } from "./constant/mock_product";
 

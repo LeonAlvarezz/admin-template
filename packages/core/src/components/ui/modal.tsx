@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import {
   Description,
@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { cn } from "../../utils/cn";
-import { CloseIcon } from "./icons";
+import { CloseIcon, MaximizeIcon, MinimizeIcon } from "./icons";
 import Button from "./button";
 
 export interface ModalProps {
@@ -20,8 +20,11 @@ export interface ModalProps {
   description?: ReactNode;
   children?: ReactNode;
   className?: string;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
   showCloseButton?: boolean;
+  showFullscreen?: boolean;
+  isFullscreen?: boolean;
+  onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
 export interface ModalHeaderProps extends ComponentPropsWithoutRef<"div"> {}
@@ -33,12 +36,17 @@ const sizeClasses = {
   md: "max-w-md",
   lg: "max-w-lg",
   xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+  "4xl": "max-w-4xl",
+  "5xl": "max-w-5xl",
+  full: "w-full max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-4rem)] h-[calc(100vh-2rem)] sm:h-[calc(100vh-4rem)] max-h-none flex flex-col my-0",
 };
 
 export function ModalHeader({ className, ...props }: ModalHeaderProps) {
   return (
     <div
-      className={cn("flex flex-col space-y-1.5 text-left", className)}
+      className={cn("flex flex-col space-y-1.5 pt-6 text-left", className)}
       {...props}
     />
   );
@@ -98,8 +106,22 @@ function ModalRoot({
   className,
   size = "lg",
   showCloseButton = true,
+  showFullscreen,
+  isFullscreen: controlledIsFullscreen,
+  onFullscreenChange,
 }: ModalProps) {
   const isModalOpen = open ?? isOpen ?? false;
+  const [internalIsFullscreen, setInternalIsFullscreen] = useState(false);
+  const isFullscreen = controlledIsFullscreen ?? internalIsFullscreen;
+  const shouldShowFullscreen = showFullscreen ?? false;
+
+  const handleToggleFullscreen = () => {
+    const next = !isFullscreen;
+    if (controlledIsFullscreen === undefined) {
+      setInternalIsFullscreen(next);
+    }
+    onFullscreenChange?.(next);
+  };
 
   const handleClose = () => {
     if (onClose) onClose();
@@ -119,19 +141,43 @@ function ModalRoot({
         <DialogPanel
           transition
           className={cn(
-            "relative w-full space-y-4 border border-border bg-sidebar rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none",
-            sizeClasses[size],
+            "relative w-full space-y-4 border border-border bg-sidebar rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition-all duration-200 ease-in-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none",
+            sizeClasses[isFullscreen ? "full" : size],
             className,
           )}
         >
-          {showCloseButton && (
-            <Button
-              variant="ghost"
-              className="w-fit h-fit p-1 absolute top-4 right-4 text-muted-foreground hover:text-foreground rounded-md"
-              onClick={handleClose}
-            >
-              <CloseIcon className="size-4" />
-            </Button>
+          {(showCloseButton || shouldShowFullscreen) && (
+            <div className="flex items-center gap-1 absolute top-4 right-4 sm:top-5 sm:right-5 z-20">
+              {shouldShowFullscreen && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                  onClick={handleToggleFullscreen}
+                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <MinimizeIcon className="size-4" />
+                  ) : (
+                    <MaximizeIcon className="size-4" />
+                  )}
+                </Button>
+              )}
+
+              {showCloseButton && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                  onClick={handleClose}
+                  title="Close"
+                >
+                  <CloseIcon className="size-4" />
+                </Button>
+              )}
+            </div>
           )}
 
           {children ? (
@@ -146,7 +192,11 @@ function ModalRoot({
                   )}
                 </ModalHeader>
               )}
-              <ModalBody>
+              <ModalBody
+                className={
+                  isFullscreen ? "flex-1 overflow-y-auto min-h-0 pr-1" : ""
+                }
+              >
                 <p className="text-sm text-muted-foreground">
                   Are you sure you want to proceed with this action?
                 </p>
