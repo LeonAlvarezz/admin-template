@@ -84,11 +84,20 @@ function SideBarHeader({
       {children ? (
         children
       ) : (
-        <div className="group-data-[collapsed=true]:hidden">
+        <div
+          className="group-data-[collapsed=true]:hidden"
+          onClick={commandSearch?.open}
+        >
           <Input
             readOnly
             onClick={commandSearch?.open}
-            onFocus={commandSearch?.open}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                commandSearch?.open();
+              }
+            }}
+            containerClassName="cursor-pointer"
             className="cursor-pointer"
             startIcon={<SearchIcon />}
             endIcon={<Keyboard keys={["command", "k"]} />}

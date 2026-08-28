@@ -141,13 +141,27 @@ function MobileNav({
 
       <Drawer open={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
         {/* Quick Search */}
-        <div className="py-3 shrink-0">
+        <div
+          className="py-3 shrink-0"
+          onClick={() => {
+            setIsSheetOpen(false);
+            commandSearch?.open();
+          }}
+        >
           <Input
             readOnly
             onClick={() => {
               setIsSheetOpen(false);
               commandSearch?.open();
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsSheetOpen(false);
+                commandSearch?.open();
+              }
+            }}
+            containerClassName="cursor-pointer"
             className="cursor-pointer"
             startIcon={<SearchIcon />}
             placeholder="Search commands & routes..."
