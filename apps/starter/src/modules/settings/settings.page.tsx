@@ -26,7 +26,9 @@ export function SettingsPage() {
         <div className="space-y-6">
           <PersonalInfoSection user={sessionQuery.data?.user} />
           <PasswordSection />
-          <TwoFactorSection />
+          <TwoFactorSection
+            twoFactorEnabled={sessionQuery.data?.user.twoFactorEnabled ?? false}
+          />
         </div>
       )}
     </div>

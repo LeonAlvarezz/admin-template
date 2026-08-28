@@ -73,7 +73,7 @@ export function ModalDescription({
 }: ComponentPropsWithoutRef<typeof Description>) {
   return (
     <Description
-      className={cn("text-xs sm:text-sm text-muted-foreground", className)}
+      className={cn("text-xs mt-2 text-muted-foreground", className)}
       {...props}
     />
   );

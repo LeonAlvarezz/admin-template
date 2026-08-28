@@ -20,6 +20,21 @@ export const SignInEmailResponseSchema = v.object({
   user: UserSchema,
 });
 
+export const VerifyTotpSchema = v.object({
+  code: v.pipe(
+    v.string(),
+    v.minLength(6, "Verification code must be 6 digits"),
+    v.maxLength(6, "Verification code must be 6 digits"),
+  ),
+});
+
+export const DisableTwoFactorSchema = v.object({
+  password: v.string(),
+});
+
+export type VerifyTotp = v.InferOutput<typeof VerifyTotpSchema>;
+export type DisableTwoFactor = v.InferOutput<typeof DisableTwoFactorSchema>;
+
 export type SignInEmailResponse = v.InferOutput<
   typeof SignInEmailResponseSchema
 >;
@@ -27,4 +42,10 @@ export type SignInEmailResponse = v.InferOutput<
 export type SessionResponse = {
   user: User;
   session: Session;
+};
+
+export type EnableTwoFactorResponse = {
+  method: "totp" | "otp";
+  totpURI: string;
+  backupCodes: string[];
 };

@@ -48,17 +48,3 @@ export type UpdateUserInfo = v.InferOutput<typeof UpdateUserInfoSchema>;
 export type ChangePassword = v.InferOutput<typeof ChangePasswordSchema>;
 export type EnableTwoFactor = v.InferOutput<typeof EnableTwoFactorSchema>;
 
-export const VerifyTotpSchema = v.object({
-  code: v.pipe(
-    v.string(),
-    v.minLength(6, "Verification code must be 6 digits"),
-    v.maxLength(6, "Verification code must be 6 digits"),
-  ),
-});
-
-export const DisableTwoFactorSchema = v.object({
-  password: v.string(),
-});
-
-export type VerifyTotp = v.InferOutput<typeof VerifyTotpSchema>;
-export type DisableTwoFactor = v.InferOutput<typeof DisableTwoFactorSchema>;

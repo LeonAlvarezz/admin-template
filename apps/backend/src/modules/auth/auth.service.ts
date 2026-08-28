@@ -6,7 +6,6 @@ import type {
   SignInEmail,
   SignInEmailResponse,
   UpdateUserInfo,
-  User,
   VerifyTotp,
 } from "@admin/types";
 

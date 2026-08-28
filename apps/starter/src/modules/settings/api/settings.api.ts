@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@admin/core";
 import { apiClient } from "@/libs/api-client";
-import type { ChangePassword, SessionResponse, UpdateUserInfo } from "@admin/types";
+import type {
+  ChangePassword,
+  EnableTwoFactorResponse,
+  SessionResponse,
+  UpdateUserInfo,
+} from "@admin/types";
 
 export const authKeys = {
   all: ["auth"] as const,
@@ -33,5 +38,36 @@ export function useChangePasswordMutation() {
   return useMutation({
     mutationFn: (payload: ChangePassword) =>
       apiClient.post("/auth/change-password", payload),
+  });
+}
+export function useEnableTwoFactorMutation() {
+  return useMutation({
+    mutationFn: (payload: { password: string }) =>
+      apiClient.post<EnableTwoFactorResponse>("/auth/two-factor/enable", {
+        ...payload,
+        method: "totp",
+      }),
+  });
+}
+
+export function useVerifyTotpMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { code: string }) =>
+      apiClient.post("/auth/two-factor/verify-totp", payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: authKeys.session() });
+    },
+  });
+}
+
+export function useDisableTwoFactorMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { password: string }) =>
+      apiClient.post("/auth/two-factor/disable", payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: authKeys.session() });
+    },
   });
 }
