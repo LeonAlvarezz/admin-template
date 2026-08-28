@@ -164,7 +164,7 @@ export function NumberStepper({
   );
   const currentValue = isControlled ? controlledValue : internalValue;
 
-  const config = sizeConfig[size] || sizeConfig.sm;
+  const config = sizeConfig[size];
 
   const isDecrementDisabled =
     disabled ||
