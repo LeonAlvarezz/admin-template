@@ -1,6 +1,10 @@
 # CONTINUITY
 
 ## [PLANS]
+- 2026-08-28T15:10:00+07:00 [USER] Proposed consolidating `/settings/profile` and `/settings/security` into single unified `/settings` page, removing sub-tabs and flattening sidebar navigation item.
+- 2026-08-28T14:36:00+07:00 [CODE] Consolidated Avatar and Personal Info form into unified `PersonalInfoSection`, added avatar bottom-right edit button triggering hidden file input, removed dedicated upload/remove buttons and deleted `avatar-section.tsx`.
+- 2026-08-28T14:37:00+07:00 [CODE] Fixed active tab indicator in `SettingsNav`: replaced conflicting `border-transparent text-muted-foreground` in base `className` with TanStack Router `inactiveProps` and `activeProps`, and mounted `SettingsNav` in `profile.page.tsx`.
+- 2026-08-28T13:53:00+07:00 [USER] Created implementation plan for User & Personal Settings (/settings/profile and /settings/security): reusable `<Switch>` in `@admin/core`, avatar management, personal info & localization forms, password change with strength meter, 2FA setup with QR code & recovery codes, active sessions device management, and OAuth connected accounts.
 - 2026-08-28T11:06:00+07:00 [USER] Created implementation plan for 404 Not Found handling: reusable `<NotFound />` component in `@admin/core`, authentication-aware 404 routing in `apps/starter` (`__root.tsx`, `_authenticated.tsx`, `App.tsx`), and robust catch-all 404 middleware in `apps/backend`.
 - 2026-08-14T15:17Z [CODE] Fix workspace dependency protocol (`workspace:*`) for Bun workspace packages.
 - 2026-08-18T11:57Z [CODE] Add 2-level nested navigation support to `@admin/core` `NavItem` and `SideBar` (accordion when expanded, popover flyout when collapsed).

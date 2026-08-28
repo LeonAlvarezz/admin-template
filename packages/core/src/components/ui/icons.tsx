@@ -54,6 +54,14 @@ import MaximizeIcon from "~icons/lucide/maximize-2";
 import MinimizeIcon from "~icons/lucide/minimize-2";
 import ProductIcon from "~icons/solar/box-bold";
 import OrderIcon from "~icons/solar/clipboard-list-bold";
+import LaptopIcon from "~icons/solar/laptop-bold";
+import SmartphoneIcon from "~icons/solar/smartphone-bold";
+import KeyIcon from "~icons/solar/key-bold";
+import QrCodeIcon from "~icons/solar/qr-code-bold";
+import ShieldCheckIcon from "~icons/solar/shield-check-bold";
+import GoogleIcon from "~icons/logos/google-icon";
+import GithubIcon from "~icons/logos/github-icon";
+import AppleIcon from "~icons/logos/apple";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -159,6 +167,14 @@ export {
   BoxIcon,
   OrderIcon,
   ClipboardListIcon,
+  LaptopIcon,
+  SmartphoneIcon,
+  KeyIcon,
+  QrCodeIcon,
+  ShieldCheckIcon,
+  GoogleIcon,
+  GithubIcon,
+  AppleIcon,
 };
 
 export const Icons = {
@@ -226,4 +242,12 @@ export const Icons = {
   Box: ProductIcon,
   Order: OrderIcon,
   ClipboardList: OrderIcon,
+  Laptop: LaptopIcon,
+  Smartphone: SmartphoneIcon,
+  Key: KeyIcon,
+  QrCode: QrCodeIcon,
+  ShieldCheck: ShieldCheckIcon,
+  Google: GoogleIcon,
+  Github: GithubIcon,
+  Apple: AppleIcon,
 };

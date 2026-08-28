@@ -47,18 +47,7 @@ export const navGroups: NavGroupConfig[] = [
         id: "settings",
         label: "Settings",
         icon: <GearIcon />,
-        items: [
-          {
-            id: "profile",
-            label: "Profile",
-            path: "/settings/profile",
-          },
-          {
-            id: "security",
-            label: "Security",
-            path: "/settings/security",
-          },
-        ],
+        path: "/settings",
       },
     ],
   },

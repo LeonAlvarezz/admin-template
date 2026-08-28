@@ -12,8 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedSettingsProfileRouteImport } from './routes/_authenticated/settings/profile'
-import { Route as AuthenticatedSettingsSecurityRouteImport } from './routes/_authenticated/settings/security'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedShopOrdersRouteImport } from './routes/_authenticated/shop/orders'
 import { Route as AuthenticatedShopProductsRouteImport } from './routes/_authenticated/shop/products'
 
@@ -31,18 +30,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedSettingsProfileRoute =
-  AuthenticatedSettingsProfileRouteImport.update({
-    id: '/settings/profile',
-    path: '/settings/profile',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsSecurityRoute =
-  AuthenticatedSettingsSecurityRouteImport.update({
-    id: '/settings/security',
-    path: '/settings/security',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedShopOrdersRoute = AuthenticatedShopOrdersRouteImport.update({
   id: '/shop/orders',
   path: '/shop/orders',
@@ -58,16 +50,14 @@ const AuthenticatedShopProductsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
-  '/settings/profile': typeof AuthenticatedSettingsProfileRoute
-  '/settings/security': typeof AuthenticatedSettingsSecurityRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/shop/products': typeof AuthenticatedShopProductsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/': typeof AuthenticatedIndexRoute
-  '/settings/profile': typeof AuthenticatedSettingsProfileRoute
-  '/settings/security': typeof AuthenticatedSettingsSecurityRoute
   '/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/shop/products': typeof AuthenticatedShopProductsRoute
 }
@@ -75,36 +65,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/settings/profile': typeof AuthenticatedSettingsProfileRoute
-  '/_authenticated/settings/security': typeof AuthenticatedSettingsSecurityRoute
   '/_authenticated/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/_authenticated/shop/products': typeof AuthenticatedShopProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/settings/profile'
-    | '/settings/security'
-    | '/shop/orders'
-    | '/shop/products'
+  fullPaths: '/' | '/login' | '/settings' | '/shop/orders' | '/shop/products'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/login'
-    | '/'
-    | '/settings/profile'
-    | '/settings/security'
-    | '/shop/orders'
-    | '/shop/products'
+  to: '/login' | '/settings' | '/' | '/shop/orders' | '/shop/products'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/settings'
     | '/_authenticated/'
-    | '/_authenticated/settings/profile'
-    | '/_authenticated/settings/security'
     | '/_authenticated/shop/orders'
     | '/_authenticated/shop/products'
   fileRoutesById: FileRoutesById
@@ -137,18 +113,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/settings/profile': {
-      id: '/_authenticated/settings/profile'
-      path: '/settings/profile'
-      fullPath: '/settings/profile'
-      preLoaderRoute: typeof AuthenticatedSettingsProfileRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/security': {
-      id: '/_authenticated/settings/security'
-      path: '/settings/security'
-      fullPath: '/settings/security'
-      preLoaderRoute: typeof AuthenticatedSettingsSecurityRouteImport
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/shop/orders': {
@@ -169,17 +138,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedSettingsProfileRoute: typeof AuthenticatedSettingsProfileRoute
-  AuthenticatedSettingsSecurityRoute: typeof AuthenticatedSettingsSecurityRoute
   AuthenticatedShopOrdersRoute: typeof AuthenticatedShopOrdersRoute
   AuthenticatedShopProductsRoute: typeof AuthenticatedShopProductsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedSettingsProfileRoute: AuthenticatedSettingsProfileRoute,
-  AuthenticatedSettingsSecurityRoute: AuthenticatedSettingsSecurityRoute,
   AuthenticatedShopOrdersRoute: AuthenticatedShopOrdersRoute,
   AuthenticatedShopProductsRoute: AuthenticatedShopProductsRoute,
 }

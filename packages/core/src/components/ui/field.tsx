@@ -10,10 +10,11 @@ import {
 } from "@headlessui/react";
 
 interface FieldContextValue {
+  inField?: boolean;
   required?: boolean;
 }
 
-const FieldContext = createContext<FieldContextValue>({});
+const FieldContext = createContext<FieldContextValue>({ inField: false });
 
 function FieldSet({
   className,
@@ -106,7 +107,7 @@ function Field({
   ...props
 }: FieldProps) {
   return (
-    <FieldContext.Provider value={{ required }}>
+    <FieldContext.Provider value={{ inField: true, required }}>
       <HeadlessField
         data-slot="field"
         data-orientation={orientation}
@@ -150,19 +151,37 @@ function FieldLabel({
   const context = useContext(FieldContext);
   const isRequired = required ?? context.required;
 
+  const classes = cn(
+    "group/field-label peer/field-label flex w-fit items-center gap-1 text-foreground/60 leading-snug group-data-[disabled=true]/field:opacity-50",
+    "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4",
+    "has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10",
+    "group-has-required/field:data-[show-asterisk=true]:after:content-['*'] group-has-required/field:data-[show-asterisk=true]:after:text-destructive group-has-required/field:data-[show-asterisk=true]:after:ml-0.5",
+    "data-[required=true]:data-[show-asterisk=true]:after:content-['*'] data-[required=true]:data-[show-asterisk=true]:after:text-destructive data-[required=true]:data-[show-asterisk=true]:after:ml-0.5",
+    className,
+  );
+
+  if (!context.inField) {
+    return (
+      <label
+        data-slot="field-label"
+        data-required={isRequired}
+        data-show-asterisk={showAsterisk}
+        className={classes}
+        {...(props)}
+      >
+        {typeof children === "function"
+          ? (children as (bag: Record<string, unknown>) => React.ReactNode)({})
+          : children}
+      </label>
+    );
+  }
+
   return (
     <HeadlessLabel
       data-slot="field-label"
       data-required={isRequired}
       data-show-asterisk={showAsterisk}
-      className={cn(
-        "group/field-label peer/field-label flex w-fit items-center gap-1 text-foreground/60 leading-snug group-data-[disabled=true]/field:opacity-50",
-        "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4",
-        "has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10",
-        "group-has-required/field:data-[show-asterisk=true]:after:content-['*'] group-has-required/field:data-[show-asterisk=true]:after:text-destructive group-has-required/field:data-[show-asterisk=true]:after:ml-0.5",
-        "data-[required=true]:data-[show-asterisk=true]:after:content-['*'] data-[required=true]:data-[show-asterisk=true]:after:text-destructive data-[required=true]:data-[show-asterisk=true]:after:ml-0.5",
-        className,
-      )}
+      className={classes}
       {...props}
     >
       {children}
@@ -234,7 +253,7 @@ function FieldError({
   errors,
   ...props
 }: React.ComponentProps<"div"> & {
-  errors?: Array<{ message?: string } | undefined>;
+  errors?: Array<{ message?: string } | string | undefined>;
 }) {
   const content = useMemo(() => {
     if (children) {
@@ -245,11 +264,15 @@ function FieldError({
       return null;
     }
 
+    const normalized = errors
+      .filter((e): e is { message?: string } | string => Boolean(e))
+      .map((e) => (typeof e === "string" ? { message: e } : e));
+
     const uniqueErrors = [
-      ...new Map(errors.map((error) => [error?.message, error])).values(),
+      ...new Map(normalized.map((error) => [error.message, error])).values(),
     ];
 
-    if (uniqueErrors.length == 1) {
+    if (uniqueErrors.length === 1) {
       return uniqueErrors[0]?.message;
     }
 
@@ -257,7 +280,7 @@ function FieldError({
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
           (error, index) =>
-            error?.message && <li key={index}>{error.message}</li>,
+            error.message && <li key={index}>{error.message}</li>,
         )}
       </ul>
     );

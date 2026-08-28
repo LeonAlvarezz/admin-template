@@ -17,7 +17,7 @@ function Avatar({
         className,
       )}
     >
-      <img src={src} className="object-cover" />
+      <img src={src} className="object-cover size-full" />
     </div>
   );
 }
