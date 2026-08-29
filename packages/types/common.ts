@@ -62,3 +62,57 @@ export type BaseCursorPaginationQuery = v.InferOutput<
 export type CursorProps = v.InferOutput<typeof CursorPropsSchema>;
 export type CursorPaginationQuery<TFilter = unknown> =
   BaseCursorPaginationQuery & TFilter;
+
+/**
+ * Wraps a Valibot object schema in a safe search validator that never crashes.
+ * If invalid search query parameters are provided (e.g. typos like order=dessc),
+ * invalid keys are automatically stripped while preserving valid ones and falling
+ * back to schema defaults.
+ */
+export function safeValidateSearch<T>(
+  schema: v.BaseSchema<unknown, T, v.BaseIssue<unknown>>,
+  fallback?: Partial<T>,
+) {
+  return (rawSearch: Record<string, unknown>): T => {
+    const result = v.safeParse(schema, rawSearch);
+    if (result.success) {
+      return result.output;
+    }
+
+    // Try sanitizing: set invalid keys identified in issues to undefined
+    const sanitized: Record<string, unknown> = { ...rawSearch };
+    for (const issue of result.issues) {
+      if (issue.path && issue.path.length > 0) {
+        const key = issue.path[0].key;
+        if (typeof key === "string" || typeof key === "number") {
+          sanitized[key] = undefined;
+        }
+      }
+    }
+
+    const reResult = v.safeParse(schema, sanitized);
+    if (reResult.success) {
+      const output = { ...(reResult.output as Record<string, unknown>) };
+      for (const key of Object.keys(rawSearch)) {
+        if (!(key in output)) {
+          output[key] = undefined;
+        }
+      }
+      return output as T;
+    }
+
+    // If still failing, parse empty object or fallback
+    const emptyResult = v.safeParse(schema, fallback ?? {});
+    if (emptyResult.success) {
+      const output = { ...(emptyResult.output as Record<string, unknown>) };
+      for (const key of Object.keys(rawSearch)) {
+        if (!(key in output)) {
+          output[key] = undefined;
+        }
+      }
+      return output as T;
+    }
+
+    return (fallback ?? {}) as T;
+  };
+}

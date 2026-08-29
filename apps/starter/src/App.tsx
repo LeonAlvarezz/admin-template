@@ -1,7 +1,7 @@
 import React from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider, ThemeProvider, Toaster, useAuth, NotFound } from "@admin/core";
+import { AuthProvider, ThemeProvider, Toaster, useAuth, NotFound, ErrorState } from "@admin/core";
 import { routeTree } from "./routeTree.gen";
 import { authStrategy } from "./config/auth";
 import { queryClient } from "./libs/query-client";
@@ -12,6 +12,9 @@ export const router = createRouter({
     auth: undefined!,
   },
   defaultNotFoundComponent: () => <NotFound fullScreen />,
+  defaultErrorComponent: ({ error, reset }) => (
+    <ErrorState fullScreen error={error} onRetry={reset} />
+  ),
 });
 
 declare module "@tanstack/react-router" {

@@ -1,14 +1,18 @@
 import * as React from "react";
 import {
+  Button,
+  CloseIcon,
   DataTable,
+  ErrorState,
   Input,
   NativeSelect,
   SearchIcon,
   SpinnerIcon,
   useAuth,
+  useQueryFilters,
 } from "@admin/core";
 import { USER_ROLE } from "@admin/types";
-import type { User } from "@admin/types";
+import type { ListUsersQuery, User } from "@admin/types";
 import { useUsersQuery } from "./api/user.api";
 import { createUserColumn } from "./components/user.column";
 import { ChangeRoleModal } from "./components/change-role-modal";
@@ -20,28 +24,29 @@ export function UserPage() {
   const { data: sessionData, isLoading: isSessionLoading } = useSessionQuery();
   const currentUser = sessionData?.user ?? authUser;
 
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedRoleFilter, setSelectedRoleFilter] =
-    React.useState<string>("all");
+  const {
+    filters,
+    searchValue,
+    setSearchValue,
+    setFilter,
+    resetFilters,
+    isFiltered,
+  } = useQueryFilters<ListUsersQuery>({
+    defaultValues: {
+      search: "",
+      role: undefined,
+      cursor: undefined,
+      limit: 20,
+      order: "desc",
+    },
+    debounceMs: 300,
+  });
 
   const [selectedUserForRole, setSelectedUserForRole] =
     React.useState<User | null>(null);
   const [isRoleModalOpen, setIsRoleModalOpen] = React.useState(false);
 
-  // Debounced search query
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
-  React.useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
-
-  const { data, isLoading } = useUsersQuery({
-    search: debouncedSearch,
-    role:
-      selectedRoleFilter !== "all"
-        ? (selectedRoleFilter as USER_ROLE)
-        : undefined,
-  });
+  const { data, isLoading } = useUsersQuery(filters);
 
   const users = data?.users ?? [];
 
@@ -108,14 +113,18 @@ export function UserPage() {
             <div className="flex flex-1 flex-wrap items-center gap-2">
               <Input
                 placeholder="Search users by name or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchValue}
+                onChange={setSearchValue}
                 startIcon={<SearchIcon />}
                 containerClassName="h-9 w-64 sm:w-80"
               />
               <NativeSelect
-                value={selectedRoleFilter}
-                onChange={(e) => setSelectedRoleFilter(e.target.value)}
+                value={filters.role ?? "all"}
+                onChange={(e) => {
+                  const role = e.target.value;
+                  if (role === "all") return setFilter("role", undefined);
+                  setFilter("role", role as USER_ROLE);
+                }}
                 className="h-8 text-xs w-36"
                 options={[
                   { value: "all", label: "All Roles" },
@@ -124,6 +133,17 @@ export function UserPage() {
                   { value: USER_ROLE.USER, label: "Standard User" },
                 ]}
               />
+              {isFiltered && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="h-8 px-2 text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                >
+                  <CloseIcon className="size-3.5" />
+                  <span>Reset</span>
+                </Button>
+              )}
             </div>
             <div className="flex items-center gap-2">
               {isLoading && (

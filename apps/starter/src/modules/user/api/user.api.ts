@@ -21,6 +21,9 @@ export function useUsersQuery(filters?: ListUsersQuery) {
         params: {
           search: filters?.search || undefined,
           role: filters?.role || undefined,
+          cursor: filters?.cursor || undefined,
+          limit: filters?.limit,
+          order: filters?.order,
         },
       }),
   });

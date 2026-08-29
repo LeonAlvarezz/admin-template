@@ -64,6 +64,7 @@ import GithubIcon from "~icons/logos/github-icon";
 import AppleIcon from "~icons/logos/apple";
 import UserIcon from "~icons/solar/user-bold";
 import UsersIcon from "~icons/solar/users-group-two-rounded-bold";
+import RefreshIcon from "~icons/basil/refresh-solid";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -141,6 +142,7 @@ export {
   EditIcon,
   CopyIcon,
   TrashIcon,
+  RefreshIcon,
   DeleteIcon,
   MoreHorizontalIcon,
   ColumnsIcon,

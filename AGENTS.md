@@ -101,3 +101,14 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `capitalize(text)` | Capitalizes first letter of string | `capitalize("active")` | `packages/core/src/utils/string.ts` |
 | `truncate(text, max, suffix?)` | Truncates string with trailing ellipsis | `truncate(productName, 30)` | `packages/core/src/utils/string.ts` |
 | `copyToClipboard(text)` | Asynchronous clipboard copy with fallback | `await copyToClipboard("SKU-12345")` | `packages/core/src/utils/dom.ts` |
+
+
+### Shared Hooks (`@admin/core`)
+
+| Hook | Description | Example Usage | Source File |
+| :--- | :--- | :--- | :--- |
+| `useQueryFilters(opts?)` / `useTableFilters(opts?)` | Bidirectional URL search query and filter state management with debounced search and clean parameter pruning | `const { filters, searchValue, setSearchValue, setFilter, resetFilters, isFiltered } = useQueryFilters({ defaultValues: { search: "", role: "all" } })` | `packages/core/src/hooks/use-query-filters.ts` |
+| `useDebounce(val, delay?)` | Debounces any rapidly changing value by specified milliseconds (default 300ms) | `const debouncedSearch = useDebounce(searchTerm, 300)` | `packages/core/src/hooks/use-debounce.ts` |
+| `useActiveUrl()` | Detects active path and matches route patterns with router/location fallback | `const { isActivePath } = useActiveUrl()` | `packages/core/src/hooks/active-url.ts` |
+| `useTheme()` | Manages dark/light theme state and root document attribute | `const { theme, toggleTheme } = useTheme()` | `packages/core/src/hooks/theme.tsx` |
+
