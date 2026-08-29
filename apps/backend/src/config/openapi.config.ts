@@ -229,6 +229,58 @@ const options: swaggerJSDoc.Options = {
             stock: { type: "integer", example: 35 },
           },
         },
+        User: {
+          type: "object",
+          properties: {
+            id: { type: "string", example: "usr_123456" },
+            name: { type: "string", example: "John Doe" },
+            email: { type: "string", format: "email", example: "john@example.com" },
+            emailVerified: { type: "boolean", example: true },
+            image: { type: "string", nullable: true, example: null },
+            role: {
+              type: "string",
+              enum: ["user", "admin", "super_admin"],
+              example: "user",
+            },
+            banned: { type: "boolean", nullable: true, example: false },
+            twoFactorEnabled: { type: "boolean", nullable: true, example: false },
+            createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" },
+          },
+        },
+        UpdateUserRolePayload: {
+          type: "object",
+          required: ["userId", "role"],
+          properties: {
+            userId: {
+              type: "string",
+              description: "ID of the target user",
+              example: "usr_123456",
+            },
+            role: {
+              type: "string",
+              enum: ["user", "admin", "super_admin"],
+              description: "New role to assign to the user",
+              example: "admin",
+            },
+          },
+        },
+        UsersListResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            data: {
+              type: "object",
+              properties: {
+                users: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/User" },
+                },
+                total: { type: "integer", example: 10 },
+              },
+            },
+          },
+        },
       },
     },
   },

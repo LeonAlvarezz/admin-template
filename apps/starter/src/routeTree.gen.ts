@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedShopOrdersRouteImport } from './routes/_authenticated/shop/orders'
 import { Route as AuthenticatedShopProductsRouteImport } from './routes/_authenticated/shop/products'
 
@@ -35,6 +36,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedShopOrdersRoute = AuthenticatedShopOrdersRouteImport.update({
   id: '/shop/orders',
   path: '/shop/orders',
@@ -51,12 +57,14 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/users': typeof AuthenticatedUsersRoute
   '/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/shop/products': typeof AuthenticatedShopProductsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/users': typeof AuthenticatedUsersRoute
   '/': typeof AuthenticatedIndexRoute
   '/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/shop/products': typeof AuthenticatedShopProductsRoute
@@ -66,20 +74,24 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/shop/orders': typeof AuthenticatedShopOrdersRoute
   '/_authenticated/shop/products': typeof AuthenticatedShopProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/settings' | '/shop/orders' | '/shop/products'
+  fullPaths:
+    '/' | '/login' | '/settings' | '/users' | '/shop/orders' | '/shop/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/settings' | '/' | '/shop/orders' | '/shop/products'
+  to:
+    '/login' | '/settings' | '/users' | '/' | '/shop/orders' | '/shop/products'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/settings'
+    | '/_authenticated/users'
     | '/_authenticated/'
     | '/_authenticated/shop/orders'
     | '/_authenticated/shop/products'
@@ -120,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/users': {
+      id: '/_authenticated/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthenticatedUsersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/shop/orders': {
       id: '/_authenticated/shop/orders'
       path: '/shop/orders'
@@ -139,6 +158,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedShopOrdersRoute: typeof AuthenticatedShopOrdersRoute
   AuthenticatedShopProductsRoute: typeof AuthenticatedShopProductsRoute
@@ -146,6 +166,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedShopOrdersRoute: AuthenticatedShopOrdersRoute,
   AuthenticatedShopProductsRoute: AuthenticatedShopProductsRoute,

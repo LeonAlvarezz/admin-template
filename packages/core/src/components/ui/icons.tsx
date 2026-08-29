@@ -62,6 +62,8 @@ import ShieldCheckIcon from "~icons/solar/shield-check-bold";
 import GoogleIcon from "~icons/logos/google-icon";
 import GithubIcon from "~icons/logos/github-icon";
 import AppleIcon from "~icons/logos/apple";
+import UserIcon from "~icons/solar/user-bold";
+import UsersIcon from "~icons/solar/users-group-two-rounded-bold";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -175,6 +177,8 @@ export {
   GoogleIcon,
   GithubIcon,
   AppleIcon,
+  UserIcon,
+  UsersIcon,
 };
 
 export const Icons = {
@@ -250,4 +254,6 @@ export const Icons = {
   Google: GoogleIcon,
   Github: GithubIcon,
   Apple: AppleIcon,
+  User: UserIcon,
+  Users: UsersIcon,
 };

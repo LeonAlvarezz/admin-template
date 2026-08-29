@@ -22,6 +22,7 @@ export const auth = betterAuth({
     twoFactor(),
     adminPlugin({
       ac,
+      adminRoles: ["admin", "super_admin"],
       roles: {
         admin,
         super_admin,

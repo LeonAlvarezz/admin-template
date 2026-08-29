@@ -1,6 +1,6 @@
 import React from "react";
 import type { NavGroupConfig } from "@admin/core";
-import { ProductIcon, OrderIcon } from "@admin/core";
+import { ProductIcon, OrderIcon, UsersIcon } from "@admin/core";
 
 import DashboardIcon from "~icons/boxicons/dashboard-filled";
 import ShopIcon from "~icons/solar/cart-4-bold";
@@ -43,6 +43,12 @@ export const navGroups: NavGroupConfig[] = [
     id: "system",
     title: "System",
     items: [
+      {
+        id: "users",
+        label: "Users",
+        icon: <UsersIcon />,
+        path: "/users",
+      },
       {
         id: "settings",
         label: "Settings",

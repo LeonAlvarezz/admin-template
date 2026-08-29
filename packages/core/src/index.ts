@@ -86,7 +86,11 @@ export type {
   ContextMenuPosition,
 } from "./components/ui/context-menu";
 export * from "./components/ui/icons";
-export { default as Tag, colorVariants, TAILWIND_COLORS } from "./components/ui/tag";
+export {
+  default as Tag,
+  colorVariants,
+  TAILWIND_COLORS,
+} from "./components/ui/tag";
 export type { TagProps, Color, Color as TagColor } from "./components/ui/tag";
 export {
   default as NumberStepper,
@@ -98,8 +102,9 @@ export type {
 } from "./components/ui/number-stepper";
 export { default as NotFound } from "./components/ui/not-found";
 export type { NotFoundProps } from "./components/ui/not-found";
-export { default as Switch, Switch as CoreSwitch } from "./components/ui/switch";
+export {
+  default as Switch,
+  Switch as CoreSwitch,
+} from "./components/ui/switch";
 export type { SwitchProps, SwitchSize } from "./components/ui/switch";
 export * from "./utils";
-
-

@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import { CursorPaginationQuerySchema } from "./common";
 
 export enum USER_ROLE {
   SUPER_ADMIN = "super_admin",
@@ -14,7 +15,7 @@ export const UserSchema = v.object({
   image: v.optional(v.nullable(v.string())),
   createdAt: v.union([v.date(), v.string()]),
   updatedAt: v.union([v.date(), v.string()]),
-  role: v.optional(v.nullable(v.string())),
+  role: v.enum(USER_ROLE),
   banned: v.optional(v.nullable(v.boolean())),
   banReason: v.optional(v.nullable(v.string())),
   banExpires: v.optional(v.nullable(v.union([v.date(), v.string()]))),
@@ -43,7 +44,36 @@ export const CreateUserSchema = v.object({
 });
 
 export type CreateUser = v.InferOutput<typeof CreateUserSchema>;
-
 export type UpdateUserInfo = v.InferOutput<typeof UpdateUserInfoSchema>;
 export type ChangePassword = v.InferOutput<typeof ChangePasswordSchema>;
 export type EnableTwoFactor = v.InferOutput<typeof EnableTwoFactorSchema>;
+
+export const UsersListResponseSchema = v.object({
+  users: v.array(UserSchema),
+  total: v.number(),
+});
+
+export const SetRoleSchema = v.object({
+  userId: v.string(),
+  role: v.enum(USER_ROLE),
+});
+
+export type SetRole = v.InferOutput<typeof SetRoleSchema>;
+export const UpdateUserRoleSchema = SetRoleSchema;
+export type UpdateUserRole = SetRole;
+
+export const ListUsersQuerySchema = v.object({
+  ...CursorPaginationQuerySchema.entries,
+  search: v.optional(v.string()),
+  role: v.optional(v.enum(USER_ROLE)),
+});
+
+export type ListUsersQuery = {
+  search?: string;
+  role?: USER_ROLE;
+  cursor?: string | null;
+  limit?: number;
+  order?: "asc" | "desc";
+};
+
+export type UsersListResponse = v.InferOutput<typeof UsersListResponseSchema>;

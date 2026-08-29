@@ -61,7 +61,7 @@ export function DataTableRowActions({
             as={Button}
             variant="ghost"
             size="sm"
-            className="ml-1 p-1 flex sticky top-0 right-0 items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
+            className="ml-5 p-0.5 flex sticky top-0 right-0 items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <MoreIcon className="size-5" />
           </MenuButton>
