@@ -24,6 +24,7 @@ import type {
 import { cn } from "../../../libs/cn";
 import { InboxIcon } from "../icons";
 import { Tooltip } from "../tooltip";
+import { Skeleton } from "../skeleton";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { DataTableViewOptions } from "./data-table-view-options";
@@ -215,13 +216,13 @@ function DataTableRoot<
               {loading ? (
                 // Loading Skeleton Rows
                 Array.from({ length: 5 }).map((_, index) => (
-                  <tr key={`skeleton-${index}`} className="animate-pulse">
-                    {columns.map((_column, colIndex) => (
+                  <tr key={`skeleton-${index}`}>
+                    {table.getVisibleLeafColumns().map((column) => (
                       <td
-                        key={`skeleton-col-${colIndex}`}
+                        key={`skeleton-${column.id}`}
                         className="px-4 py-3.5 whitespace-nowrap"
                       >
-                        <div className="h-4 bg-muted rounded-md w-3/4" />
+                        <Skeleton className="h-4 w-3/4" />
                       </td>
                     ))}
                   </tr>
@@ -272,7 +273,9 @@ function DataTableRoot<
                 // Empty State
                 <tr>
                   <td
-                    colSpan={columns.length}
+                    colSpan={
+                      table.getVisibleLeafColumns().length || columns.length
+                    }
                     className="h-36 text-center py-8"
                   >
                     {emptyState ?? (
@@ -293,6 +296,7 @@ function DataTableRoot<
           <DataTablePagination
             table={table as any}
             pageSizeOptions={pageSizeOptions}
+            loading={loading}
           />
         )}
       </div>

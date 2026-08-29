@@ -24,6 +24,7 @@ Before generating or refactoring any front-end UI code, agents **MUST** inspect 
    - **Avatars**: Use `<Avatar>` from `@admin/core` instead of custom image wrappers for user profiles.
    - **Notifications**: Use `toast` / `<Toaster>` from `@admin/core` instead of custom inline alerts or native `alert()`.
    - **Charts**: Use `<ChartContainer>`, `<ChartTooltip>`, `<ChartTooltipContent>` from `@admin/core`.
+   - **Skeletons & Loading States**: Use `<Skeleton>` from `@admin/core` instead of ad-hoc animated pulse divs. For tables, pass `loading` directly to `<DataTable>`.
 
 3. **Extending Components (No Fragmented Custom Code)**:
    - If an existing `@admin/core` component lacks a required prop, size, variant, or feature, **extend the component in `@admin/core`** first.
@@ -84,6 +85,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<NumberStepper>`, `<Stepper>` | `import { NumberStepper, Stepper } from "@admin/core"` | `packages/core/src/components/ui/number-stepper.tsx` |
 | `<NotFound>` | `import { NotFound } from "@admin/core"` | `packages/core/src/components/ui/not-found.tsx` |
 | `<Switch>` | `import { Switch } from "@admin/core"` | `packages/core/src/components/ui/switch.tsx` |
+| `<Skeleton>` | `import { Skeleton } from "@admin/core"` | `packages/core/src/components/ui/skeleton.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
 
 

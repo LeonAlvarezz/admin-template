@@ -45,7 +45,7 @@ export function UserPage() {
     currentUser?.role === USER_ROLE.ADMIN ||
     currentUser?.role === USER_ROLE.SUPER_ADMIN;
 
-  const { data } = useUsersQuery(filters, { enabled: isAuthorized });
+  const { data, isLoading } = useUsersQuery(filters, { enabled: isAuthorized });
 
   const users = data?.users ?? [];
 
@@ -103,6 +103,7 @@ export function UserPage() {
       <DataTable
         columns={columns}
         data={users}
+        loading={isLoading}
         toolbar={(table) => (
           <DataTable.Toolbar>
             <div className="flex flex-1 flex-wrap items-center gap-2">

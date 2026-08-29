@@ -111,4 +111,6 @@ export {
   Switch as CoreSwitch,
 } from "./components/ui/switch";
 export type { SwitchProps, SwitchSize } from "./components/ui/switch";
+export { default as Skeleton, Skeleton as CoreSkeleton } from "./components/ui/skeleton";
+export type { SkeletonProps } from "./components/ui/skeleton";
 export * from "./utils";
