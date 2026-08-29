@@ -100,7 +100,7 @@ export function VisitorBarChart() {
       <ChartContainer config={chartConfig} className="h-75 w-full">
         <BarChart
           data={visitorData}
-          margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
         >
           <CartesianGrid
             vertical={false}
@@ -143,7 +143,6 @@ export function VisitorBarChart() {
             radius={[6, 6, 0, 0]}
             stackId="a"
           />
-
         </BarChart>
       </ChartContainer>
     </div>

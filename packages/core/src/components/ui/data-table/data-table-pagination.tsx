@@ -5,7 +5,9 @@ import Pagination from "../pagination";
 import Skeleton from "../skeleton";
 import { cn } from "../../../libs/cn";
 
-export interface DataTablePaginationProps<TData extends Record<string, any> = any> {
+export interface DataTablePaginationProps<
+  TData extends Record<string, any> = any,
+> {
   table: ReactTable<DefaultDataTableFeatures, TData>;
   pageSizeOptions?: number[];
   loading?: boolean;
@@ -23,9 +25,9 @@ export function DataTablePagination<TData extends Record<string, any> = any>({
   const pageCount = table.getPageCount();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 pt-5 pb-3 border-t border-border">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 pt-5 pb-3 border-t border-border">
       {/* Selected count info */}
-      <div className="flex gap-10 items-center">
+      <div className="flex gap-10 sm:items-center">
         <div className="text-xs text-muted-foreground order-2 sm:order-1">
           {loading ? (
             <Skeleton className="h-4 w-20" />

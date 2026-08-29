@@ -174,7 +174,7 @@ function DataTableRoot<
       ) : null}
 
       {/* Main Table Shell */}
-      <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
+      <div className="@container rounded-lg border border-border bg-card overflow-hidden shadow-xs">
         <div className="overflow-x-auto table-scrollbar">
           <table
             className="w-full table-fixed text-left text-sm text-foreground"
@@ -276,14 +276,16 @@ function DataTableRoot<
                     colSpan={
                       table.getVisibleLeafColumns().length || columns.length
                     }
-                    className="h-36 text-center py-8"
+                    className="h-36 p-0 text-center"
                   >
-                    {emptyState ?? (
-                      <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                        <InboxIcon className="size-8 opacity-40" />
-                        <p className="text-sm font-medium">No results found.</p>
-                      </div>
-                    )}
+                    <div className="sticky left-0 w-[100cqw] flex flex-col items-center justify-center gap-2 text-muted-foreground py-8">
+                      {emptyState ?? (
+                        <>
+                          <InboxIcon className="size-8 opacity-40" />
+                          <p className="text-sm font-medium">No results found.</p>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )}
