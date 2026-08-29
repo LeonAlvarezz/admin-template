@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import type { ReactNode, TouchEvent } from "react";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { Dialog, DialogBackdrop, DialogPanel, Transition } from "@headlessui/react";
 import { cn } from "../../libs/cn";
 import Button from "./button";
 
@@ -63,64 +63,66 @@ export function Drawer({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="relative z-50">
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition duration-200 ease-out data-closed:opacity-0"
-      />
-
-      <div className="fixed inset-0 flex overflow-hidden">
-        <DialogPanel
+    <Transition appear show={open}>
+      <Dialog onClose={onClose} className="relative z-50">
+        <DialogBackdrop
           transition
-          style={
-            side === "bottom" && offsetY > 0
-              ? {
-                  transform: `translateY(${offsetY}px)`,
-                  opacity: Math.max(0.3, 1 - offsetY / 300),
-                  transition: isDragging
-                    ? "none"
-                    : "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-                }
-              : undefined
-          }
-          className={cn(
-            "fixed bg-sidebar p-4 shadow-2xl transition duration-300 ease-out flex flex-col focus:outline-none",
-            positionClasses[side],
-            className,
-          )}
-        >
-          {/* Swipe-to-close Touch Target (Top Nudge Bar & Header) */}
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            className="w-full flex flex-col items-center cursor-grab active:cursor-grabbing select-none shrink-0 py-1 touch-none"
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs transition duration-200 ease-out data-closed:opacity-0"
+        />
+
+        <div className="fixed inset-0 flex overflow-hidden">
+          <DialogPanel
+            transition
+            style={
+              side === "bottom" && offsetY > 0
+                ? {
+                    transform: `translateY(${offsetY}px)`,
+                    opacity: Math.max(0.3, 1 - offsetY / 300),
+                    transition: isDragging
+                      ? "none"
+                      : "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }
+                : undefined
+            }
+            className={cn(
+              "fixed bg-sidebar p-4 shadow-2xl transition duration-300 ease-out flex flex-col focus:outline-none",
+              positionClasses[side],
+              className,
+            )}
           >
-            {side === "bottom" && showDragHandle && (
-              <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-2 shrink-0 hover:bg-muted-foreground/40 transition-colors" />
-            )}
+            {/* Swipe-to-close Touch Target (Top Nudge Bar & Header) */}
+            <div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              className="w-full flex flex-col items-center cursor-grab active:cursor-grabbing select-none shrink-0 py-1 touch-none"
+            >
+              {side === "bottom" && showDragHandle && (
+                <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-2 shrink-0 hover:bg-muted-foreground/40 transition-colors" />
+              )}
 
-            {title && (
-              <div className="w-full flex items-center justify-between pb-3 border-b border-border shrink-0">
-                <span className="font-bold text-sm text-foreground">
-                  {title}
-                </span>
-                <Button
-                  variant="ghost"
-                  type="button"
-                  onClick={onClose}
-                  className="text-xs font-semibold text-primary cursor-pointer hover:underline"
-                >
-                  Done
-                </Button>
-              </div>
-            )}
-          </div>
+              {title && (
+                <div className="w-full flex items-center justify-between pb-3 border-b border-border shrink-0">
+                  <span className="font-bold text-sm text-foreground">
+                    {title}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={onClose}
+                    className="text-xs font-semibold text-primary cursor-pointer hover:underline"
+                  >
+                    Done
+                  </Button>
+                </div>
+              )}
+            </div>
 
-          {children}
-        </DialogPanel>
-      </div>
-    </Dialog>
+            {children}
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </Transition>
   );
 }
 

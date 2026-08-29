@@ -14,6 +14,7 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
+  Transition,
 } from "@headlessui/react";
 import { useNavigate } from "@tanstack/react-router";
 import { cn } from "../../libs/cn";
@@ -296,111 +297,113 @@ export function CommandSearch({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-200 data-closed:opacity-0"
-      />
-
-      <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24">
-        <DialogPanel
+    <Transition appear show={isOpen}>
+      <Dialog onClose={handleClose} className="relative z-50">
+        <DialogBackdrop
           transition
-          className="w-full max-w-xl overflow-hidden rounded-xl border border-border/80 bg-sidebar shadow-2xl transition-all duration-200 data-closed:scale-95 data-closed:opacity-0 text-foreground"
-        >
-          <Combobox onChange={handleSelect}>
-            <div className="relative flex items-center border-b border-border/60 px-4">
-              <SearchIcon className="pointer-events-none absolute left-4 size-5 text-muted-foreground" />
-              <ComboboxInput
-                autoFocus
-                className="w-full bg-transparent py-4 pl-8 pr-12 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none"
-                placeholder={placeholder}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <div className="absolute right-4 flex items-center gap-1">
-                <Keyboard keys={["esc"]} />
-              </div>
-            </div>
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-200 data-closed:opacity-0"
+        />
 
-            <ComboboxOptions
-              static
-              className="max-h-80 overflow-y-auto p-2 scroll-py-2 divide-y divide-border/30 focus:outline-none"
-            >
-              {filteredGroups.length === 0 ? (
-                <div className="py-10 text-center text-sm text-muted-foreground flex flex-col items-center gap-2">
-                  <CommandIcon className="size-8 text-muted-foreground/50" />
-                  <p>{emptyText}</p>
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24">
+          <DialogPanel
+            transition
+            className="w-full max-w-xl overflow-hidden rounded-xl border border-border/80 bg-sidebar shadow-2xl transition-all duration-200 data-closed:scale-95 data-closed:opacity-0 text-foreground"
+          >
+            <Combobox onChange={handleSelect}>
+              <div className="relative flex items-center border-b border-border/60 px-4">
+                <SearchIcon className="pointer-events-none absolute left-4 size-5 text-muted-foreground" />
+                <ComboboxInput
+                  autoFocus
+                  className="w-full bg-transparent py-4 pl-8 pr-12 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none"
+                  placeholder={placeholder}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <div className="absolute right-4 flex items-center gap-1">
+                  <Keyboard keys={["esc"]} />
                 </div>
-              ) : (
-                filteredGroups.map((group) => (
-                  <div key={group.id} className="py-2 first:pt-0 last:pb-0">
-                    {group.title && (
-                      <div className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                        {group.title}
-                      </div>
-                    )}
-                    <div className="flex flex-col gap-0.5 mt-0.5">
-                      {group.items.map((item) => (
-                        <ComboboxOption
-                          key={item.id}
-                          value={item}
-                          className="group/item flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-foreground select-none cursor-pointer transition-colors data-focus:bg-accent data-focus:text-accent-foreground"
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            {item.icon && (
-                              <span className="shrink-0 text-muted-foreground group-data-focus/item:text-foreground">
-                                {item.icon}
-                              </span>
-                            )}
-                            <div className="flex flex-col min-w-0">
-                              <div className="flex items-center gap-2 truncate">
-                                <span className="font-medium truncate">
-                                  {item.label}
-                                </span>
-                                {item.category &&
-                                  group.title !== item.category && (
-                                    <span className="text-xs text-muted-foreground truncate">
-                                      in {item.category}
-                                    </span>
-                                  )}
-                              </div>
-                              {item.description && (
-                                <span className="text-xs text-muted-foreground truncate">
-                                  {item.description}
+              </div>
+
+              <ComboboxOptions
+                static
+                className="max-h-80 scroll-fade-y overflow-y-auto p-2 scroll-py-2 divide-y divide-border/30 focus:outline-none"
+              >
+                {filteredGroups.length === 0 ? (
+                  <div className="py-10 text-center text-sm text-muted-foreground flex flex-col items-center gap-2">
+                    <CommandIcon className="size-8 text-muted-foreground/50" />
+                    <p>{emptyText}</p>
+                  </div>
+                ) : (
+                  filteredGroups.map((group) => (
+                    <div key={group.id} className="py-2 first:pt-0 last:pb-0">
+                      {group.title && (
+                        <div className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                          {group.title}
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-0.5 mt-0.5">
+                        {group.items.map((item) => (
+                          <ComboboxOption
+                            key={item.id}
+                            value={item}
+                            className="group/item flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-foreground select-none cursor-pointer transition-colors data-focus:bg-accent data-focus:text-accent-foreground"
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              {item.icon && (
+                                <span className="shrink-0 text-muted-foreground group-data-focus/item:text-foreground">
+                                  {item.icon}
                                 </span>
                               )}
+                              <div className="flex flex-col min-w-0">
+                                <div className="flex items-center gap-2 truncate">
+                                  <span className="font-medium truncate">
+                                    {item.label}
+                                  </span>
+                                  {item.category &&
+                                    group.title !== item.category && (
+                                      <span className="text-xs text-muted-foreground truncate">
+                                        in {item.category}
+                                      </span>
+                                    )}
+                                </div>
+                                {item.description && (
+                                  <span className="text-xs text-muted-foreground truncate">
+                                    {item.description}
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="flex items-center gap-2 shrink-0">
-                            {item.badge && <div>{item.badge}</div>}
-                            {item.shortcut && item.shortcut.length > 0 && (
-                              <Keyboard keys={item.shortcut} />
-                            )}
-                          </div>
-                        </ComboboxOption>
-                      ))}
+                            <div className="flex items-center gap-2 shrink-0">
+                              {item.badge && <div>{item.badge}</div>}
+                              {item.shortcut && item.shortcut.length > 0 && (
+                                <Keyboard keys={item.shortcut} />
+                              )}
+                            </div>
+                          </ComboboxOption>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </ComboboxOptions>
+                  ))
+                )}
+              </ComboboxOptions>
 
-            <div className="flex items-center justify-between border-t border-border/60 px-4 py-2 text-[11px] text-muted-foreground bg-accent/30">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1">
-                  <Keyboard keys={["up"]} /> <Keyboard keys={["down"]} />{" "}
-                  Navigate
-                </span>
-                <span className="flex items-center gap-1">
-                  <Keyboard keys={["enter"]} /> Select
-                </span>
+              <div className="flex items-center justify-between border-t border-border/60 px-4 py-2 text-[11px] text-muted-foreground bg-accent/30">
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-1">
+                    <Keyboard keys={["up"]} /> <Keyboard keys={["down"]} />{" "}
+                    Navigate
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Keyboard keys={["enter"]} /> Select
+                  </span>
+                </div>
               </div>
-            </div>
-          </Combobox>
-        </DialogPanel>
-      </div>
-    </Dialog>
+            </Combobox>
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </Transition>
   );
 }
 
