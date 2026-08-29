@@ -3,7 +3,6 @@ import {
   Button,
   CloseIcon,
   DataTable,
-  ErrorState,
   Input,
   NativeSelect,
   SearchIcon,
@@ -46,7 +45,7 @@ export function UserPage() {
     React.useState<User | null>(null);
   const [isRoleModalOpen, setIsRoleModalOpen] = React.useState(false);
 
-  const { data, isLoading } = useUsersQuery(filters);
+  const { data } = useUsersQuery(filters);
 
   const users = data?.users ?? [];
 
@@ -146,12 +145,6 @@ export function UserPage() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {isLoading && (
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <SpinnerIcon className="size-3.5" />
-                  <span>Syncing...</span>
-                </div>
-              )}
               <DataTable.ViewOptions table={table} />
             </div>
           </DataTable.Toolbar>

@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { UnauthorizedException } from "@/lib";
 import { fromNodeHeaders } from "better-auth/node";
 import type { NextFunction, Request, Response } from "express";
-import type { User } from "@admin/types";
+import { USER_ROLE, type User } from "@admin/types";
 
 declare global {
   namespace Express {
@@ -18,6 +18,10 @@ type ProtectedRouteHandler = (
   res: Response,
   next: NextFunction,
 ) => void | Promise<void>;
+
+function isUserRole(role: unknown): role is USER_ROLE {
+  return Object.values(USER_ROLE).includes(role as USER_ROLE);
+}
 
 function protectedRoute(
   handler: ProtectedRouteHandler,
@@ -40,7 +44,14 @@ function protectedRoute(
         throw new UnauthorizedException();
       }
 
-      req.user = session.user;
+      if (!isUserRole(session.user.role)) {
+        throw new UnauthorizedException();
+      }
+
+      req.user = {
+        ...session.user,
+        role: session.user.role,
+      };
       req.session = session.session;
 
       await handler(req, res, next);
