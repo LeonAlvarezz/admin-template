@@ -1,6 +1,7 @@
 import type { UserProfile } from "@admin/core";
 import { SessionAuthStrategy } from "@admin/core";
 import { apiClient } from "@/libs/api-client";
+import { queryClient } from "@/libs/query-client";
 import type {
   SessionResponse,
   SignInEmail,
@@ -21,11 +22,13 @@ export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
         role: userResponse.role ?? undefined,
       };
     } catch {
+      queryClient.clear();
       return null;
     }
   },
 
   onLogin: async (payload: SignInEmail): Promise<UserProfile> => {
+    queryClient.clear();
     const data = await apiClient.post<SignInEmailResponse>(
       "/auth/sign-in/email",
       payload,
@@ -47,5 +50,11 @@ export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
     };
   },
 
-  onLogout: () => apiClient.post("/auth/sign-out"),
+  onLogout: async () => {
+    try {
+      await apiClient.post("/auth/sign-out");
+    } finally {
+      queryClient.clear();
+    }
+  },
 });

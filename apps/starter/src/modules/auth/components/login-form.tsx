@@ -16,6 +16,7 @@ import {
   useAuth,
 } from "@admin/core";
 import { apiClient, getErrorMessage } from "@/libs/api-client";
+import { queryClient } from "@/libs/query-client";
 import * as v from "valibot";
 
 export function LoginForm() {
@@ -90,6 +91,7 @@ export function LoginForm() {
         });
       }
 
+      queryClient.clear();
       await auth.initialize();
       toast.success("Welcome back!");
       navigate({ to: "/" });

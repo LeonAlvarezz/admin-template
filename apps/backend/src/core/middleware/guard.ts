@@ -7,7 +7,7 @@ import { USER_ROLE, type User } from "@admin/types";
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user: User;
       session?: typeof auth.$Infer.Session.session;
     }
   }

@@ -16,12 +16,8 @@ import { useUsersQuery } from "./api/user.api";
 import { createUserColumn } from "./components/user.column";
 import { ChangeRoleModal } from "./components/change-role-modal";
 
-import { useSessionQuery } from "../settings/api/settings.api";
-
 export function UserPage() {
-  const { user: authUser, isLoading: isAuthLoading } = useAuth();
-  const { data: sessionData, isLoading: isSessionLoading } = useSessionQuery();
-  const currentUser = sessionData?.user ?? authUser;
+  const { user: currentUser, isLoading: isAuthLoading } = useAuth();
 
   const {
     filters,
@@ -45,7 +41,11 @@ export function UserPage() {
     React.useState<User | null>(null);
   const [isRoleModalOpen, setIsRoleModalOpen] = React.useState(false);
 
-  const { data } = useUsersQuery(filters);
+  const isAuthorized =
+    currentUser?.role === USER_ROLE.ADMIN ||
+    currentUser?.role === USER_ROLE.SUPER_ADMIN;
+
+  const { data } = useUsersQuery(filters, { enabled: isAuthorized });
 
   const users = data?.users ?? [];
 
@@ -58,11 +58,7 @@ export function UserPage() {
     onChangeRole: handleOpenRoleModal,
   });
 
-  const isAuthorized =
-    currentUser?.role === USER_ROLE.ADMIN ||
-    currentUser?.role === USER_ROLE.SUPER_ADMIN;
-
-  if (isAuthLoading || (isSessionLoading && !currentUser)) {
+  if (isAuthLoading || !currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-100 text-center p-6">
         <SpinnerIcon className="size-6 animate-spin text-primary mb-2" />
@@ -71,7 +67,7 @@ export function UserPage() {
     );
   }
 
-  if (!isAuthorized && currentUser) {
+  if (!isAuthorized) {
     return (
       <div className="flex flex-col items-center justify-center min-h-100 text-center p-6 border border-border rounded-xl bg-sidebar">
         <div className="size-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mb-3">

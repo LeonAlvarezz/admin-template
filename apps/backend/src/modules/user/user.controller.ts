@@ -18,7 +18,14 @@ export class UserController {
 
   listUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.user) throw new UnauthorizedException();
+      if (
+        req.user.role !== USER_ROLE.ADMIN &&
+        req.user.role !== USER_ROLE.SUPER_ADMIN
+      ) {
+        throw new ForbiddenException({
+          message: "You do not have permission to view the user list",
+        });
+      }
       const query = v.parse(ListUsersQuerySchema, req.query);
       const result = await this.userService.listUsers(query);
       res.success(result);
@@ -29,8 +36,6 @@ export class UserController {
 
   setRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.user) throw new UnauthorizedException();
-
       const payload = v.parse(SetRoleSchema, req.body);
       const result = await this.userService.setRole(payload, req.user);
 

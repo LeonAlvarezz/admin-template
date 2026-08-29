@@ -13,7 +13,10 @@ export const userKeys = {
   list: (filters?: ListUsersQuery) => [...userKeys.lists(), filters] as const,
 };
 
-export function useUsersQuery(filters?: ListUsersQuery) {
+export function useUsersQuery(
+  filters?: ListUsersQuery,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: userKeys.list(filters),
     queryFn: () =>
@@ -26,6 +29,7 @@ export function useUsersQuery(filters?: ListUsersQuery) {
           order: filters?.order,
         },
       }),
+    enabled: options?.enabled ?? true,
   });
 }
 
