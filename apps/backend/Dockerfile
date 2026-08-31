@@ -1,42 +1,43 @@
-# use the official Bun image
-FROM oven/bun:1 AS base
-WORKDIR /usr/src/app
+FROM oven/bun:1.3.9-alpine AS base
+WORKDIR /app
 
+FROM base AS dependencies
+COPY package.json bun.lock ./
+COPY apps/backend/package.json apps/backend/package.json
+COPY apps/starter/package.json apps/starter/package.json
+COPY packages/core/package.json packages/core/package.json
+COPY packages/eslint-config/package.json packages/eslint-config/package.json
+COPY packages/types/package.json packages/types/package.json
+COPY packages/typescript-config/package.json packages/typescript-config/package.json
+RUN bun install --frozen-lockfile --filter express-template
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY ./package.json ./bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+FROM dependencies AS build
+COPY apps/backend apps/backend
+COPY packages/types packages/types
+RUN bun run --cwd apps/backend build
 
-# install with --production (exclude devDependencies)
-RUN mkdir -p /temp/prod
-COPY ./package.json ./bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+FROM base AS production-dependencies
+COPY package.json bun.lock ./
+COPY apps/backend/package.json apps/backend/package.json
+COPY apps/starter/package.json apps/starter/package.json
+COPY packages/core/package.json packages/core/package.json
+COPY packages/eslint-config/package.json packages/eslint-config/package.json
+COPY packages/types/package.json packages/types/package.json
+COPY packages/typescript-config/package.json packages/typescript-config/package.json
+RUN bun install --frozen-lockfile --production --filter express-template
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
-COPY . .
+FROM oven/bun:1.3.9-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3333
 
+COPY --from=production-dependencies --chown=bun:bun /app/node_modules ./node_modules
+COPY --from=build --chown=bun:bun /app/apps/backend ./apps/backend
+COPY --from=build --chown=bun:bun /app/packages/types ./packages/types
 
-# copy production dependencies and source code into final image
-FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app .
-COPY --from=prerelease /usr/src/app/package.json .
-
-
-COPY ./entrypoint.sh .
-
-
-# Fix permissions 
-RUN chmod +x entrypoint.sh 
-
-
-# run the app
+WORKDIR /app/apps/backend
 USER bun
-EXPOSE 3000
-ENTRYPOINT [ "./entrypoint.sh" ]
+EXPOSE 3333
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD ["bun", "-e", "fetch('http://127.0.0.1:' + (process.env.PORT || '3333') + '/api/health-check').then((response) => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1));"]
+CMD ["bun", "run", "start"]
