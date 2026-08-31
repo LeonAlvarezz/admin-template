@@ -201,6 +201,8 @@
 - If an application package extends a shared TSConfig with `"declaration": true` and `"declarationMap": true` without setting `"noEmit": true`, running `tsc` will emit `.d.ts` and `.d.ts.map` files directly into `src/`.
 
 ## [OUTCOMES]
+- 2026-08-31T10:45:27+07:00 [CODE] Replaced the dashboard's three metric wrappers in `apps/starter/src/routes/_authenticated/index.tsx` with shared `<Card padding="sm">` and `<Card.Title>` composition. Added a red-green dashboard regression test and ignored `apps/starter/test/**` in starter ESLint to match the core package's test convention. Dashboard/Card tests (7/7), changed-route lint, monorepo typecheck, and starter build pass; full starter lint remains blocked by nine unrelated existing errors.
+- 2026-08-31T10:37:06+07:00 [CODE] Corrected `Card` polymorphic typing in `packages/core/src/components/ui/card.tsx`: omitted the native `title` collision, replaced the invalid generic interface and `CardProps<any>` with a generic `ComponentPropsWithRef` type, and retained element-specific props/ref inference without explicit `any`. Card tests (6/6), core lint, monorepo typecheck, and build pass; starter build retains its existing large-chunk warning.
 - Package dependency syntax fixed for Bun.
 - Tailwind v4 setup completed for `@admin/core` and `apps/starter`.
 - Semantic theme tokens configured in `@admin/core`.
@@ -258,8 +260,6 @@
 - 2026-08-21T17:10:00+07:00 [CODE] Completely removed `globalFilteringFeature` and `createFilteredRowModel` from [`data-table.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table.tsx) and search input from [`data-table-toolbar.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table-toolbar.tsx). Removed ~8.6 kB of client-side filtering code from the bundle. Monorepo typechecks, unit tests, and production build passed with 0 errors.
 - 2026-08-28T11:10:00+07:00 [CODE] Implemented comprehensive 404 Not Found handling: created reusable, responsive `<NotFound />` component in `@admin/core` (`not-found.tsx`) with full-screen & layout-embedded support, theme tokens, and back/home actions. Configured authentication-aware 404 routing in `apps/starter` (`__root.tsx`, `_authenticated.tsx`, `App.tsx`) preserving `AdminLayout` for authenticated users with `enableTabs={false}` and rendering full-screen 404 for unauthenticated visitors. Standardized backend Express 404 catch-all middleware in `apps/backend/src/loaders/loader.ts`. Exported from `@admin/core`, documented in `AGENTS.md`. All monorepo typechecks, ESLint on changed files, unit tests, and production builds pass cleanly with 0 errors.
 - 2026-08-29T15:56:00+07:00 [CODE] Fixed unauthorized screen persistence on `/users` when switching accounts: removed stale `useSessionQuery` in `UserPage`, sourced `currentUser` directly from canonical `useAuth()`, gated `useUsersQuery` with `{ enabled: isAuthorized }`, purged `queryClient` on login, logout, and 2FA verify, and enforced admin role authorization on backend `GET /users`. All typechecks, tests, and production builds pass cleanly with 0 errors.
-
-
 
 
 

@@ -11,6 +11,7 @@ import {
   Modal,
   Select,
   slugify,
+  Textarea,
   toast,
 } from "@admin/core";
 import { PRODUCT_STATUS } from "@admin/types";
@@ -352,12 +353,14 @@ export function ProductModal({
             <form.Field name="image">
               {(field) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>Image URL (Optional)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Image URL (Optional)
+                  </FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}
                     placeholder="https://images.unsplash.com/..."
-                    value={field.state.value ?? ""}
+                    value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
@@ -368,14 +371,18 @@ export function ProductModal({
             <form.Field name="description">
               {(field) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>Description (Optional)</FieldLabel>
-                  <Input
+                  <FieldLabel htmlFor={field.name}>
+                    Description (Optional)
+                  </FieldLabel>
+                  <Textarea
                     id={field.name}
                     name={field.name}
                     placeholder="Brief description of the product features and specs..."
-                    value={field.state.value ?? ""}
+                    value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    maxWordCount={100}
+                    
                   />
                 </Field>
               )}

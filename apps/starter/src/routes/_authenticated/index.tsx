@@ -1,6 +1,7 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { VisitorBarChart } from "../../modules/dashboard/components/visitor-bar-chart";
+import { Card } from "@admin/core";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: DashboardPage,
@@ -20,22 +21,29 @@ function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl border border-border bg-sidebar shadow-xs">
-          <h3 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">Total Revenue</h3>
+        <Card padding="sm">
+          <Card.Title className="text-xs text-muted-foreground uppercase tracking-wider">
+            Total Revenue
+          </Card.Title>
           <p className="text-2xl font-bold mt-1 text-foreground">$45,231.89</p>
-        </div>
-        <div className="p-4 rounded-xl border border-border bg-sidebar shadow-xs">
-          <h3 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">Subscriptions</h3>
+        </Card>
+
+        <Card padding="sm">
+          <Card.Title className="text-xs text-muted-foreground uppercase tracking-wider">
+            Subscriptions
+          </Card.Title>
           <p className="text-2xl font-bold mt-1 text-foreground">+2,350</p>
-        </div>
-        <div className="p-4 rounded-xl border border-border bg-sidebar shadow-xs">
-          <h3 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">Active Now</h3>
+        </Card>
+
+        <Card padding="sm">
+          <Card.Title className="text-xs text-muted-foreground uppercase tracking-wider">
+            Active Now
+          </Card.Title>
           <p className="text-2xl font-bold mt-1 text-foreground">+573</p>
-        </div>
+        </Card>
       </div>
 
       <VisitorBarChart />
     </div>
   );
 }
-

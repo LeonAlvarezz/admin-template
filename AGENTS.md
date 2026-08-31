@@ -64,6 +64,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | :--- | :--- | :--- |
 | `<Button>` | `import { Button } from "@admin/core"` | `packages/core/src/components/ui/button.tsx` |
 | `<Input>`, `<InputPassword>` | `import { Input, InputPassword } from "@admin/core"` | `packages/core/src/components/ui/input.tsx` |
+| `<Textarea>` | `import { Textarea } from "@admin/core"` | `packages/core/src/components/ui/textarea.tsx` |
 | `<Checkbox>` | `import { Checkbox } from "@admin/core"` | `packages/core/src/components/ui/checkbox.tsx` |
 | `<NativeSelect>` | `import { NativeSelect } from "@admin/core"` | `packages/core/src/components/ui/native-select.tsx` |
 | `<Select>`, `<Select.Option>` | `import { Select } from "@admin/core"` | `packages/core/src/components/ui/select.tsx` |
@@ -86,6 +87,7 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `<NotFound>` | `import { NotFound } from "@admin/core"` | `packages/core/src/components/ui/not-found.tsx` |
 | `<Switch>` | `import { Switch } from "@admin/core"` | `packages/core/src/components/ui/switch.tsx` |
 | `<Skeleton>` | `import { Skeleton } from "@admin/core"` | `packages/core/src/components/ui/skeleton.tsx` |
+| `<Card>`, `<Card.Header>`, `<Card.Content>` | `import { Card } from "@admin/core"` | `packages/core/src/components/ui/card.tsx` |
 | `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
 
 
@@ -102,6 +104,8 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 | `slugify(text)` | Converts text to URL-friendly slug | `slugify("Wireless Noise Canceling")` | `packages/core/src/utils/string.ts` |
 | `capitalize(text)` | Capitalizes first letter of string | `capitalize("active")` | `packages/core/src/utils/string.ts` |
 | `truncate(text, max, suffix?)` | Truncates string with trailing ellipsis | `truncate(productName, 30)` | `packages/core/src/utils/string.ts` |
+| `countWords(text)` | Counts words in a string by whitespace delimiters | `countWords("Hello world")` | `packages/core/src/utils/string.ts` |
+| `trimToWordCount(text, maxWords)` | Trims string to specified max word count | `trimToWordCount("One two three", 2)` | `packages/core/src/utils/string.ts` |
 | `copyToClipboard(text)` | Asynchronous clipboard copy with fallback | `await copyToClipboard("SKU-12345")` | `packages/core/src/utils/dom.ts` |
 
 

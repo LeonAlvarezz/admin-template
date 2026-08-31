@@ -9,6 +9,8 @@ import {
   slugify,
   capitalize,
   truncate,
+  countWords,
+  trimToWordCount,
 } from "../src/utils";
 
 describe("Utility Functions", () => {
@@ -92,5 +94,21 @@ describe("Utility Functions", () => {
       expect(truncate("Hello World", 5)).toBe("Hello...");
       expect(truncate("Short", 10)).toBe("Short");
     });
+
+    it("counts words correctly", () => {
+      expect(countWords("")).toBe(0);
+      expect(countWords("   ")).toBe(0);
+      expect(countWords("Hello")).toBe(1);
+      expect(countWords("Hello world")).toBe(2);
+      expect(countWords("  Leading and   trailing   spaces  \n  newlines ")).toBe(5);
+    });
+
+    it("trims text to word count limit", () => {
+      expect(trimToWordCount("One two three four", 2)).toBe("One two");
+      expect(trimToWordCount("One two three", 5)).toBe("One two three");
+      expect(trimToWordCount("One two three four", 0)).toBe("");
+      expect(trimToWordCount("  One   two   three  ", 2)).toBe("  One   two");
+    });
   });
 });
+
