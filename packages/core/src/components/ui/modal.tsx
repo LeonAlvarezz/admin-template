@@ -87,10 +87,7 @@ export function ModalBody({ className, ...props }: ModalBodyProps) {
 export function ModalFooter({ className, ...props }: ModalFooterProps) {
   return (
     <div
-      className={cn(
-        "flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-4",
-        className,
-      )}
+      className={cn("flex  sm:items-center justify-end gap-3 pt-4", className)}
       {...props}
     />
   );
@@ -139,81 +136,83 @@ function ModalRoot({
         />
 
         {/* Centered modal container */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <DialogPanel
-            transition
-            className={cn(
-              "relative w-full space-y-4 border border-border bg-sidebar rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition-all duration-200 ease-in-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none",
-              sizeClasses[isFullscreen ? "full" : size],
-              className,
-            )}
-          >
-            {(showCloseButton || shouldShowFullscreen) && (
-              <div className="flex items-center gap-1 absolute top-4 right-4 sm:top-5 sm:right-5 z-20">
-                {shouldShowFullscreen && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-                    onClick={handleToggleFullscreen}
-                    title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-                  >
-                    {isFullscreen ? (
-                      <MinimizeIcon className="size-4" />
-                    ) : (
-                      <MaximizeIcon className="size-4" />
-                    )}
-                  </Button>
-                )}
+        <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6">
+          <div className="flex min-h-full items-center justify-center">
+            <DialogPanel
+              transition
+              className={cn(
+                "relative w-full space-y-4 border border-border bg-sidebar rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition-all duration-200 ease-in-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none my-auto",
+                sizeClasses[isFullscreen ? "full" : size],
+                className,
+              )}
+            >
+              {(showCloseButton || shouldShowFullscreen) && (
+                <div className="flex items-center gap-1 absolute top-4 right-4 sm:top-5 sm:right-5 z-20">
+                  {shouldShowFullscreen && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                      onClick={handleToggleFullscreen}
+                      title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                    >
+                      {isFullscreen ? (
+                        <MinimizeIcon className="size-4" />
+                      ) : (
+                        <MaximizeIcon className="size-4" />
+                      )}
+                    </Button>
+                  )}
 
-                {showCloseButton && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-                    onClick={handleClose}
-                    title="Close"
-                  >
-                    <CloseIcon className="size-4" />
-                  </Button>
-                )}
-              </div>
-            )}
+                  {showCloseButton && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                      onClick={handleClose}
+                      title="Close"
+                    >
+                      <CloseIcon className="size-4" />
+                    </Button>
+                  )}
+                </div>
+              )}
 
-            {children ? (
-              children
-            ) : (
-              <>
-                {(title || description) && (
-                  <ModalHeader>
-                    {title && <ModalTitle>{title}</ModalTitle>}
-                    {description && (
-                      <ModalDescription>{description}</ModalDescription>
-                    )}
-                  </ModalHeader>
-                )}
-                <ModalBody
-                  className={
-                    isFullscreen ? "flex-1 overflow-y-auto min-h-0 pr-1" : ""
-                  }
-                >
-                  <p className="text-sm text-muted-foreground">
-                    Are you sure you want to proceed with this action?
-                  </p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button variant="outline" onClick={handleClose}>
-                    Cancel
-                  </Button>
-                  <Button variant="default" onClick={handleClose}>
-                    Confirm
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </DialogPanel>
+              {children ? (
+                children
+              ) : (
+                <>
+                  {(title || description) && (
+                    <ModalHeader>
+                      {title && <ModalTitle>{title}</ModalTitle>}
+                      {description && (
+                        <ModalDescription>{description}</ModalDescription>
+                      )}
+                    </ModalHeader>
+                  )}
+                  <ModalBody
+                    className={
+                      isFullscreen ? "flex-1 overflow-y-auto min-h-0 pr-1" : ""
+                    }
+                  >
+                    <p className="text-sm text-muted-foreground">
+                      Are you sure you want to proceed with this action?
+                    </p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button variant="outline" onClick={handleClose}>
+                      Cancel
+                    </Button>
+                    <Button variant="default" onClick={handleClose}>
+                      Confirm
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </DialogPanel>
+          </div>
         </div>
       </Dialog>
     </Transition>

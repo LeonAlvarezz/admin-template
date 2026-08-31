@@ -1,6 +1,12 @@
 # CONTINUITY
 
 ## [PLANS]
+
+- 2026-08-31T14:24:00+07:00 [CODE] Fixed modal scrollbar collision and flex centering overflow cut off: updated `<Modal>` (`packages/core/src/components/ui/modal.tsx`) wrapper to `overflow-y-auto` with inner `min-h-full flex items-center justify-center` and `my-auto` on `DialogPanel`, preventing content from being cut off at the top when modal exceeds viewport height; refactored `AddProductModal` (`apps/starter/src/modules/product/components/add-product-modal.tsx`) with pinned header/footer, `max-h-[85vh]`, dedicated `scrollbar-thin` scrollable body with proper padding (`px-6 sm:px-8 py-3 pr-1`), and removed accidental duplicate description fields.
+- 2026-08-31T13:42:00+07:00 [CODE] Added clipboard paste support (Ctrl+V / Cmd+V) to `<Upload>` and `<UploadArea>`: users can paste images directly from clipboard (e.g. screenshots, copied image files) or pasted URLs, with automatic file processing, size/MIME validation, and preview rendering. All typechecks and production builds pass.
+- 2026-08-31T13:24:00+07:00 [CODE] Fixed Unsplash and external image CDN thumbnail preview in `<UploadItem>` (`packages/core/src/components/ui/upload.tsx`): Unsplash URLs don't have trailing `.jpg`/`.png` file extensions and contain URL query strings (`?w=1000...`), which failed the strict extension regex; enhanced image detection to check image CDNs (Unsplash, Cloudinary, Imgur, Picsum), parent `accept="image"` context, and strip query strings, with stateful `onError` fallback to document icon if network fails. Monorepo typechecks and builds pass with 0 errors.
+- 2026-08-31T11:55:00+07:00 [CODE] Refactored `<Upload>` / `<FileUpload>` `accept` prop to support semantic preset constants (`FILE_PRESETS`), typed preset names (`"image"`, `"pdf"`, `"document"`, `"spreadsheet"`, `"archive"`, `"video"`, `"audio"`, `"csv"`), extension arrays (`[".png", ".jpg", ".webp"]`), and mixed arrays via centralized `normalizeAccept()` utility in `packages/core/src/utils/file.ts`. Exported from `@admin/core`, updated `add-product-modal.tsx`, added unit tests in `utils.test.ts`, and updated `AGENTS.md`. All packages pass `tsc --noEmit` and production build passes.
+- 2026-08-31T11:35:00+07:00 [CODE] Implemented reusable `<Upload>` / `<FileUpload>` component in `@admin/core` (`packages/core/src/components/ui/Upload.tsx`): supports drag-and-drop or click-to-browse file upload, top URL link input with button to paste direct URLs, file list with image thumbnails or generic file icons, file size and MIME-type constraints with `formatFileSize` validation, accessible keyboard navigation (`Enter` / `Space`), compound subcomponents (`Upload.Root`, `Upload.LinkInput`, `Upload.Area`, `Upload.FileList`, `Upload.Item`), exported via `@admin/core`, integrated into `apps/starter` `AddProductModal` for product image upload, added unit tests, and documented in `AGENTS.md`. All packages pass `tsc --noEmit` and production build passes.
 - 2026-08-31T10:11:00+07:00 [CODE] Added root `docker-compose.yml` for PostgreSQL 16 Alpine container with healthchecks and persistent volume; configured root package.json convenience scripts (`docker:up`, `docker:down`, `db:migrate`, `db:push`, `db:reset`); created `apps/starter/.env.example` and synchronized port configurations in `apps/backend/.env.example`; updated `README.md` with complete monorepo architecture diagram (documenting `apps/backend` and `packages/types`), database migration and seed commands, default login credentials table (`seed.ts`), and Scalar API reference. All packages pass `tsc --noEmit`.
 - 2026-08-29T17:35:00+07:00 [CODE] Implemented DataTable loading state and reusable Skeleton primitive: created `<Skeleton>` component in `@admin/core` (`packages/core/src/components/ui/skeleton.tsx`), exposed single `loading?: boolean` prop in `<DataTable>`, rendered 5 skeleton rows mapped across visible leaf columns (`table.getVisibleLeafColumns()`), forwarded loading state to `<DataTablePagination>` to display count skeleton and disable pagination controls during data fetch, and wired `loading={isLoading}` in `apps/starter/src/modules/user/user.page.tsx`.
 - 2026-08-29T17:24:00+07:00 [CODE] Fixed first-time open animation failure in Modal, Drawer, and CommandSearch: wrapped Dialog in <Transition appear show={...}> so Headless UI v2 passes appear: true to TransitionContext, allowing TransitionChild on DialogBackdrop and DialogPanel to run CSS enter transitions on initial mount.
@@ -136,6 +142,7 @@
 - 2026-08-19T17:57Z [CODE] Fixed backend `error-middleware.ts` status code parsing when `error.status` is a string (e.g. Better Auth `APIError` `status: "UNAUTHORIZED"`), preventing Express `res.status()` runtime TypeError.
 
 ## [DISCOVERIES]
+
 - 2026-08-29T17:42:00+07:00 [CODE] DataTable empty state appeared off-center on horizontally scrollable tables because `td[colSpan]` centered content across the full `table.getTotalSize()` width (e.g. 850px) rather than the visible card width (~500px). Fixed by marking table shell with `@container`, and setting the empty state wrapper to `sticky left-0 w-[100cqw] flex items-center justify-center`.
 - 2026-08-29T17:40:00+07:00 [CODE] Recharts BarChart in VisitorBarChart had negative left margin (`margin={{ left: -20 }}`), shifting Y-axis labels 20px outside SVG bounds and truncating leading digits (e.g. "1000", "2000" rendered as "000"). Fixed by setting `margin.left: 0`.
 - 2026-08-29T17:24:00+07:00 [CODE] Headless UI v2 Dialog creates an internal Transition with appear: false and initial: true when open is passed directly. On the first open, TransitionChild evaluates ce = initial && !appear as true, setting enabled to false and suppressing the enter animation (data-closed is omitted). On subsequent opens, initial is false so animations play. Wrapping Dialog in <Transition appear show={open}> ensures appear: true is passed, enabling transitions on first open.
@@ -181,13 +188,8 @@
 - 2026-08-20T15:20:25+07:00 [CODE] Enhanced Command Search architecture to be 100% pluggable: added `commandGroups` & `commandItems` props to `<AdminLayout />`, and `useRegisterCommands()` hook for registering component-scoped actions that auto-mount and auto-cleanup. Verified clean typechecks and production build.
 - 2026-08-20T15:24:04+07:00 [CODE] Documented Command Search Palette (`Cmd+K`), automatic route indexing, layout-scoped custom commands, and component-scoped `useRegisterCommands()` hook in root `README.md`.
 
-
-
-
-
-
-
 ## [DISCOVERIES]
+
 - 2026-08-18T14:32:34+07:00 [TOOL] `NavItemConfig.path` and `UserMenuItem.href` incorrectly use `LinkProps<RegisteredRouter["routeTree"]>`: `LinkProps`' first generic is the rendered component type and the type represents the entire props object, not a `to` string. `bun --filter @admin/core check-types` fails on every string path; `apps/starter/src/config/navigation.tsx` also has `path: ""` while the generated route is `/shop/products`.
 - Bun requires `workspace:*` syntax to locate workspace packages in a monorepo without 404ing on npm.
 - `bun add` treats `--filter` arguments as package names to install from npm instead of workspace target filters. Put `--filter` before `add` (`bun --filter <pkg> add`) or use `--cwd <path>`.
@@ -201,6 +203,7 @@
 - If an application package extends a shared TSConfig with `"declaration": true` and `"declarationMap": true` without setting `"noEmit": true`, running `tsc` will emit `.d.ts` and `.d.ts.map` files directly into `src/`.
 
 ## [OUTCOMES]
+
 - 2026-08-31T10:45:27+07:00 [CODE] Replaced the dashboard's three metric wrappers in `apps/starter/src/routes/_authenticated/index.tsx` with shared `<Card padding="sm">` and `<Card.Title>` composition. Added a red-green dashboard regression test and ignored `apps/starter/test/**` in starter ESLint to match the core package's test convention. Dashboard/Card tests (7/7), changed-route lint, monorepo typecheck, and starter build pass; full starter lint remains blocked by nine unrelated existing errors.
 - 2026-08-31T10:37:06+07:00 [CODE] Corrected `Card` polymorphic typing in `packages/core/src/components/ui/card.tsx`: omitted the native `title` collision, replaced the invalid generic interface and `CardProps<any>` with a generic `ComponentPropsWithRef` type, and retained element-specific props/ref inference without explicit `any`. Card tests (6/6), core lint, monorepo typecheck, and build pass; starter build retains its existing large-chunk warning.
 - Package dependency syntax fixed for Bun.
@@ -260,13 +263,3 @@
 - 2026-08-21T17:10:00+07:00 [CODE] Completely removed `globalFilteringFeature` and `createFilteredRowModel` from [`data-table.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table.tsx) and search input from [`data-table-toolbar.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/data-table/data-table-toolbar.tsx). Removed ~8.6 kB of client-side filtering code from the bundle. Monorepo typechecks, unit tests, and production build passed with 0 errors.
 - 2026-08-28T11:10:00+07:00 [CODE] Implemented comprehensive 404 Not Found handling: created reusable, responsive `<NotFound />` component in `@admin/core` (`not-found.tsx`) with full-screen & layout-embedded support, theme tokens, and back/home actions. Configured authentication-aware 404 routing in `apps/starter` (`__root.tsx`, `_authenticated.tsx`, `App.tsx`) preserving `AdminLayout` for authenticated users with `enableTabs={false}` and rendering full-screen 404 for unauthenticated visitors. Standardized backend Express 404 catch-all middleware in `apps/backend/src/loaders/loader.ts`. Exported from `@admin/core`, documented in `AGENTS.md`. All monorepo typechecks, ESLint on changed files, unit tests, and production builds pass cleanly with 0 errors.
 - 2026-08-29T15:56:00+07:00 [CODE] Fixed unauthorized screen persistence on `/users` when switching accounts: removed stale `useSessionQuery` in `UserPage`, sourced `currentUser` directly from canonical `useAuth()`, gated `useUsersQuery` with `{ enabled: isAuthorized }`, purged `queryClient` on login, logout, and 2FA verify, and enforced admin role authorization on backend `GET /users`. All typechecks, tests, and production builds pass cleanly with 0 errors.
-
-
-
-
-
-
-
-
-
-

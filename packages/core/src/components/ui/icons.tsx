@@ -65,6 +65,10 @@ import AppleIcon from "~icons/logos/apple";
 import UserIcon from "~icons/solar/user-bold";
 import UsersIcon from "~icons/solar/users-group-two-rounded-bold";
 import RefreshIcon from "~icons/basil/refresh-solid";
+import UploadCloudIcon from "~icons/lucide/upload-cloud";
+import LinkIcon from "~icons/lucide/link-2";
+import FileTextIcon from "~icons/lucide/file-text";
+import UploadIcon from "~icons/akar-icons/cloud-upload";
 import { cn } from "../../utils";
 
 export type IconComponent = React.ComponentType<
@@ -181,6 +185,10 @@ export {
   AppleIcon,
   UserIcon,
   UsersIcon,
+  UploadIcon,
+  UploadCloudIcon,
+  LinkIcon,
+  FileTextIcon,
 };
 
 export const Icons = {
@@ -258,4 +266,8 @@ export const Icons = {
   Apple: AppleIcon,
   User: UserIcon,
   Users: UsersIcon,
+  Upload: UploadIcon,
+  UploadCloud: UploadCloudIcon,
+  Link: LinkIcon,
+  FileText: FileTextIcon,
 };

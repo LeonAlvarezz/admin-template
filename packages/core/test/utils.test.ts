@@ -110,5 +110,17 @@ describe("Utility Functions", () => {
       expect(trimToWordCount("  One   two   three  ", 2)).toBe("  One   two");
     });
   });
+
+  describe("normalizeAccept", () => {
+    it("normalizes semantic presets and arrays correctly", async () => {
+      const { normalizeAccept, FILE_PRESETS } = await import("../src/utils/file");
+
+      expect(normalizeAccept("image")).toBe("image/*");
+      expect(normalizeAccept(["image", ".pdf"])).toBe("image/*,.pdf");
+      expect(normalizeAccept(FILE_PRESETS.CSV)).toBe(".csv,text/csv");
+      expect(normalizeAccept(["csv", ".xlsx"])).toBe(".csv,text/csv,.xlsx");
+      expect(normalizeAccept(undefined)).toBeUndefined();
+    });
+  });
 });
 

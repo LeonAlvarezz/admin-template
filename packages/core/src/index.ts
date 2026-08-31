@@ -5,7 +5,10 @@ export { default as SideBar } from "./components/sidebar";
 export { default as NavItem } from "./components/ui/nav-item";
 export { default as Input, InputPassword } from "./components/ui/input";
 export type { InputProps, InputPasswordProps } from "./components/ui/input";
-export { default as Textarea, Textarea as CoreTextarea } from "./components/ui/textarea";
+export {
+  default as Textarea,
+  Textarea as CoreTextarea,
+} from "./components/ui/textarea";
 export type { TextareaProps } from "./components/ui/textarea";
 export { default as Button } from "./components/ui/button";
 export { default as Checkbox } from "./components/ui/checkbox";
@@ -113,7 +116,10 @@ export {
   Switch as CoreSwitch,
 } from "./components/ui/switch";
 export type { SwitchProps, SwitchSize } from "./components/ui/switch";
-export { default as Skeleton, Skeleton as CoreSkeleton } from "./components/ui/skeleton";
+export {
+  default as Skeleton,
+  Skeleton as CoreSkeleton,
+} from "./components/ui/skeleton";
 export type { SkeletonProps } from "./components/ui/skeleton";
 export {
   default as Card,
@@ -138,4 +144,27 @@ export type {
   CardContentProps,
   CardFooterProps,
 } from "./components/ui/card";
+export {
+  default as Upload,
+  FileUpload,
+  UploadLinkInput,
+  UploadArea,
+  UploadFileList,
+  UploadItem,
+  useUploadContext,
+  FILE_PRESETS,
+  normalizeAccept,
+} from "./components/ui/upload";
+export type {
+  UploadProps,
+  UploadLinkInputProps,
+  UploadAreaProps,
+  UploadFileListProps,
+  UploadItemProps,
+  UploadContextValue,
+  UploadFileItem,
+  UploadAccept,
+  UploadAcceptItem,
+  FilePresetKey,
+} from "./components/ui/upload";
 export * from "./utils";

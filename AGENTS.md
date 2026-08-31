@@ -60,61 +60,59 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 
 ### UI Components (`@admin/core`)
 
-| UI Primitives & Core Components | Export Path (`@admin/core`) | Source File |
-| :--- | :--- | :--- |
-| `<Button>` | `import { Button } from "@admin/core"` | `packages/core/src/components/ui/button.tsx` |
-| `<Input>`, `<InputPassword>` | `import { Input, InputPassword } from "@admin/core"` | `packages/core/src/components/ui/input.tsx` |
-| `<Textarea>` | `import { Textarea } from "@admin/core"` | `packages/core/src/components/ui/textarea.tsx` |
-| `<Checkbox>` | `import { Checkbox } from "@admin/core"` | `packages/core/src/components/ui/checkbox.tsx` |
-| `<NativeSelect>` | `import { NativeSelect } from "@admin/core"` | `packages/core/src/components/ui/native-select.tsx` |
-| `<Select>`, `<Select.Option>` | `import { Select } from "@admin/core"` | `packages/core/src/components/ui/select.tsx` |
-| `<Field>`, `<FieldSet>`, `<FieldLabel>` | `import { Field, FieldSet, FieldLabel } from "@admin/core"` | `packages/core/src/components/ui/field.tsx` |
-| `<Tooltip>` | `import { Tooltip } from "@admin/core"` | `packages/core/src/components/ui/tooltip.tsx` |
-| `<DataTable>` | `import { DataTable } from "@admin/core"` | `packages/core/src/components/ui/data-table/` |
-| `<Drawer>` | `import { Drawer } from "@admin/core"` | `packages/core/src/components/ui/drawer.tsx` |
-| `<Pagination>` | `import { Pagination } from "@admin/core"` | `packages/core/src/components/ui/pagination.tsx` |
-| `<Keyboard>` | `import { Keyboard } from "@admin/core"` | `packages/core/src/components/ui/keyboard.tsx` |
-| `<Avatar>` | `import { Avatar } from "@admin/core"` | `packages/core/src/components/ui/avatar.tsx` |
-| `<Toaster>`, `toast` | `import { Toaster, toast } from "@admin/core"` | `packages/core/src/components/ui/toaster.tsx` |
-| `<ChartContainer>`, `<ChartTooltip>` | `import { ChartContainer, ChartTooltip } from "@admin/core"` | `packages/core/src/components/ui/chart.tsx` |
-| `<CommandSearch>` | `import { CommandSearch } from "@admin/core"` | `packages/core/src/components/ui/command-search.tsx` |
-| `<ContextMenu>` | `import { ContextMenu } from "@admin/core"` | `packages/core/src/components/ui/context-menu.tsx` |
-| `<WorkspaceTabs>` | `import { WorkspaceTabs } from "@admin/core"` | `packages/core/src/components/workspace-tabs.tsx` |
-| `<Modal>`, `<Modal.Header>`, `<Modal.Footer>` | `import { Modal, ModalHeader, ModalFooter } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx` |
-| `<ConfirmModal>` | `import { ConfirmModal } from "@admin/core"` | `packages/core/src/components/ui/confirm-modal.tsx` |
-| `<Tag>` | `import { Tag } from "@admin/core"` | `packages/core/src/components/ui/tag.tsx` |
-| `<NumberStepper>`, `<Stepper>` | `import { NumberStepper, Stepper } from "@admin/core"` | `packages/core/src/components/ui/number-stepper.tsx` |
-| `<NotFound>` | `import { NotFound } from "@admin/core"` | `packages/core/src/components/ui/not-found.tsx` |
-| `<Switch>` | `import { Switch } from "@admin/core"` | `packages/core/src/components/ui/switch.tsx` |
-| `<Skeleton>` | `import { Skeleton } from "@admin/core"` | `packages/core/src/components/ui/skeleton.tsx` |
-| `<Card>`, `<Card.Header>`, `<Card.Content>` | `import { Card } from "@admin/core"` | `packages/core/src/components/ui/card.tsx` |
-| `<SideBar>`, `<NavItem>` | `import { SideBar, NavItem } from "@admin/core"` | `packages/core/src/components/sidebar.tsx` |
-
+| UI Primitives & Core Components               | Export Path (`@admin/core`)                                     | Source File                                          |
+| :-------------------------------------------- | :-------------------------------------------------------------- | :--------------------------------------------------- |
+| `<Button>`                                    | `import { Button } from "@admin/core"`                          | `packages/core/src/components/ui/button.tsx`         |
+| `<Input>`, `<InputPassword>`                  | `import { Input, InputPassword } from "@admin/core"`            | `packages/core/src/components/ui/input.tsx`          |
+| `<Textarea>`                                  | `import { Textarea } from "@admin/core"`                        | `packages/core/src/components/ui/textarea.tsx`       |
+| `<Checkbox>`                                  | `import { Checkbox } from "@admin/core"`                        | `packages/core/src/components/ui/checkbox.tsx`       |
+| `<NativeSelect>`                              | `import { NativeSelect } from "@admin/core"`                    | `packages/core/src/components/ui/native-select.tsx`  |
+| `<Select>`, `<Select.Option>`                 | `import { Select } from "@admin/core"`                          | `packages/core/src/components/ui/select.tsx`         |
+| `<Field>`, `<FieldSet>`, `<FieldLabel>`       | `import { Field, FieldSet, FieldLabel } from "@admin/core"`     | `packages/core/src/components/ui/field.tsx`          |
+| `<Tooltip>`                                   | `import { Tooltip } from "@admin/core"`                         | `packages/core/src/components/ui/tooltip.tsx`        |
+| `<DataTable>`                                 | `import { DataTable } from "@admin/core"`                       | `packages/core/src/components/ui/data-table/`        |
+| `<Drawer>`                                    | `import { Drawer } from "@admin/core"`                          | `packages/core/src/components/ui/drawer.tsx`         |
+| `<Pagination>`                                | `import { Pagination } from "@admin/core"`                      | `packages/core/src/components/ui/pagination.tsx`     |
+| `<Keyboard>`                                  | `import { Keyboard } from "@admin/core"`                        | `packages/core/src/components/ui/keyboard.tsx`       |
+| `<Avatar>`                                    | `import { Avatar } from "@admin/core"`                          | `packages/core/src/components/ui/avatar.tsx`         |
+| `<Toaster>`, `toast`                          | `import { Toaster, toast } from "@admin/core"`                  | `packages/core/src/components/ui/toaster.tsx`        |
+| `<ChartContainer>`, `<ChartTooltip>`          | `import { ChartContainer, ChartTooltip } from "@admin/core"`    | `packages/core/src/components/ui/chart.tsx`          |
+| `<CommandSearch>`                             | `import { CommandSearch } from "@admin/core"`                   | `packages/core/src/components/ui/command-search.tsx` |
+| `<ContextMenu>`                               | `import { ContextMenu } from "@admin/core"`                     | `packages/core/src/components/ui/context-menu.tsx`   |
+| `<WorkspaceTabs>`                             | `import { WorkspaceTabs } from "@admin/core"`                   | `packages/core/src/components/workspace-tabs.tsx`    |
+| `<Modal>`, `<Modal.Header>`, `<Modal.Footer>` | `import { Modal, ModalHeader, ModalFooter } from "@admin/core"` | `packages/core/src/components/ui/modal.tsx`          |
+| `<ConfirmModal>`                              | `import { ConfirmModal } from "@admin/core"`                    | `packages/core/src/components/ui/confirm-modal.tsx`  |
+| `<Tag>`                                       | `import { Tag } from "@admin/core"`                             | `packages/core/src/components/ui/tag.tsx`            |
+| `<NumberStepper>`, `<Stepper>`                | `import { NumberStepper, Stepper } from "@admin/core"`          | `packages/core/src/components/ui/number-stepper.tsx` |
+| `<NotFound>`                                  | `import { NotFound } from "@admin/core"`                        | `packages/core/src/components/ui/not-found.tsx`      |
+| `<Switch>`                                    | `import { Switch } from "@admin/core"`                          | `packages/core/src/components/ui/switch.tsx`         |
+| `<Skeleton>`                                  | `import { Skeleton } from "@admin/core"`                        | `packages/core/src/components/ui/skeleton.tsx`       |
+| `<Card>`, `<Card.Header>`, `<Card.Content>`   | `import { Card } from "@admin/core"`                            | `packages/core/src/components/ui/card.tsx`           |
+| `<Upload>`, `<FileUpload>`                    | `import { Upload, FileUpload } from "@admin/core"`              | `packages/core/src/components/ui/Upload.tsx`         |
+| `<SideBar>`, `<NavItem>`                      | `import { SideBar, NavItem } from "@admin/core"`                | `packages/core/src/components/sidebar.tsx`           |
 
 ### Shared Utilities & Helpers (`@admin/core`)
 
-| Utility Function | Description | Example Usage | Source File |
-| :--- | :--- | :--- | :--- |
-| `cn(...classes)` | Tailwind CSS class merge + conditional joiner | `cn("p-4", isDark && "bg-black")` | `packages/core/src/utils/cn.ts` |
-| `formatCurrency(val, opts?)` | Localized currency formatting (USD, EUR, etc.) | `formatCurrency(129.99, { currency: "USD" })` | `packages/core/src/utils/formatters.ts` |
-| `formatNumber(val, opts?)` | Localized number formatting with notation (e.g. 1.2K) | `formatNumber(12500, { notation: "compact" })` | `packages/core/src/utils/formatters.ts` |
-| `formatDate(date, opts?, locale?)` | Localized date formatting | `formatDate(new Date(), { month: "short", day: "numeric" })` | `packages/core/src/utils/formatters.ts` |
-| `formatRelativeTime(date, base?)` | Relative human-readable time ("5 mins ago") | `formatRelativeTime("2026-08-24T10:00:00Z")` | `packages/core/src/utils/formatters.ts` |
-| `formatFileSize(bytes, dec?)` | Human-readable file sizes ("1.5 MB") | `formatFileSize(1548576)` | `packages/core/src/utils/formatters.ts` |
-| `slugify(text)` | Converts text to URL-friendly slug | `slugify("Wireless Noise Canceling")` | `packages/core/src/utils/string.ts` |
-| `capitalize(text)` | Capitalizes first letter of string | `capitalize("active")` | `packages/core/src/utils/string.ts` |
-| `truncate(text, max, suffix?)` | Truncates string with trailing ellipsis | `truncate(productName, 30)` | `packages/core/src/utils/string.ts` |
-| `countWords(text)` | Counts words in a string by whitespace delimiters | `countWords("Hello world")` | `packages/core/src/utils/string.ts` |
-| `trimToWordCount(text, maxWords)` | Trims string to specified max word count | `trimToWordCount("One two three", 2)` | `packages/core/src/utils/string.ts` |
-| `copyToClipboard(text)` | Asynchronous clipboard copy with fallback | `await copyToClipboard("SKU-12345")` | `packages/core/src/utils/dom.ts` |
-
+| Utility Function                   | Description                                           | Example Usage                                                | Source File                             |
+| :--------------------------------- | :---------------------------------------------------- | :----------------------------------------------------------- | :-------------------------------------- |
+| `cn(...classes)`                   | Tailwind CSS class merge + conditional joiner         | `cn("p-4", isDark && "bg-black")`                            | `packages/core/src/utils/cn.ts`         |
+| `formatCurrency(val, opts?)`       | Localized currency formatting (USD, EUR, etc.)        | `formatCurrency(129.99, { currency: "USD" })`                | `packages/core/src/utils/formatters.ts` |
+| `formatNumber(val, opts?)`         | Localized number formatting with notation (e.g. 1.2K) | `formatNumber(12500, { notation: "compact" })`               | `packages/core/src/utils/formatters.ts` |
+| `formatDate(date, opts?, locale?)` | Localized date formatting                             | `formatDate(new Date(), { month: "short", day: "numeric" })` | `packages/core/src/utils/formatters.ts` |
+| `formatRelativeTime(date, base?)`  | Relative human-readable time ("5 mins ago")           | `formatRelativeTime("2026-08-24T10:00:00Z")`                 | `packages/core/src/utils/formatters.ts` |
+| `formatFileSize(bytes, dec?)`      | Human-readable file sizes ("1.5 MB")                  | `formatFileSize(1548576)`                                    | `packages/core/src/utils/formatters.ts` |
+| `slugify(text)`                    | Converts text to URL-friendly slug                    | `slugify("Wireless Noise Canceling")`                        | `packages/core/src/utils/string.ts`     |
+| `capitalize(text)`                 | Capitalizes first letter of string                    | `capitalize("active")`                                       | `packages/core/src/utils/string.ts`     |
+| `truncate(text, max, suffix?)`     | Truncates string with trailing ellipsis               | `truncate(productName, 30)`                                  | `packages/core/src/utils/string.ts`     |
+| `countWords(text)`                 | Counts words in a string by whitespace delimiters     | `countWords("Hello world")`                                  | `packages/core/src/utils/string.ts`     |
+| `copyToClipboard(text)`            | Asynchronous clipboard copy with fallback             | `await copyToClipboard("SKU-12345")`                         | `packages/core/src/utils/dom.ts`        |
+| `normalizeAccept(accept)`          | Normalizes file presets, extensions, and array inputs | `normalizeAccept(["image", ".pdf"])`                         | `packages/core/src/utils/file.ts`       |
 
 ### Shared Hooks (`@admin/core`)
 
-| Hook | Description | Example Usage | Source File |
-| :--- | :--- | :--- | :--- |
+| Hook                                                | Description                                                                                                  | Example Usage                                                                                                                                           | Source File                                    |
+| :-------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------- |
 | `useQueryFilters(opts?)` / `useTableFilters(opts?)` | Bidirectional URL search query and filter state management with debounced search and clean parameter pruning | `const { filters, searchValue, setSearchValue, setFilter, resetFilters, isFiltered } = useQueryFilters({ defaultValues: { search: "", role: "all" } })` | `packages/core/src/hooks/use-query-filters.ts` |
-| `useDebounce(val, delay?)` | Debounces any rapidly changing value by specified milliseconds (default 300ms) | `const debouncedSearch = useDebounce(searchTerm, 300)` | `packages/core/src/hooks/use-debounce.ts` |
-| `useActiveUrl()` | Detects active path and matches route patterns with router/location fallback | `const { isActivePath } = useActiveUrl()` | `packages/core/src/hooks/active-url.ts` |
-| `useTheme()` | Manages dark/light theme state and root document attribute | `const { theme, toggleTheme } = useTheme()` | `packages/core/src/hooks/theme.tsx` |
-
+| `useDebounce(val, delay?)`                          | Debounces any rapidly changing value by specified milliseconds (default 300ms)                               | `const debouncedSearch = useDebounce(searchTerm, 300)`                                                                                                  | `packages/core/src/hooks/use-debounce.ts`      |
+| `useActiveUrl()`                                    | Detects active path and matches route patterns with router/location fallback                                 | `const { isActivePath } = useActiveUrl()`                                                                                                               | `packages/core/src/hooks/active-url.ts`        |
+| `useTheme()`                                        | Manages dark/light theme state and root document attribute                                                   | `const { theme, toggleTheme } = useTheme()`                                                                                                             | `packages/core/src/hooks/theme.tsx`            |

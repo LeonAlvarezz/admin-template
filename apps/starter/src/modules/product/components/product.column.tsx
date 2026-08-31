@@ -156,8 +156,8 @@ export const createProductColumn = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Action" />
       ),
-      size: 80,
       enableHiding: false,
+      size: 120,
       enableSorting: false,
       cell: ({ row }) => {
         const product = row.original;

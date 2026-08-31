@@ -29,7 +29,7 @@ export function DataTableRowActions({
   return (
     <Menu
       as="div"
-      className={cn("relative flex items-center justify-center", className)}
+      className={cn("relative flex items-center gap-2", className)}
     >
       <div className="flex gap-2">
         {flatItems.map((action, index) => {
@@ -61,7 +61,7 @@ export function DataTableRowActions({
             as={Button}
             variant="ghost"
             size="sm"
-            className="ml-5 p-0.5 flex sticky top-0 right-0 items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
+            className="p-0.5 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <MoreIcon className="size-5" />
           </MenuButton>
