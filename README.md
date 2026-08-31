@@ -616,12 +616,57 @@ bun run check-types
 # Lint codebase
 bun run lint
 
+# Run all tests
+bun run test
+
 # Build all applications for production
 bun run build
 ```
 
 ---
 
+## Production Containers
+
+Build both images from the repository root. The frontend API URL is public build-time configuration:
+
+```bash
+docker build \
+  -f apps/starter/Dockerfile \
+  --build-arg VITE_API_BASE_URL=https://api.example.com \
+  -t admin-template-frontend .
+
+docker build \
+  -f apps/backend/Dockerfile \
+  -t admin-template-backend .
+```
+
+Deploy the frontend and backend on HTTPS origins such as `https://admin.example.com` and `https://api.example.com`. Configure the backend with:
+
+```dotenv
+NODE_ENV=production
+PORT=3333
+CORS_ORIGINS=https://admin.example.com
+TRUST_PROXY_HOPS=1
+```
+
+`CORS_ORIGINS` accepts a comma-separated list of exact origins. Do not use `*` with credentialed requests. `TRUST_PROXY_HOPS=1` assumes one controlled reverse proxy that overwrites forwarded headers; use `0` when the API is directly exposed.
+
+The frontend sends requests with credentials, and Better Auth uses the same validated `CORS_ORIGINS` allowlist. Keep production cookie attributes aligned with the deployed HTTPS domains. Sibling subdomains are cross-origin but same-site; unrelated top-level domains require an explicit `SameSite=None; Secure` and CSRF review.
+
+Run migrations as a separate release step before starting the new backend image:
+
+```bash
+bun run db:migrate
+```
+
+Health endpoints:
+
+- Frontend: `GET /healthz`
+- Backend: `GET /api/health-check`
+
+TLS certificates, HSTS policy, DNS, secrets, image publishing, and rollout orchestration belong to the deployment platform and are intentionally outside these images.
+
+---
+
 ## 📄 License
 MIT
-

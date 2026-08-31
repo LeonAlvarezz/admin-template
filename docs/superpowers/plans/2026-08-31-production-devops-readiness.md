@@ -154,6 +154,7 @@ git commit -m "ci: make repository quality gates runnable"
 - Create: `apps/backend/src/config/cors.ts`
 - Create: `apps/backend/test/security-config.test.ts`
 - Modify: `apps/backend/src/config/env.ts`
+- Modify: `apps/backend/src/lib/auth.ts`
 - Modify: `apps/backend/src/loaders/loader.ts`
 - Modify: `apps/backend/.env.example`
 - Modify: `apps/backend/package.json`
@@ -193,6 +194,15 @@ function validateOrigin(
 }
 
 describe("production HTTP security configuration", () => {
+  test("Better Auth shares the validated CORS origin allowlist", async () => {
+    const authSource = await Bun.file(
+      new URL("../src/lib/auth.ts", import.meta.url),
+    ).text();
+
+    expect(authSource).toContain('import { env } from "@/config";');
+    expect(authSource).toContain("trustedOrigins: env.CORS_ORIGINS");
+  });
+
   test("normalizes a comma-separated exact-origin allowlist", () => {
     expect(
       corsOriginsSchema.parse(
@@ -336,7 +346,7 @@ Run:
 bun test apps/backend/test/security-config.test.ts
 ```
 
-Expected: 6 tests pass.
+Expected: 7 tests pass.
 
 - [ ] **Step 5: Install Helmet from the root workspace**
 
@@ -383,6 +393,14 @@ Add to `apps/backend/.env.example`:
 ```dotenv
 CORS_ORIGINS=http://localhost:5173
 TRUST_PROXY_HOPS=0
+```
+
+Use the same validated allowlist for Better Auth in `apps/backend/src/lib/auth.ts`:
+
+```ts
+import { env } from "@/config";
+
+trustedOrigins: env.CORS_ORIGINS,
 ```
 
 - [ ] **Step 7: Verify backend security code**
@@ -463,7 +481,7 @@ COPY apps/starter apps/starter
 COPY packages/core packages/core
 COPY packages/types packages/types
 COPY packages/typescript-config packages/typescript-config
-RUN bun --cwd apps/starter run build
+RUN bun run --cwd apps/starter build
 
 FROM nginx:alpine AS runtime
 COPY apps/starter/nginx.conf /etc/nginx/conf.d/default.conf
@@ -565,12 +583,12 @@ COPY packages/core/package.json packages/core/package.json
 COPY packages/eslint-config/package.json packages/eslint-config/package.json
 COPY packages/types/package.json packages/types/package.json
 COPY packages/typescript-config/package.json packages/typescript-config/package.json
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --filter express-template
 
 FROM dependencies AS build
 COPY apps/backend apps/backend
 COPY packages/types packages/types
-RUN bun --cwd apps/backend run build
+RUN bun run --cwd apps/backend build
 
 FROM base AS production-dependencies
 COPY package.json bun.lock ./
@@ -580,7 +598,7 @@ COPY packages/core/package.json packages/core/package.json
 COPY packages/eslint-config/package.json packages/eslint-config/package.json
 COPY packages/types/package.json packages/types/package.json
 COPY packages/typescript-config/package.json packages/typescript-config/package.json
-RUN bun install --frozen-lockfile --production
+RUN bun install --frozen-lockfile --production --filter express-template
 
 FROM oven/bun:1.3.9-alpine AS runtime
 WORKDIR /app
