@@ -161,8 +161,8 @@ git commit -m "ci: make repository quality gates runnable"
 - Delete: `apps/backend/bun.lock`
 
 **Interfaces:**
-- Produces: `httpOriginSchema: ZodType<string>` which validates and normalizes one origin.
-- Produces: `corsOriginsSchema: ZodType<string[]>` which parses comma-separated origins.
+- Produces: `httpOriginSchema: ZodType<string>` in `cors.ts`, which validates and normalizes one origin.
+- Produces: `corsOriginsSchema: ZodType<string[]>` in `cors.ts`, which parses comma-separated origins.
 - Produces: callable `createCorsOriginValidator(allowedOrigins: readonly string[]): CorsOriginValidator`.
 - Extends: `env.CORS_ORIGINS: string[]` and `env.TRUST_PROXY_HOPS: number`.
 - Consumes: Express `cors` origin callback and Helmet middleware.
@@ -173,17 +173,21 @@ Create `apps/backend/test/security-config.test.ts`:
 
 ```ts
 import { describe, expect, test } from "bun:test";
-import { createCorsOriginValidator } from "../src/config/cors";
-import { corsOriginsSchema, httpOriginSchema } from "../src/config/env";
+import {
+  corsOriginsSchema,
+  createCorsOriginValidator,
+  httpOriginSchema,
+  trustProxyHopsSchema,
+} from "../src/config/cors";
 
 function validateOrigin(
   validator: ReturnType<typeof createCorsOriginValidator>,
   origin?: string,
 ) {
-  return new Promise<boolean | string | undefined>((resolve, reject) => {
+  return new Promise<boolean>((resolve, reject) => {
     validator(origin, (error, allowed) => {
       if (error) return reject(error);
-      resolve(allowed);
+      resolve(allowed === true);
     });
   });
 }
@@ -195,6 +199,12 @@ describe("production HTTP security configuration", () => {
         " https://admin.example.com/,http://localhost:5173 ",
       ),
     ).toEqual(["https://admin.example.com", "http://localhost:5173"]);
+  });
+
+  test("defaults to the local frontend origin", () => {
+    expect(corsOriginsSchema.parse(undefined)).toEqual([
+      "http://localhost:5173",
+    ]);
   });
 
   test("rejects URLs that are not HTTP origins", () => {
@@ -222,13 +232,15 @@ describe("production HTTP security configuration", () => {
     expect(await validateOrigin(validate)).toBe(true);
   });
 
-  test("rejects unconfigured browser origins", async () => {
+  test("rejects unconfigured origins and invalid proxy hops", async () => {
     const validate = createCorsOriginValidator([
       "https://admin.example.com",
     ]);
     await expect(
       validateOrigin(validate, "https://attacker.example"),
     ).rejects.toThrow("Origin not allowed by CORS");
+    expect(trustProxyHopsSchema.safeParse(-1).success).toBe(false);
+    expect(trustProxyHopsSchema.parse("1")).toBe(1);
   });
 });
 ```
@@ -245,7 +257,7 @@ Expected: FAIL because `src/config/cors.ts`, `corsOriginsSchema`, and `httpOrigi
 
 - [ ] **Step 3: Implement origin parsing and the callback**
 
-Export these schemas above `envSchema` in `apps/backend/src/config/env.ts`:
+Define these schemas in `apps/backend/src/config/cors.ts`:
 
 ```ts
 export const httpOriginSchema = z
@@ -270,19 +282,15 @@ export const httpOriginSchema = z
 
 export const corsOriginsSchema = z
   .string()
+  .prefault("http://localhost:5173")
   .transform((value) => value.split(","))
   .pipe(z.array(httpOriginSchema).min(1))
   .transform((origins) => [...new Set(origins)]);
+
+export const trustProxyHopsSchema = z.coerce.number().int().min(0).default(0);
 ```
 
-Add these fields to `envSchema`:
-
-```ts
-CORS_ORIGINS: corsOriginsSchema.default("http://localhost:5173"),
-TRUST_PROXY_HOPS: z.coerce.number().int().min(0).default(0),
-```
-
-Create `apps/backend/src/config/cors.ts`:
+Add this callable type and validator below the schemas in `cors.ts`:
 
 ```ts
 type CorsOriginResult =
@@ -311,6 +319,15 @@ export function createCorsOriginValidator(
 }
 ```
 
+Then add these imports and fields to `apps/backend/src/config/env.ts`:
+
+```ts
+import { corsOriginsSchema, trustProxyHopsSchema } from "./cors";
+
+CORS_ORIGINS: corsOriginsSchema,
+TRUST_PROXY_HOPS: trustProxyHopsSchema,
+```
+
 - [ ] **Step 4: Run the focused test and confirm it passes**
 
 Run:
@@ -319,14 +336,14 @@ Run:
 bun test apps/backend/test/security-config.test.ts
 ```
 
-Expected: 5 tests pass.
+Expected: 6 tests pass.
 
 - [ ] **Step 5: Install Helmet from the root workspace**
 
 Delete the obsolete nested `apps/backend/bun.lock`, then run:
 
 ```bash
-bun --filter express-template add helmet
+bun add helmet --filter express-template
 ```
 
 Expected: `helmet` is in backend dependencies and the root `bun.lock` is updated; no app-local lockfile remains.
@@ -374,7 +391,7 @@ Run:
 
 ```bash
 bun test apps/backend/test/security-config.test.ts
-bun --cwd apps/backend run check-types
+bun run --cwd apps/backend check-types
 bun run lint
 git diff --check
 ```

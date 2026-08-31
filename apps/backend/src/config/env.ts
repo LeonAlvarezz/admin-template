@@ -1,5 +1,6 @@
 // env.ts
 import { z } from "zod";
+import { corsOriginsSchema, trustProxyHopsSchema } from "./cors";
 
 // Define the schema as an object with all of the env
 // variables and their types
@@ -19,6 +20,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.string(),
+  CORS_ORIGINS: corsOriginsSchema,
+  TRUST_PROXY_HOPS: trustProxyHopsSchema,
 });
 
 // Validate `process.env` against our schema

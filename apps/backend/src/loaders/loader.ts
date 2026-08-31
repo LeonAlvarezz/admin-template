@@ -1,6 +1,7 @@
 import express from "express";
 import type { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import helmet from "helmet";
 import methodOverride from "method-override";
 import errorMiddleware from "@/core/middleware/error-middleware";
 import cookieParser from "cookie-parser";
@@ -8,20 +9,22 @@ import createHttpError from "http-errors";
 import { env } from "@/config";
 import { default as routeHandler } from "@/core/route-handler";
 import { ignoreFavicon } from "@/utils";
-import { toNodeHandler } from "better-auth/node";
-import { auth } from "@/lib/auth";
 import { responseWrapper } from "@/core/middleware/response";
+import { createCorsOriginValidator } from "@/config/cors";
 
 export default function expressLoader({ app }: { app: express.Application }) {
   // Security and parsing middleware
-  app.enable("trust proxy");
+  app.set("trust proxy", env.TRUST_PROXY_HOPS);
+  app.disable("x-powered-by");
 
   app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  );
+  app.use(
     cors({
-      origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        return callback(null, origin);
-      },
+      origin: createCorsOriginValidator(env.CORS_ORIGINS),
       credentials: true,
     }),
   );
