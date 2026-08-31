@@ -558,7 +558,7 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
     <WorkspaceTabsContext.Provider value={contextValue}>
       <div
         className={cn(
-          "bg-sidebar border-b border-border pt-2 px-1 sm:px-4 flex items-center justify-between gap-2 relative select-none shrink-0",
+          "bg-card border-b border-border pt-2 px-1 sm:px-4 flex items-center justify-between gap-2 relative select-none shrink-0",
           className,
         )}
       >

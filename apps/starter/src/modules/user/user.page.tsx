@@ -69,7 +69,7 @@ export function UserPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-100 text-center p-6 border border-border rounded-xl bg-sidebar">
+      <div className="flex flex-col items-center justify-center min-h-100 text-center p-6 border border-border rounded-xl bg-card">
         <div className="size-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mb-3">
           <span className="text-xl font-bold">!</span>
         </div>

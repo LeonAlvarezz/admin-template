@@ -136,7 +136,7 @@ function NavItemRoot({
           <MenuItems
             transition
             anchor={{ to: "right start", gap: 10 }}
-            className="z-50 min-w-44 rounded-lg border border-border/40 bg-sidebar p-2 shadow-lg text-popover-foreground transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-left"
+            className="z-50 min-w-44 rounded-lg border border-border/40 bg-card p-2 shadow-lg text-popover-foreground transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-left"
           >
             {label && (
               <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground border-b border-border/40 mb-1">
@@ -235,7 +235,6 @@ function NavItemRoot({
                 level={2}
               />
             ))}
-
           </ul>
         )}
       </li>

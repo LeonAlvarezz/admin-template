@@ -87,7 +87,7 @@ export function ModalBody({ className, ...props }: ModalBodyProps) {
 export function ModalFooter({ className, ...props }: ModalFooterProps) {
   return (
     <div
-      className={cn("flex  sm:items-center justify-end gap-3 pt-4", className)}
+      className={cn("flex sm:items-center justify-end gap-3 pt-4", className)}
       {...props}
     />
   );
@@ -141,7 +141,7 @@ function ModalRoot({
             <DialogPanel
               transition
               className={cn(
-                "relative w-full space-y-4 border border-border bg-sidebar rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition-all duration-200 ease-in-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none my-auto",
+                "relative w-full space-y-4 border border-border bg-popover rounded-xl text-foreground p-6 sm:p-8 shadow-2xl transition-all duration-200 ease-in-out data-closed:scale-95 data-closed:opacity-0 focus:outline-none my-auto",
                 sizeClasses[isFullscreen ? "full" : size],
                 className,
               )}

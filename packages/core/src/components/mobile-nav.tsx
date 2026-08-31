@@ -43,7 +43,7 @@ function MobileNav({
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-sidebar border-t border-border px-3 flex items-center justify-around shrink-0 z-30 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border px-3 flex items-center justify-around shrink-0 z-30 md:hidden">
         {dockItems.map((item) => {
           const hasSubItems = Boolean(item.items && item.items.length > 0);
           const isPopoverOpen = openPopoverId === item.id;
@@ -58,7 +58,7 @@ function MobileNav({
                       className="fixed inset-0 bg-black/40 z-40"
                       onClick={() => setOpenPopoverId(null)}
                     />
-                    <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-56 bg-sidebar border border-border/80 rounded-2xl p-2 shadow-2xl z-50 animate-in slide-in-from-bottom-2 duration-150">
+                    <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-56 bg-card border border-border/80 rounded-2xl p-2 shadow-2xl z-50 animate-in slide-in-from-bottom-2 duration-150">
                       <div className="px-3 py-1.5 border-b border-border/50 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
                         {item.label}
                       </div>

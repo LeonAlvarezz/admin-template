@@ -621,7 +621,7 @@ export function Select<T = any>({
         <ComboboxOptions
           transition
           className={cn(
-            "absolute top-full left-0 mt-1 z-50 w-full min-w-full max-h-60 overflow-y-auto rounded-lg border border-border bg-sidebar p-1 shadow-xl outline-none",
+            "absolute top-full left-0 mt-1 z-50 w-full min-w-full max-h-60 overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-xl outline-none",
             "transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 scroll-fade-y",
             dropdownClassName,
           )}

@@ -85,7 +85,7 @@ export function Drawer({
                 : undefined
             }
             className={cn(
-              "fixed bg-sidebar p-4 shadow-2xl transition duration-300 ease-out flex flex-col focus:outline-none",
+              "fixed bg-card p-4 shadow-2xl transition duration-300 ease-out flex flex-col focus:outline-none",
               positionClasses[side],
               className,
             )}

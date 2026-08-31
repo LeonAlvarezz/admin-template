@@ -35,7 +35,7 @@ export function VisitorBarChart() {
   );
 
   return (
-    <div className="rounded-xl border border-border bg-sidebar p-5 shadow-xs transition-all">
+    <div className="rounded-xl border border-border bg-card p-5 shadow-xs transition-all">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-4 border-b border-border/60">
         <div>
           <div className="flex items-center gap-2.5">
@@ -51,7 +51,7 @@ export function VisitorBarChart() {
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg bg-background p-1 border border-border/50 text-xs">
+        <div className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg p-1 border border-border/50 text-xs">
           <button
             type="button"
             onClick={() => setActiveSegment("all")}

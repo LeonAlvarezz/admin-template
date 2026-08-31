@@ -307,7 +307,7 @@ export function CommandSearch({
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24">
           <DialogPanel
             transition
-            className="w-full max-w-xl overflow-hidden rounded-xl border border-border/80 bg-sidebar shadow-2xl transition-all duration-200 data-closed:scale-95 data-closed:opacity-0 text-foreground"
+            className="w-full max-w-xl overflow-hidden rounded-xl border border-border/80 bg-card shadow-2xl transition-all duration-200 data-closed:scale-95 data-closed:opacity-0 text-foreground"
           >
             <Combobox onChange={handleSelect}>
               <div className="relative flex items-center border-b border-border/60 px-4">

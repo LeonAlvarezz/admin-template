@@ -174,7 +174,7 @@ function DataTableRoot<
       ) : null}
 
       {/* Main Table Shell */}
-      <div className="@container rounded-lg border border-border bg-card overflow-hidden shadow-xs">
+      <div className="@container rounded-lg border border-border bg-card/90 overflow-hidden shadow-xs">
         <div className="overflow-x-auto table-scrollbar">
           <table
             className="w-full table-fixed text-left text-sm text-foreground"
@@ -282,7 +282,9 @@ function DataTableRoot<
                       {emptyState ?? (
                         <>
                           <InboxIcon className="size-8 opacity-40" />
-                          <p className="text-sm font-medium">No results found.</p>
+                          <p className="text-sm font-medium">
+                            No results found.
+                          </p>
                         </>
                       )}
                     </div>

@@ -108,7 +108,7 @@
 - 2026-08-14T16:06Z [CODE] Installed `@svgr/core` & `@svgr/plugin-jsx` peer dependencies in `apps/starter` and `packages/core` to resolve `unplugin-icons` React JSX compiler pre-transform errors.
 - 2026-08-14T16:11Z [CODE] Installed `@iconify/json` across `packages/core` and `apps/starter` to enable offline build-time bundling with `unplugin-icons`.
 - 2026-08-14T17:34Z [CODE] Updated `ghost` button variant hover classes to `data-hover:bg-accent data-hover:text-accent-foreground` in `packages/core/src/components/ui/button.tsx`.
-- 2026-08-14T17:46Z [CODE] Fixed `<aside>` background in `packages/core/src/components/sidebar.tsx` from `bg-sidebar-accent` to `bg-sidebar`.
+- 2026-08-14T17:46Z [CODE] Fixed `<aside>` background in `packages/core/src/components/sidebar.tsx` from `bg-card-accent` to `bg-card`.
 - 2026-08-17T14:18Z [CODE] Updated `packages/core/src/components/ui/input.tsx` to use `InputProps<"input">` from `@headlessui/react` and pass `placeholder={placeholder}` directly.
 - 2026-08-17T14:32Z [CODE] Updated `Input` wrapper from `<label>` to `<div>` container supporting `startIcon` / `endIcon` slots.
 - 2026-08-17T14:47Z [CODE] Created `KbdKey` union type and key formatting map in `packages/core/src/components/ui/keyboard.tsx`.
@@ -141,8 +141,14 @@
 - 2026-08-19T17:53Z [CODE] Updated `ApiClient` in `apps/starter/src/libs/api-client.ts` with `ApiResponse<T>` envelope support, automatic `data.data` unwrapping on `success: true`, explicit `responseReturn: "envelope"`, and automatic `ApiClientError` throwing when `success: false`.
 - 2026-08-19T17:57Z [CODE] Fixed backend `error-middleware.ts` status code parsing when `error.status` is a string (e.g. Better Auth `APIError` `status: "UNAUTHORIZED"`), preventing Express `res.status()` runtime TypeError.
 
+## [DECISIONS]
+
+- 2026-08-31T14:48:00+07:00 [USER] Color-system consolidation keeps the existing electric blue as the single brand/action hue; design comparison remains in chat without opening a browser mockup.
+- 2026-08-31T14:55:00+07:00 [USER] Supersedes the proposed role-first token rename: keep the existing token names and define a strict usage/state guideline for them instead.
+
 ## [DISCOVERIES]
 
+- 2026-08-31T15:08:00+07:00 [CODE] Dark theme surface elevation was inverted: `card` was `oklch(0.26 ...)`, while `popover` was `0.19` and `accent` was `0.15`, so overlays and hover states rendered darker than their containing card; Select also used `bg-card` for its floating options surface instead of `bg-popover`.
 - 2026-08-29T17:42:00+07:00 [CODE] DataTable empty state appeared off-center on horizontally scrollable tables because `td[colSpan]` centered content across the full `table.getTotalSize()` width (e.g. 850px) rather than the visible card width (~500px). Fixed by marking table shell with `@container`, and setting the empty state wrapper to `sticky left-0 w-[100cqw] flex items-center justify-center`.
 - 2026-08-29T17:40:00+07:00 [CODE] Recharts BarChart in VisitorBarChart had negative left margin (`margin={{ left: -20 }}`), shifting Y-axis labels 20px outside SVG bounds and truncating leading digits (e.g. "1000", "2000" rendered as "000"). Fixed by setting `margin.left: 0`.
 - 2026-08-29T17:24:00+07:00 [CODE] Headless UI v2 Dialog creates an internal Transition with appear: false and initial: true when open is passed directly. On the first open, TransitionChild evaluates ce = initial && !appear as true, setting enabled to false and suppressing the enter animation (data-closed is omitted). On subsequent opens, initial is false so animations play. Wrapping Dialog in <Transition appear show={open}> ensures appear: true is passed, enabling transitions on first open.
@@ -204,6 +210,7 @@
 
 ## [OUTCOMES]
 
+- 2026-08-31T15:19:00+07:00 [CODE] Rebalanced only `popover` and `accent`: light accent is `oklch(0.95 0.015 255)`, dark popover is `oklch(0.29 0.028 266)`, and dark accent is `oklch(0.32 0.035 260)`; Select floating options now use `bg-popover`. Added a red-green theme elevation regression. Core lint/typecheck, all 89 core tests with a test-only icon stub, monorepo build, and `git diff --check` pass; direct Bun component tests remain blocked by the existing unresolved `~icons/boxicons/search` test alias.
 - 2026-08-31T10:45:27+07:00 [CODE] Replaced the dashboard's three metric wrappers in `apps/starter/src/routes/_authenticated/index.tsx` with shared `<Card padding="sm">` and `<Card.Title>` composition. Added a red-green dashboard regression test and ignored `apps/starter/test/**` in starter ESLint to match the core package's test convention. Dashboard/Card tests (7/7), changed-route lint, monorepo typecheck, and starter build pass; full starter lint remains blocked by nine unrelated existing errors.
 - 2026-08-31T10:37:06+07:00 [CODE] Corrected `Card` polymorphic typing in `packages/core/src/components/ui/card.tsx`: omitted the native `title` collision, replaced the invalid generic interface and `CardProps<any>` with a generic `ComponentPropsWithRef` type, and retained element-specific props/ref inference without explicit `any`. Card tests (6/6), core lint, monorepo typecheck, and build pass; starter build retains its existing large-chunk warning.
 - Package dependency syntax fixed for Bun.

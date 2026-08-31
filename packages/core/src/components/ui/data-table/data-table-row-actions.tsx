@@ -69,7 +69,7 @@ export function DataTableRowActions({
           <MenuItems
             transition
             anchor="bottom end"
-            className="z-50 min-w-36 rounded-md border border-border bg-sidebar p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+            className="z-50 min-w-36 rounded-md border border-border bg-card p-1 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
           >
             {remainingItems.map((action, index) => {
               const isDestructive = action.variant === "destructive";

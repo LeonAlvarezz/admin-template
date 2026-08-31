@@ -31,7 +31,7 @@ Before generating or refactoring any front-end UI code, agents **MUST** inspect 
    - Do **NOT** bypass `@admin/core` by writing inline HTML primitives or duplicating component logic inside feature modules in `apps/starter`.
 
 4. **Styling & Token Consistency**:
-   - Always use theme tokens from `packages/core/src/styles/main.css` (`bg-accent`, `text-accent-foreground`, `bg-sidebar`, `bg-popover`, `border-border`, etc.).
+   - Always use theme tokens from `packages/core/src/styles/main.css` (`bg-accent`, `text-accent-foreground`, `bg-card`, `bg-popover`, `border-border`, etc.).
    - Preserve hover/focus state conventions standardized across `@admin/core` (`bg-accent text-accent-foreground`).
 
 ---

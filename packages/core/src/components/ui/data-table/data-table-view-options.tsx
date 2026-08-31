@@ -37,7 +37,7 @@ export function DataTableViewOptions<TData extends Record<string, any> = any>({
       <MenuItems
         transition
         anchor="bottom end"
-        className="z-50 min-w-44 rounded-md border border-border bg-sidebar p-1.5 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+        className="z-50 min-w-44 rounded-md border border-border bg-card p-1.5 text-popover-foreground shadow-md transition duration-100 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
       >
         <div className="px-2 py-1 text-xs font-semibold text-muted-foreground capitalize tracking-wider">
           View columns

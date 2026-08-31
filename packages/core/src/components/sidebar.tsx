@@ -235,7 +235,7 @@ function SideBarUserMenu({
       <MenuItems
         transition
         anchor={{ to: "top start", gap: 12 }}
-        className="w-(--button-width) min-w-48 z-50 rounded-lg border border-border/40 bg-sidebar p-2 text-popover-foreground shadow-lg focus:outline-none transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-bottom"
+        className="w-(--button-width) min-w-48 z-50 rounded-lg border border-border/40 bg-card p-2 text-popover-foreground shadow-lg focus:outline-none transition duration-150 ease-out data-closed:scale-95 data-closed:opacity-0 origin-bottom"
       >
         {menuItems.length > 0 &&
           menuItems.map((item) => (
@@ -302,7 +302,7 @@ function SideBarRoot({
       {/* Desktop Sidebar */}
       <aside
         data-collapsed={isCollapsed}
-        className="hidden md:flex border-r-[0.5px] border-border z-10 text-foreground group h-svh shrink-0 flex-col w-80 data-[collapsed=true]:w-16 bg-sidebar data-[collapsed=true]:px-0 py-4 transition-all duration-200"
+        className="hidden md:flex border-r-[0.5px] border-border z-10 text-foreground group h-svh shrink-0 flex-col w-80 data-[collapsed=true]:w-16 bg-card data-[collapsed=true]:px-0 py-4 transition-all duration-200"
       >
         <div className="flex flex-col flex-1 gap-2 min-h-0">
           {children ? (

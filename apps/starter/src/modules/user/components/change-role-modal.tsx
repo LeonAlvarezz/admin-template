@@ -110,7 +110,7 @@ export function ChangeRoleModal({
 
         <ModalBody className="space-y-5">
           {/* Target User Info Summary */}
-          <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-sidebar">
+          <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card">
             {targetUser.image ? (
               <Avatar
                 src={targetUser.image}
