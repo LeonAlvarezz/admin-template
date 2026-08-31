@@ -80,7 +80,7 @@ export function TwoFactorSection({ twoFactorEnabled }: TwoFactorSectionProps) {
       });
 
       setTotpURI(data.totpURI);
-      setBackupCodes(data.backupCodes || []);
+      setBackupCodes(data.backupCodes);
 
       // Extract secret from totpURI (otpauth://totp/...?secret=XXXXX)
       try {

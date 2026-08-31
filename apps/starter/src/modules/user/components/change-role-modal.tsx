@@ -38,7 +38,7 @@ export function ChangeRoleModal({
 
   React.useEffect(() => {
     if (targetUser?.role) {
-      setRole(targetUser.role as USER_ROLE);
+      setRole(targetUser.role);
     } else {
       setRole(USER_ROLE.USER);
     }

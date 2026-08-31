@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 import tanstackRouter from "@tanstack/router-plugin/vite";
-import path from "path";
+import path from "node:path";
 
 export default defineConfig({
   plugins: [

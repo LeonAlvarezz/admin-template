@@ -9,5 +9,5 @@
     },
     "types": ["unplugin-icons/types/react", "vite/client"],
   },
-  "include": ["src", "src/main.tsx"],
+  "include": ["src", "src/main.tsx", "vite.config.ts"],
 }

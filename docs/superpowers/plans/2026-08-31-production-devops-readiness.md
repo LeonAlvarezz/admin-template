@@ -35,7 +35,7 @@
 - Modify: `apps/starter/src/modules/user/components/change-role-modal.tsx`
 
 **Interfaces:**
-- Produces: root `bun run test` command and a Bun preload resolving all `~icons/*` imports during tests.
+- Produces: root `bun run test` command and a Bun preload mocking all `~icons/*` imports declared by the shared icon barrel during tests.
 - Produces: a starter TypeScript project that includes `vite.config.ts`, allowing typed ESLint to parse it.
 - Preserves: existing auth, 2FA, and role behavior; lint edits remove only type-redundant fallbacks/assertions.
 
@@ -55,28 +55,27 @@ Expected: tests report unresolved `~icons/boxicons/search`; lint reports five st
 Create `test/setup.ts`:
 
 ```ts
-Bun.plugin({
-  name: "test-virtual-icons",
-  setup(build) {
-    build.onResolve({ filter: /^~icons\// }, (args) => ({
-      namespace: "test-virtual-icons",
-      path: args.path,
-    }));
+import { mock } from "bun:test";
 
-    build.onLoad(
-      { filter: /.*/, namespace: "test-virtual-icons" },
-      () => ({
-        contents: `
-          import { createElement } from "react";
-          export default function TestIcon(props) {
-            return createElement("svg", props);
-          }
-        `,
-        loader: "js",
-      }),
-    );
-  },
-});
+function TestIcon() {
+  return null;
+}
+
+const iconBarrel = await Bun.file(
+  new URL("../packages/core/src/components/ui/icons.tsx", import.meta.url),
+).text();
+
+const iconModules = new Set(
+  Array.from(iconBarrel.matchAll(/from "(~icons\/[^"]+)"/g), (match) =>
+    match[1],
+  ),
+);
+
+for (const iconModule of iconModules) {
+  mock.module(iconModule, () => ({
+    default: TestIcon,
+  }));
+}
 ```
 
 Create `bunfig.toml`:
@@ -98,6 +97,12 @@ In `apps/starter/tsconfig.json`, replace the `include` array with:
 
 ```json
 "include": ["src", "src/main.tsx", "vite.config.ts"]
+```
+
+In `apps/starter/vite.config.ts`, use the Node protocol import required by typed lint:
+
+```ts
+import path from "node:path";
 ```
 
 In `apps/starter/src/config/auth.ts`, change both role mappings to the already-required enum value:
@@ -137,7 +142,7 @@ Expected: every command exits `0`; all current tests pass, lint reports no error
 - [ ] **Step 5: Commit the quality-gate prerequisite**
 
 ```bash
-git add bunfig.toml test/setup.ts package.json apps/starter/tsconfig.json apps/starter/src/config/auth.ts apps/starter/src/modules/settings/components/two-factor-section.tsx apps/starter/src/modules/user/components/change-role-modal.tsx
+git add bunfig.toml test/setup.ts package.json apps/starter/tsconfig.json apps/starter/vite.config.ts apps/starter/src/config/auth.ts apps/starter/src/modules/settings/components/two-factor-section.tsx apps/starter/src/modules/user/components/change-role-modal.tsx docs/superpowers/plans/2026-08-31-production-devops-readiness.md
 git commit -m "ci: make repository quality gates runnable"
 ```
 

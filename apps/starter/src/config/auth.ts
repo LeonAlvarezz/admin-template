@@ -19,7 +19,7 @@ export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
         email: userResponse.email,
         name: userResponse.name,
         avatarUrl: userResponse.image ?? undefined,
-        role: userResponse.role ?? undefined,
+        role: userResponse.role,
       };
     } catch {
       queryClient.clear();
@@ -46,7 +46,7 @@ export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
       email: data.user.email,
       name: data.user.name,
       avatarUrl: data.user.image ?? undefined,
-      role: data.user.role ?? undefined,
+      role: data.user.role,
     };
   },
 
