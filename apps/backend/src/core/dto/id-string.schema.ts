@@ -1,7 +1,7 @@
-import z from "zod";
+import * as v from "valibot";
 
-export const IdStringSchema = z.object({
-  id: z.string().min(1, "ID is required"),
+export const IdStringSchema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, "ID is required")),
 });
 
-export type IdStringDto = z.infer<typeof IdStringSchema>;
+export type IdStringDto = v.InferOutput<typeof IdStringSchema>;

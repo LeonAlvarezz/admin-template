@@ -2,7 +2,7 @@ import { CriticalError, ErrorCode, Logger } from "@/lib";
 import { DrizzleError, DrizzleQueryError } from "drizzle-orm";
 import type { ErrorRequestHandler, Response } from "express";
 import { isHttpError } from "http-errors";
-import { ZodError } from "zod";
+import * as v from "valibot";
 // Do not try to remove unused params as it will result in the application return the error as HTML
 const errorMiddleware: ErrorRequestHandler = (
   error,
@@ -42,11 +42,12 @@ const errorMiddleware: ErrorRequestHandler = (
     errorMessage = error.message;
   }
 
-  if (error instanceof ZodError) {
-    const errorMessages = error.issues.map(
-      (issue) => `${issue.path.join(".")} is ${issue.message}`,
-    );
-    return res.error(errorMessages.join("\n"), statusCode);
+  if (v.isValiError(error)) {
+    const errorMessages = error.issues.map((issue) => {
+      const dotPath = v.getDotPath(issue);
+      return dotPath ? `${dotPath} is ${issue.message}` : issue.message;
+    });
+    return res.error(errorMessages.join("\n"), statusCode === 500 ? 400 : statusCode);
   }
 
   if (error instanceof DrizzleQueryError) {

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import * as v from "valibot";
 import {
   corsOriginsSchema,
   createCorsOriginValidator,
@@ -30,24 +31,25 @@ describe("production HTTP security configuration", () => {
 
   test("normalizes a comma-separated exact-origin allowlist", () => {
     expect(
-      corsOriginsSchema.parse(
+      v.parse(
+        corsOriginsSchema,
         " https://admin.example.com/,http://localhost:5173 ",
       ),
     ).toEqual(["https://admin.example.com", "http://localhost:5173"]);
   });
 
   test("defaults to the local frontend origin", () => {
-    expect(corsOriginsSchema.parse(undefined)).toEqual([
+    expect(v.parse(corsOriginsSchema, undefined)).toEqual([
       "http://localhost:5173",
     ]);
   });
 
   test("rejects URLs that are not HTTP origins", () => {
-    expect(httpOriginSchema.safeParse("ftp://admin.example.com").success).toBe(
+    expect(v.safeParse(httpOriginSchema, "ftp://admin.example.com").success).toBe(
       false,
     );
     expect(
-      httpOriginSchema.safeParse("https://admin.example.com/path").success,
+      v.safeParse(httpOriginSchema, "https://admin.example.com/path").success,
     ).toBe(false);
   });
 
@@ -75,7 +77,7 @@ describe("production HTTP security configuration", () => {
     await expect(
       validateOrigin(validate, "https://attacker.example"),
     ).rejects.toThrow("Origin not allowed by CORS");
-    expect(trustProxyHopsSchema.safeParse(-1).success).toBe(false);
-    expect(trustProxyHopsSchema.parse("1")).toBe(1);
+    expect(v.safeParse(trustProxyHopsSchema, -1).success).toBe(false);
+    expect(v.parse(trustProxyHopsSchema, "1")).toBe(1);
   });
 });

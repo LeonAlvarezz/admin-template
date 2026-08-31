@@ -1,18 +1,20 @@
 import { BadRequestException, InternalServerException } from "@/lib";
 import type { Request, Response, NextFunction } from "express";
-import { z, ZodError } from "zod";
+import * as v from "valibot";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function validateData(schema: z.ZodObject<any, any>) {
+export function validateData<
+  TSchema extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>(schema: TSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse(req.body);
+      req.body = v.parse(schema, req.body);
       next();
     } catch (error) {
-      if (error instanceof ZodError) {
-        const errorMessages = error.issues.map(
-          (issue) => `${issue.path.join(".")} is ${issue.message}`
-        );
+      if (v.isValiError(error)) {
+        const errorMessages = error.issues.map((issue) => {
+          const dotPath = v.getDotPath(issue);
+          return dotPath ? `${dotPath} is ${issue.message}` : issue.message;
+        });
 
         console.log("errorMessages:", errorMessages);
         throw new BadRequestException({
