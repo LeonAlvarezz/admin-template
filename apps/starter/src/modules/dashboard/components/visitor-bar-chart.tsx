@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@admin/core";
+import {
+  Button,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@admin/core";
 import type { ChartConfig } from "@admin/core";
 
 const visitorData = [
@@ -52,7 +57,8 @@ export function VisitorBarChart() {
         </div>
 
         <div className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg p-1 border border-border/50 text-xs">
-          <button
+          <Button
+            variant="barebone"
             type="button"
             onClick={() => setActiveSegment("all")}
             className={`px-2.5 py-1 rounded-md transition-all font-medium ${
@@ -62,8 +68,9 @@ export function VisitorBarChart() {
             }`}
           >
             All Traffic
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="barebone"
             type="button"
             onClick={() => setActiveSegment("desktop")}
             className={`px-2.5 py-1 rounded-md transition-all font-medium ${
@@ -73,8 +80,9 @@ export function VisitorBarChart() {
             }`}
           >
             Desktop
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="barebone"
             type="button"
             onClick={() => setActiveSegment("mobile")}
             className={`px-2.5 py-1 rounded-md transition-all font-medium ${
@@ -84,7 +92,7 @@ export function VisitorBarChart() {
             }`}
           >
             Mobile
-          </button>
+          </Button>
         </div>
       </div>
 

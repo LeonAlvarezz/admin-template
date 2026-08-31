@@ -55,10 +55,10 @@ function NativeSelectRoot({
   return (
     <div
       className={cn(
-        "relative flex items-center gap-2 rounded-md border border-border bg-muted/20 px-3 text-foreground transition-all input-focus",
+        "relative flex items-center gap-2 rounded-md border border-border px-3 text-foreground transition-all input-focus",
         invalid &&
           "border-destructive focus-within:border-destructive focus-within:ring-destructive/20",
-        disabled && "opacity-50 cursor-not-allowed bg-muted/20",
+        disabled && "opacity-50 cursor-not-allowed",
         sizeClasses[sizeVariant],
         containerClassName,
       )}

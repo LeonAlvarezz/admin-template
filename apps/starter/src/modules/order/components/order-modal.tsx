@@ -624,7 +624,7 @@ export function OrderModal({
             </div>
 
             {/* Live Financial Summary */}
-            <div className="p-4 rounded-lg border border-border bg-muted/20 space-y-2">
+            <div className="p-4 rounded-lg border border-border bg-card space-y-2">
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Subtotal</span>
                 <span className="font-medium text-foreground">
@@ -755,7 +755,7 @@ export function OrderModal({
             </div>
 
             {/* Financial Summary */}
-            <div className="p-4 rounded-lg border border-border bg-muted/20 space-y-2">
+            <div className="p-4 rounded-lg border border-border bg-card space-y-2">
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Subtotal</span>
                 <span className="font-medium text-foreground">

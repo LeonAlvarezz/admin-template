@@ -408,7 +408,7 @@ export function Select<T = any>({
         {searchable ? (
           <div
             className={cn(
-              "relative flex w-full items-center rounded-md border border-border bg-muted/20 text-foreground transition-all input-focus",
+              "relative flex w-full items-center rounded-md border border-border text-foreground transition-all input-focus",
               invalid &&
                 "border-destructive focus-within:border-destructive focus-within:ring-destructive/20",
               disabled && "opacity-50 cursor-not-allowed bg-muted/20",
