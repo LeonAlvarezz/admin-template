@@ -7,7 +7,12 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:seed": "bun --cwd apps/backend db:seed"
+    "db:migrate": "bun --cwd apps/backend db:migrate",
+    "db:push": "bun --cwd apps/backend db:push",
+    "db:reset": "bun --cwd apps/backend db:reset",
+    "db:seed": "bun --cwd apps/backend db:seed",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

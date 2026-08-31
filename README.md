@@ -9,15 +9,23 @@ A modern, high-performance monorepo admin template built with **React 19**, **Ty
 ```
 admin-template/
 ├── apps/
-│   └── starter/           # Frontend consumer application using @admin/core
+│   ├── starter/           # React 19 + TanStack Router frontend client
+│   └── backend/           # Express 5 + Drizzle ORM + Better Auth backend API
 ├── packages/
-│   └── core/              # Core framework package (@admin/core)
-└── package.json           # Workspace root dependencies & scripts
+│   ├── core/              # Core framework, UI components, layout, and styling (@admin/core)
+│   ├── types/             # Shared Valibot schemas, contracts, and TypeScript models (@admin/types)
+│   ├── eslint-config/     # Shared ESLint configuration (@admin/eslint-config)
+│   └── typescript-config/ # Shared TypeScript base configurations (@admin/typescript-config)
+├── docker-compose.yml     # Local PostgreSQL 16 container definition
+└── package.json           # Monorepo root scripts & workspace configuration
 ```
 
 - **Package Manager**: [Bun](https://bun.sh) (uses `workspace:*` dependency protocol).
 - **Monorepo Build System**: [Turborepo](https://turbo.build) for parallel builds and caching.
-- **Bundler & Compiler**: [Vite](https://vitejs.dev) with `@tailwindcss/vite` plugin and `unplugin-icons`.
+- **Frontend App (`apps/starter`)**: [React 19](https://react.dev), [Vite](https://vitejs.dev), [Tailwind CSS v4](https://tailwindcss.com), [TanStack Router](https://tanstack.com/router) (file-based routing), and [TanStack Query](https://tanstack.com/query).
+- **Backend API (`apps/backend`)**: [Express 5](https://expressjs.com), [Drizzle ORM](https://orm.drizzle.team) with PostgreSQL, [Better Auth](https://www.better-auth.com), and [Scalar API Reference](https://scalar.com) (`/docs`).
+- **Core Library (`packages/core`)**: Headless UI v2 primitives, compound sidebar & workspace tabs, and centralized OKLCH theme tokens.
+- **Type Library (`packages/types`)**: End-to-end schema validation using [Valibot](https://valibot.dev) shared between backend and frontend.
 
 ---
 
@@ -513,33 +521,102 @@ export function CustomCompoundSelect() {
 
 ---
 
-## 🛠️ Development & Commands
+## 🗄️ Database & Container (`docker-compose.yml`)
 
-### Prerequisites
+The backend requires a PostgreSQL database managed through **Drizzle ORM**. A turnkey PostgreSQL 16 Alpine container configuration is provided at the repository root ([`docker-compose.yml`](file:///Users/leonhong/Personal%20Project/admin-template/docker-compose.yml)).
+
+### Quick Database Commands
+
+```bash
+# Start PostgreSQL container in background (port 5432)
+bun docker:up
+# or: docker compose up -d
+
+# Run Drizzle database migrations
+bun db:migrate
+
+# Seed initial admin & standard accounts
+bun db:seed
+
+# Inspect database schema with Drizzle Studio
+bun --cwd apps/backend studio
+
+# Reset database (drops all tables & enum types)
+bun db:reset
+
+# Stop PostgreSQL container
+bun docker:down
+# or: docker compose down
+```
+
+---
+
+## 🔑 Default Seed Accounts
+
+Running `bun db:seed` provisions three pre-configured accounts from [`apps/backend/src/db/seed.ts`](file:///Users/leonhong/Personal%20Project/admin-template/apps/backend/src/db/seed.ts) with Better Auth credentials:
+
+| Role | Role Value (`USER_ROLE`) | Email | Password | Permissions & Capabilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **Super Admin** | `superAdmin` | `superadmin@example.com` | `12345678` | Full unrestricted access, role promotion/demotion, system configurations |
+| **Admin** | `admin` | `admin@example.com` | `12345678` | User management, product/order catalog administration |
+| **Standard User** | `user` | `user@example.com` | `12345678` | Standard authenticated profile access |
+
+---
+
+## ⚡ Backend API & Interactive Documentation (`apps/backend`)
+
+The backend is built with **Express 5**, **Better Auth**, and **Drizzle ORM**, following a clean Controller / Service / Repository pattern.
+
+- **Server Port**: `3333` (configurable via `.env`)
+- **API Base URL**: `http://localhost:3333/api`
+- **Interactive Scalar API Docs**: Open [http://localhost:3333/docs](http://localhost:3333/docs) in your browser while the backend is running to view live OpenAPI 3.0 specs, test endpoints, and inspect payload schemas.
+
+---
+
+## 🛠️ Development & Quickstart
+
+### 1. Prerequisites
 - [Bun](https://bun.sh) v1.1+
+- [Docker](https://www.docker.com/) & Docker Compose
 
-### Installation
+### 2. Installation & Setup
 ```bash
+# 1. Clone repository and install dependencies
+git clone https://github.com/LeonAlvarezz/admin-template.git
+cd admin-template
 bun install
+
+# 2. Configure environment variables
+cp apps/backend/.env.example apps/backend/.env
+cp apps/starter/.env.example apps/starter/.env
+
+# 3. Start PostgreSQL container
+bun docker:up
+
+# 4. Apply database migrations & seed default accounts
+bun db:migrate
+bun db:seed
 ```
 
-### Development
-Start all workspace apps in dev mode:
+### 3. Running Applications
 ```bash
+# Run full stack (backend on :3333, frontend on :5173) in parallel
 bun run dev
+
+# Or run individual apps:
+bun --cwd apps/backend dev     # Backend API
+bun --cwd apps/starter dev     # Frontend UI
 ```
 
-Or target the starter app directly:
+### 4. Verification & Quality Checks
 ```bash
-bun --cwd apps/starter dev
-```
-
-### Type Checking & Build
-```bash
-# Typecheck packages and apps
+# Type check all packages and applications
 bun run check-types
 
-# Production build
+# Lint codebase
+bun run lint
+
+# Build all applications for production
 bun run build
 ```
 
@@ -547,3 +624,4 @@ bun run build
 
 ## 📄 License
 MIT
+
