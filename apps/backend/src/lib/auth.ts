@@ -1,3 +1,4 @@
+import { env } from "@/config";
 import { db } from "@/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -12,11 +13,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:3000",
-  ],
+  trustedOrigins: env.CORS_ORIGINS,
   plugins: [
     openAPI(),
     twoFactor(),

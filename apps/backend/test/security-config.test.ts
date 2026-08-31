@@ -19,6 +19,15 @@ function validateOrigin(
 }
 
 describe("production HTTP security configuration", () => {
+  test("Better Auth shares the validated CORS origin allowlist", async () => {
+    const authSource = await Bun.file(
+      new URL("../src/lib/auth.ts", import.meta.url),
+    ).text();
+
+    expect(authSource).toContain('import { env } from "@/config";');
+    expect(authSource).toContain("trustedOrigins: env.CORS_ORIGINS");
+  });
+
   test("normalizes a comma-separated exact-origin allowlist", () => {
     expect(
       corsOriginsSchema.parse(
