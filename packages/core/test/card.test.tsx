@@ -2,13 +2,8 @@ import { describe, expect, it } from "bun:test";
 import React from "react";
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardAction,
   CardContent,
   CardBody,
-  CardFooter,
   cardVariants,
 } from "../src/components/ui/card";
 
@@ -32,7 +27,9 @@ describe("Card Component", () => {
     );
 
     expect(element.props.title).toBe("Revenue Overview");
-    expect(element.props.description).toBe("Monthly recurring revenue breakdown");
+    expect(element.props.description).toBe(
+      "Monthly recurring revenue breakdown",
+    );
     expect(element.props.action).toBe(actionNode);
   });
 
