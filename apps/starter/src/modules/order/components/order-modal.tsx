@@ -22,10 +22,10 @@ import {
   Tag,
   toast,
   TrashIcon,
-} from "@admin/core";
-import type { Color } from "@admin/core";
-import type { Order, OrderItem } from "@admin/types";
-import { ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
+} from "@z3/admin-core";
+import type { Color } from "@z3/admin-core";
+import type { Order, OrderItem } from "@z3/types";
+import { ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
 import { ORDER_ITEMS_POOL } from "../constant/mock_order";
 import { OrderStatusColor } from "@/modules/shared/status-color";
 

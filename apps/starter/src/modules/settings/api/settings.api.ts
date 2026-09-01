@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@admin/core";
+import { useAuth } from "@z3/admin-core";
 import { apiClient } from "@/libs/api-client";
 import type {
   ChangePassword,
   EnableTwoFactorResponse,
   SessionResponse,
   UpdateUserInfo,
-} from "@admin/types";
+} from "@z3/types";
 
 export const authKeys = {
   all: ["auth"] as const,

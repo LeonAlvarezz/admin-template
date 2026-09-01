@@ -1,5 +1,5 @@
-import type { Order, OrderItem } from "@admin/types";
-import { ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
+import type { Order, OrderItem } from "@z3/types";
+import { ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
 
 const CUSTOMERS = [
   {

@@ -4,8 +4,8 @@ import {
   Outlet,
   useNavigate,
 } from "@tanstack/react-router";
-import type { AuthContextValue } from "@admin/core";
-import { AdminLayout, ErrorState, NotFound, useAuth } from "@admin/core";
+import type { AuthContextValue } from "@z3/admin-core";
+import { AdminLayout, ErrorState, NotFound, useAuth } from "@z3/admin-core";
 import { navGroups } from "../config/navigation";
 
 export interface RouterContext {

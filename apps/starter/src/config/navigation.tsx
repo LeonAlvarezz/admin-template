@@ -1,6 +1,6 @@
 import React from "react";
-import type { NavGroupConfig } from "@admin/core";
-import { ProductIcon, OrderIcon, UsersIcon } from "@admin/core";
+import type { NavGroupConfig } from "@z3/admin-core";
+import { ProductIcon, OrderIcon, UsersIcon } from "@z3/admin-core";
 
 import DashboardIcon from "~icons/boxicons/dashboard-filled";
 import ShopIcon from "~icons/solar/cart-4-bold";

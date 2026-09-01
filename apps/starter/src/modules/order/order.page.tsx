@@ -1,5 +1,5 @@
-import { DataTable } from "@admin/core";
-import type { Order } from "@admin/types";
+import { DataTable } from "@z3/admin-core";
+import type { Order } from "@z3/types";
 import { SAMPLE_ORDERS } from "./constant/mock_order";
 import { useState } from "react";
 import { createOrderColumn } from "./components/order.column";

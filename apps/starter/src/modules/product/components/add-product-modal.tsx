@@ -14,10 +14,10 @@ import {
   slugify,
   Textarea,
   toast,
-} from "@admin/core";
-import type { UploadFileItem } from "@admin/core";
-import { PRODUCT_STATUS } from "@admin/types";
-import type { Product } from "@admin/types";
+} from "@z3/admin-core";
+import type { UploadFileItem } from "@z3/admin-core";
+import { PRODUCT_STATUS } from "@z3/types";
+import type { Product } from "@z3/types";
 
 export interface ProductFormData {
   name: string;

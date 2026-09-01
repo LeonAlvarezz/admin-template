@@ -22,7 +22,7 @@ import {
   Tag,
   copyToClipboard,
   toast,
-} from "@admin/core";
+} from "@z3/admin-core";
 import { getErrorMessage } from "@/libs/api-client";
 import {
   useDisableTwoFactorMutation,

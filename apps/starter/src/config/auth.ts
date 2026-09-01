@@ -1,5 +1,5 @@
-import type { UserProfile } from "@admin/core";
-import { SessionAuthStrategy } from "@admin/core";
+import type { UserProfile } from "@z3/admin-core";
+import { SessionAuthStrategy } from "@z3/admin-core";
 import { apiClient } from "@/libs/api-client";
 import { queryClient } from "@/libs/query-client";
 import type {
@@ -7,7 +7,7 @@ import type {
   SignInEmail,
   SignInEmailResponse,
   SignInEmailTotpRedirectResponse,
-} from "@admin/types";
+} from "@z3/types";
 
 export const authStrategy: SessionAuthStrategy = new SessionAuthStrategy({
   onInitialize: async () => {

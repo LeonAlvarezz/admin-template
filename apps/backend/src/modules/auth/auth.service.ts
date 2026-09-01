@@ -8,7 +8,7 @@ import type {
   UpdateUserInfo,
   VerifyBackupCode,
   VerifyTotp,
-} from "@admin/types";
+} from "@z3/types";
 
 export class AuthService {
   async signInEmail(payload: SignInEmail, headers?: HeadersInit) {

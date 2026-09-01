@@ -13,9 +13,9 @@ import {
   NativeSelect,
   Tag,
   toast,
-} from "@admin/core";
-import { USER_ROLE } from "@admin/types";
-import type { User } from "@admin/types";
+} from "@z3/admin-core";
+import { USER_ROLE } from "@z3/types";
+import type { User } from "@z3/types";
 import { useUpdateUserRoleMutation } from "../api/user.api";
 import { getErrorMessage } from "@/libs/api-client";
 import UserRoleTag from "./user-role-tag";

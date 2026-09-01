@@ -1,5 +1,5 @@
 {
-  "name": "@admin/types",
+  "name": "@z3/types",
   "private": true,
   "type": "module",
   "version": "0.0.0",
@@ -14,7 +14,7 @@
     "valibot": "^1.4.2"
   },
   "devDependencies": {
-    "@admin/typescript-config": "workspace:*",
+    "@z3/typescript-config": "workspace:*",
     "better-auth": "^1.7.1",
     "typescript": "5.9.2"
   }

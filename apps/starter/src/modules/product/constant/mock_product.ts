@@ -1,5 +1,5 @@
-import type { Product} from "@admin/types";
-import { PRODUCT_STATUS } from "@admin/types";
+import type { Product} from "@z3/types";
+import { PRODUCT_STATUS } from "@z3/types";
 
 const BASE_PRODUCTS = [
   {

@@ -8,7 +8,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { enumToPgEnum } from "../common";
-import { PRODUCT_STATUS } from "@admin/types";
+import { PRODUCT_STATUS } from "@z3/types";
 
 export const productStatusEnum = pgEnum(
   "PRODUCT_STATUS",

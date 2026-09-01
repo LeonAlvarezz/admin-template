@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import type { ApiResult, UserProfile } from "../types";
 import type { AuthStrategy } from "./type";
-import type { SignInEmail } from "@admin/types";
+import type { SignInEmail } from "@z3/types";
 
 export interface AuthContextValue {
   user: UserProfile | null;

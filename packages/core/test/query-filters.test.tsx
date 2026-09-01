@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { sanitizeParams, useQueryFilters, useTableFilters } from "../src/hooks/use-query-filters";
 import { useDebounce } from "../src/hooks/use-debounce";
 import { ErrorState } from "../src/components/ui/error-state";
-import { safeValidateSearch, ListUsersQuerySchema, USER_ROLE } from "@admin/types";
+import { safeValidateSearch, ListUsersQuerySchema, USER_ROLE } from "@z3/types";
 
 describe("sanitizeParams", () => {
   it("removes undefined, null, and empty string values", () => {

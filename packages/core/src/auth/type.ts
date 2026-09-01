@@ -1,4 +1,4 @@
-import type { SignInEmail } from "@admin/types";
+import type { SignInEmail } from "@z3/types";
 import type { UserProfile } from "../types";
 
 export interface AuthStrategy {

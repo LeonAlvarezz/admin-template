@@ -1,5 +1,5 @@
 {
-  "name": "admin-template",
+  "name": "z3-admin",
   "private": true,
   "scripts": {
     "build": "turbo run build",

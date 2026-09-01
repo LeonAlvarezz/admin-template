@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { SignInEmailSchema } from "@admin/types";
+import { SignInEmailSchema } from "@z3/types";
 import {
   ArrowLeftIcon,
   Button,
@@ -14,7 +14,7 @@ import {
   ShieldCheckIcon,
   toast,
   useAuth,
-} from "@admin/core";
+} from "@z3/admin-core";
 import { apiClient, getErrorMessage } from "@/libs/api-client";
 import { queryClient } from "@/libs/query-client";
 import * as v from "valibot";

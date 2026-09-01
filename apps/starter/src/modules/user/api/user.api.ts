@@ -5,7 +5,7 @@ import type {
   SetRole,
   User,
   UsersListResponse,
-} from "@admin/types";
+} from "@z3/types";
 
 export const userKeys = {
   all: ["users"] as const,

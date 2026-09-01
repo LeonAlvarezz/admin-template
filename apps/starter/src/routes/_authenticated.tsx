@@ -6,7 +6,7 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
-import { AdminLayout, NotFound, useAuth } from "@admin/core";
+import { AdminLayout, NotFound, useAuth } from "@z3/admin-core";
 import { navGroups } from "../config/navigation";
 
 export const Route = createFileRoute("/_authenticated")({

@@ -15,7 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@admin/core": path.resolve(
+      "@z3/admin-core": path.resolve(
         __dirname,
         "../../packages/core/src/index.ts",
       ),

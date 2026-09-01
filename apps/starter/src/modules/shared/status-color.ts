@@ -1,5 +1,5 @@
-import type { Color } from "@admin/core";
-import type { ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
+import type { Color } from "@z3/admin-core";
+import type { ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
 
 export const PaymentStatusColor: Record<PAYMENT_STATUS, Color> = {
   failed: "red",

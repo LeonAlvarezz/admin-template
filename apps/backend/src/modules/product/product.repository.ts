@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { product } from "@/db/schema";
-import type { CreateProduct, UpdateProduct } from "@admin/types";
+import type { CreateProduct, UpdateProduct } from "@z3/types";
 import { asc, count, desc, eq, ilike, or } from "drizzle-orm";
 
 export interface FindAllProductsParams {

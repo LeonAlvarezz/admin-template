@@ -5,7 +5,7 @@ import {
   type CursorMeta,
   type CursorMetaProps,
   type CursorProps,
-} from "@admin/types";
+} from "@z3/types";
 import * as v from "valibot";
 export { dateToISOString } from "./date";
 

@@ -1,5 +1,5 @@
 {
-  "extends": "@admin/typescript-config/base.json",
+  "extends": "@z3/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "dist"
   },

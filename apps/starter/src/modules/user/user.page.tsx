@@ -9,9 +9,9 @@ import {
   SpinnerIcon,
   useAuth,
   useQueryFilters,
-} from "@admin/core";
-import { USER_ROLE } from "@admin/types";
-import type { ListUsersQuery, User } from "@admin/types";
+} from "@z3/admin-core";
+import { USER_ROLE } from "@z3/types";
+import type { ListUsersQuery, User } from "@z3/types";
 import { useUsersQuery } from "./api/user.api";
 import { createUserColumn } from "./components/user.column";
 import { ChangeRoleModal } from "./components/change-role-modal";

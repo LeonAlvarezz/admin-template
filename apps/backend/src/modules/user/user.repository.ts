@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { user } from "@/db/schema";
-import type { ListUsersQuery, USER_ROLE } from "@admin/types";
+import type { ListUsersQuery, USER_ROLE } from "@z3/types";
 import { and, desc, eq, ilike, or, sql, SQL } from "drizzle-orm";
 
 export class UserRepository {

@@ -8,7 +8,7 @@ import {
   type SetRole,
   type User,
   USER_ROLE,
-} from "@admin/types";
+} from "@z3/types";
 import { UserRepository } from "./user.repository";
 import {
   dateToISOString,

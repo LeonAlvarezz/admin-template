@@ -8,10 +8,10 @@ import {
   formatCurrency,
   formatDate,
   toast,
-} from "@admin/core";
-import type { DefaultDataTableFeatures } from "@admin/core";
-import { PRODUCT_STATUS } from "@admin/types";
-import type { Product } from "@admin/types";
+} from "@z3/admin-core";
+import type { DefaultDataTableFeatures } from "@z3/admin-core";
+import { PRODUCT_STATUS } from "@z3/types";
+import type { Product } from "@z3/types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 export const createProductColumn = ({

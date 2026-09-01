@@ -8,7 +8,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { enumToPgEnum } from "../common";
-import { ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
+import { ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
 import { user } from "./user.schema";
 import { product } from "./product.schema";
 

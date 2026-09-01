@@ -1,6 +1,6 @@
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { enumToPgEnum } from "../common";
-import { USER_ROLE } from "@admin/types";
+import { USER_ROLE } from "@z3/types";
 
 export const userRoleEnum = pgEnum("USER_ROLE", enumToPgEnum(USER_ROLE));
 

@@ -1,4 +1,4 @@
-import { Skeleton } from "@admin/core";
+import { Skeleton } from "@z3/admin-core";
 
 function SettingSkeleton() {
   return (

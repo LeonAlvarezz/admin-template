@@ -10,7 +10,7 @@ import {
   FieldLabel,
   Input,
   toast,
-} from "@admin/core";
+} from "@z3/admin-core";
 import { getErrorMessage } from "@/libs/api-client";
 import { useUpdateUserMutation } from "../api/settings.api";
 import type { UserProfileData } from "../constant/mock_settings";

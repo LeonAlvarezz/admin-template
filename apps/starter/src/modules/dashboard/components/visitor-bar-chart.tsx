@@ -5,8 +5,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@admin/core";
-import type { ChartConfig } from "@admin/core";
+} from "@z3/admin-core";
+import type { ChartConfig } from "@z3/admin-core";
 
 const visitorData = [
   { date: "Mon", desktop: 1420, mobile: 890 },

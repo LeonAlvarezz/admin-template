@@ -7,11 +7,11 @@ import {
   ConfirmModal,
   SearchIcon,
   PlusIcon,
-} from "@admin/core";
+} from "@z3/admin-core";
 import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
 import { createProductColumn } from "./components/product.column";
-import type { Product } from "@admin/types";
+import type { Product } from "@z3/types";
 import { SAMPLE_PRODUCTS } from "./constant/mock_product";
 
 function ProductPage() {

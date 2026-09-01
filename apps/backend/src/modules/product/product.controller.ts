@@ -4,7 +4,7 @@ import {
   CreateProductSchema,
   NumberIdSchema,
   UpdateProductSchema,
-} from "@admin/types";
+} from "@z3/types";
 import * as v from "valibot";
 import {
   BadRequestException,

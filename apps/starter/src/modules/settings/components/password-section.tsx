@@ -7,7 +7,7 @@ import {
   FieldLabel,
   InputPassword,
   toast,
-} from "@admin/core";
+} from "@z3/admin-core";
 import { getErrorMessage } from "@/libs/api-client";
 import { useChangePasswordMutation } from "../api/settings.api";
 

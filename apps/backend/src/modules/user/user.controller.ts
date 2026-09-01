@@ -5,7 +5,7 @@ import {
   ListUsersQuerySchema,
   SetRoleSchema,
   USER_ROLE,
-} from "@admin/types";
+} from "@z3/types";
 import * as v from "valibot";
 import { ForbiddenException, UnauthorizedException } from "@/lib";
 

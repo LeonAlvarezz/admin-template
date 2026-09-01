@@ -1,5 +1,5 @@
-import { Tag } from "@admin/core";
-import { USER_ROLE } from "@admin/types";
+import { Tag } from "@z3/admin-core";
+import { USER_ROLE } from "@z3/types";
 
 type UserRoleTagProps = {
   role: USER_ROLE;

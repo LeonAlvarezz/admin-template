@@ -3,7 +3,7 @@ import type {
   UpdateProduct,
   User,
   USER_ROLE,
-} from "@admin/types";
+} from "@z3/types";
 import {
   type FindAllProductsParams,
   ProductRepository,

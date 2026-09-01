@@ -1,7 +1,7 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { VisitorBarChart } from "../../modules/dashboard/components/visitor-bar-chart";
-import { Card } from "@admin/core";
+import { Card } from "@z3/admin-core";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: DashboardPage,
@@ -15,7 +15,7 @@ function DashboardPage() {
           Dashboard Overview
         </h1>
         <p className="text-muted-foreground text-sm mt-1">
-          Welcome to ZeroUI Admin layout powered by <code>@admin/core</code> and
+          Welcome to ZeroUI Admin layout powered by <code>@z3/admin-core</code> and
           TanStack Router file-based routing!
         </p>
       </div>

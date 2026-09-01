@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { UnauthorizedException } from "@/lib";
 import { fromNodeHeaders } from "better-auth/node";
 import type { NextFunction, Request, Response } from "express";
-import { USER_ROLE, type User } from "@admin/types";
+import { USER_ROLE, type User } from "@z3/types";
 
 declare global {
   namespace Express {

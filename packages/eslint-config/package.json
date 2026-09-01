@@ -1,5 +1,5 @@
 {
-  "name": "@admin/eslint-config",
+  "name": "@z3/eslint-config",
   "version": "0.0.0",
   "type": "module",
   "private": true,

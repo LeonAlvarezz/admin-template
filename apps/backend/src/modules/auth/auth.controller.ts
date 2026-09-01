@@ -9,7 +9,7 @@ import {
   UpdateUserInfoSchema,
   VerifyBackupCodeSchema,
   VerifyTotpSchema,
-} from "@admin/types";
+} from "@z3/types";
 import * as v from "valibot";
 import { UnauthorizedException } from "@/lib";
 

@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { user } from "@/db/schema";
 import { auth } from "@/lib";
-import { USER_ROLE } from "@admin/types";
+import { USER_ROLE } from "@z3/types";
 import { eq } from "drizzle-orm";
 
 const SEED_USERS = [

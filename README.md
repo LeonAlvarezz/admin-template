@@ -1,4 +1,4 @@
-# ZeroUI Admin Template & Architecture
+# Z3 Admin Template & Architecture
 
 A modern, high-performance monorepo admin template built with **React 19**, **TypeScript**, **Tailwind CSS v4**, **TanStack Router**, and **Headless UI v2**, powered by **Bun** and **Turborepo**.
 
@@ -7,15 +7,15 @@ A modern, high-performance monorepo admin template built with **React 19**, **Ty
 ## 🏗️ Monorepo Architecture
 
 ```
-admin-template/
+z3-admin/
 ├── apps/
 │   ├── starter/           # React 19 + TanStack Router frontend client
 │   └── backend/           # Express 5 + Drizzle ORM + Better Auth backend API
 ├── packages/
-│   ├── core/              # Core framework, UI components, layout, and styling (@admin/core)
-│   ├── types/             # Shared Valibot schemas, contracts, and TypeScript models (@admin/types)
-│   ├── eslint-config/     # Shared ESLint configuration (@admin/eslint-config)
-│   └── typescript-config/ # Shared TypeScript base configurations (@admin/typescript-config)
+│   ├── core/              # Core framework, UI components, layout, and styling (@z3/admin-core)
+│   ├── types/             # Shared Valibot schemas, contracts, and TypeScript models (@z3/types)
+│   ├── eslint-config/     # Shared ESLint configuration (@z3/eslint-config)
+│   └── typescript-config/ # Shared TypeScript base configurations (@z3/typescript-config)
 ├── docker-compose.yml     # Local PostgreSQL 16 container definition
 └── package.json           # Monorepo root scripts & workspace configuration
 ```
@@ -33,7 +33,7 @@ admin-template/
 
 ### Tailwind CSS v4 & Semantic Design Tokens
 
-- Managed centrally in `@admin/core` ([`packages/core/src/styles/main.css`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/styles/main.css)).
+- Managed centrally in `@z3/admin-core` ([`packages/core/src/styles/main.css`](file:///Users/leonhong/Personal%20Project/z3-admin/packages/core/src/styles/main.css)).
 - Uses **OKLCH color space** for high-contrast, accessible light & dark modes:
   - `--color-primary`, `--color-secondary`, `--color-accent`, `--color-muted`, `--color-destructive`.
   - Custom sidebar dark charcoal tokens (`#171a23`, `#232836`, `#3b82f6`).
@@ -45,7 +45,7 @@ admin-template/
 
 ---
 
-## 🧩 UI Components (`@admin/core`)
+## 🧩 UI Components (`@z3/admin-core`)
 
 | Component                               | Description                                                                                                                                                                                                  |
 | :-------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -74,7 +74,7 @@ admin-template/
 
 ## 🧭 Navigation & Router Architecture
 
-`@admin/core` is natively integrated with **TanStack Router** using **File-Based Routing** (`@tanstack/router-plugin`). `<NavItem>` directly renders TanStack's `<Link to={item.path}>` with `activeProps` for automatic active route highlights and route preloading.
+`@z3/admin-core` is natively integrated with **TanStack Router** using **File-Based Routing** (`@tanstack/router-plugin`). `<NavItem>` directly renders TanStack's `<Link to={item.path}>` with `activeProps` for automatic active route highlights and route preloading.
 
 ### 🌿 Nested Navigation (Sub-menus)
 
@@ -108,7 +108,7 @@ export const navGroups: NavGroupConfig[] = [
 For 90% of standard admin apps, pass `navGroups`, `user`, and `onSignOut` directly to `<AdminLayout>`:
 
 ```tsx
-import { AdminLayout } from "@admin/core";
+import { AdminLayout } from "@z3/admin-core";
 import { Outlet } from "@tanstack/react-router";
 import { navGroups } from "./config/navigation";
 
@@ -134,7 +134,7 @@ export default function App() {
 For applications requiring custom widgets (such as organization switchers or storage progress bars), compose `<SideBar>` compound components:
 
 ```tsx
-import { AdminLayout, SideBar } from "@admin/core";
+import { AdminLayout, SideBar } from "@z3/admin-core";
 import { Outlet } from "@tanstack/react-router";
 import ShieldIcon from "~icons/solar/shield-bold";
 
@@ -175,7 +175,7 @@ export function CustomApp() {
 
 ## 🔍 Command Search Palette (Cmd+K)
 
-`@admin/core` includes a built-in, accessible Command Search palette powered by `@headlessui/react` (`Dialog` and `Combobox`). It opens via global keyboard shortcut (`Cmd+K` / `Ctrl+K`) or by clicking the sidebar search bar.
+`@z3/admin-core` includes a built-in, accessible Command Search palette powered by `@headlessui/react` (`Dialog` and `Combobox`). It opens via global keyboard shortcut (`Cmd+K` / `Ctrl+K`) or by clicking the sidebar search bar.
 
 ### Features
 
@@ -192,7 +192,7 @@ You can extend the command search with custom actions in two ways:
 Pass custom command items or groups to `<AdminLayout />`:
 
 ```tsx
-import { AdminLayout } from "@admin/core";
+import { AdminLayout } from "@z3/admin-core";
 import PlusIcon from "~icons/solar/add-circle-bold";
 
 export function App() {
@@ -221,7 +221,7 @@ export function App() {
 Dynamically register actions inside any route or component. Commands automatically register when mounted and clean up when unmounted:
 
 ```tsx
-import { useRegisterCommands } from "@admin/core";
+import { useRegisterCommands } from "@z3/admin-core";
 import DownloadIcon from "~icons/solar/download-bold";
 
 export function ProductsPage() {
@@ -242,7 +242,7 @@ export function ProductsPage() {
 
 ---
 
-## 🔽 Select Component (`@admin/core`)
+## 🔽 Select Component (`@z3/admin-core`)
 
 `<Select>` is a fully accessible, high-performance dropdown and combobox component built on `@headlessui/react` v2. It eliminates the limitations of native `<select>` elements and custom dropdowns by unifying search filtering, multi-select tag chips, async remote data loading, grouped options, and compound markup.
 
@@ -264,7 +264,7 @@ Supports structured option objects (`SelectOption<T>`) or primitive strings/numb
 
 ```tsx
 import { useState } from "react";
-import { Select, type SelectOption } from "@admin/core";
+import { Select, type SelectOption } from "@z3/admin-core";
 
 const fruitOptions: SelectOption<string>[] = [
   { value: "apple", label: "Apple" },
@@ -297,7 +297,7 @@ export function BasicSelectDemo() {
 Enable `searchable={true}` to turn the select trigger into a live-filtering search input with instant keyboard autocomplete:
 
 ```tsx
-import { Select } from "@admin/core";
+import { Select } from "@z3/admin-core";
 
 const countryOptions = [
   {
@@ -347,7 +347,7 @@ Enable `multiple={true}` to allow selecting multiple values. Selected items appe
 
 ```tsx
 import { useState } from "react";
-import { Select } from "@admin/core";
+import { Select } from "@z3/admin-core";
 
 const roleOptions = [
   { value: "admin", label: "Admin" },
@@ -380,7 +380,7 @@ export function MultiSelectDemo() {
 Fetch options on-the-fly from a backend API or search endpoint. Includes automatic debouncing (default: 250ms) and loading spinner:
 
 ```tsx
-import { Select } from "@admin/core";
+import { Select } from "@z3/admin-core";
 
 export function AsyncSelectDemo() {
   return (
@@ -412,7 +412,7 @@ export function AsyncSelectDemo() {
 Group related options and render custom leading icons for each item or the select trigger:
 
 ```tsx
-import { Select, type SelectGroup } from "@admin/core";
+import { Select, type SelectGroup } from "@z3/admin-core";
 import AppleIcon from "~icons/solar/apple-bold";
 import CupIcon from "~icons/solar/cup-bold";
 
@@ -452,10 +452,10 @@ export function GroupedSelectDemo() {
 
 ### 6. Form Integration with `<Field>` & Validation
 
-Wrap `<Select>` inside `@admin/core`'s `<Field>` or connect with `@tanstack/react-form`:
+Wrap `<Select>` inside `@z3/admin-core`'s `<Field>` or connect with `@tanstack/react-form`:
 
 ```tsx
-import { Field, FieldLabel, FieldError, Select } from "@admin/core";
+import { Field, FieldLabel, FieldError, Select } from "@z3/admin-core";
 
 export function FormSelectExample({ field }: { field: any }) {
   const isInvalid =
@@ -489,7 +489,7 @@ export function FormSelectExample({ field }: { field: any }) {
 For fully customized menus, you can declare options directly as JSX children:
 
 ```tsx
-import { Select } from "@admin/core";
+import { Select } from "@z3/admin-core";
 
 export function CustomCompoundSelect() {
   return (
@@ -556,7 +556,7 @@ export function CustomCompoundSelect() {
 
 ## 🗄️ Database & Container (`docker-compose.yml`)
 
-The backend requires a PostgreSQL database managed through **Drizzle ORM**. A turnkey PostgreSQL 16 Alpine container configuration is provided at the repository root ([`docker-compose.yml`](file:///Users/leonhong/Personal%20Project/admin-template/docker-compose.yml)).
+The backend requires a PostgreSQL database managed through **Drizzle ORM**. A turnkey PostgreSQL 16 Alpine container configuration is provided at the repository root ([`docker-compose.yml`](file:///Users/leonhong/Personal%20Project/z3-admin/docker-compose.yml)).
 
 ### Quick Database Commands
 
@@ -586,7 +586,7 @@ bun docker:down
 
 ## 🔑 Default Seed Accounts
 
-Running `bun db:seed` provisions three pre-configured accounts from [`apps/backend/src/db/seed.ts`](file:///Users/leonhong/Personal%20Project/admin-template/apps/backend/src/db/seed.ts) with Better Auth credentials:
+Running `bun db:seed` provisions three pre-configured accounts from [`apps/backend/src/db/seed.ts`](file:///Users/leonhong/Personal%20Project/z3-admin/apps/backend/src/db/seed.ts) with Better Auth credentials:
 
 | Role              | Role Value (`USER_ROLE`) | Email                    | Password   | Permissions & Capabilities                                               |
 | :---------------- | :----------------------- | :----------------------- | :--------- | :----------------------------------------------------------------------- |
@@ -617,8 +617,8 @@ The backend is built with **Express 5**, **Better Auth**, and **Drizzle ORM**, f
 
 ```bash
 # 1. Clone repository and install dependencies
-git clone https://github.com/LeonAlvarezz/admin-template.git
-cd admin-template
+git clone https://github.com/LeonAlvarezz/z3-admin.git
+cd z3-admin
 bun install
 
 # 2. Configure environment variables
@@ -670,11 +670,11 @@ Build both images from the repository root. The frontend API URL is public build
 docker build \
   -f apps/starter/Dockerfile \
   --build-arg VITE_API_BASE_URL=https://api.example.com \
-  -t admin-template-frontend .
+  -t z3-admin-frontend .
 
 docker build \
   -f apps/backend/Dockerfile \
-  -t admin-template-backend .
+  -t z3-admin-backend .
 ```
 
 Deploy the frontend and backend on HTTPS origins such as `https://admin.example.com` and `https://api.example.com`. Configure the backend with:

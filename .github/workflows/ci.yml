@@ -56,12 +56,12 @@ jobs:
           docker build
           -f apps/starter/Dockerfile
           --build-arg VITE_API_BASE_URL=https://api.example.com
-          -t admin-template-frontend:ci
+          -t z3-admin-frontend:ci
           .
 
       - name: Build backend image
         run: >-
           docker build
           -f apps/backend/Dockerfile
-          -t admin-template-backend:ci
+          -t z3-admin-backend:ci
           .

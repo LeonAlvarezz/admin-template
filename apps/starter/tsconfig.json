@@ -1,5 +1,5 @@
 {
-  "extends": "@admin/typescript-config/react-library.json",
+  "extends": "@z3/typescript-config/react-library.json",
   "compilerOptions": {
     "noEmit": true,
     "jsx": "react-jsx",

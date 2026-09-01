@@ -9,9 +9,9 @@ import {
   formatCurrency,
   Tag,
   ViewIcon,
-} from "@admin/core";
-import type { Color, DefaultDataTableFeatures } from "@admin/core";
-import type { Order, ORDER_STATUS, PAYMENT_STATUS } from "@admin/types";
+} from "@z3/admin-core";
+import type { Color, DefaultDataTableFeatures } from "@z3/admin-core";
+import type { Order, ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 type Props = {
