@@ -23,7 +23,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   return (
     <CommandSearchProvider>
-      <div className="flex h-svh w-screen overflow-hidden bg-background text-foreground">
+      <div className="flex h-svh w-full max-w-full overflow-hidden bg-background text-foreground">
         {sidebar ? (
           sidebar
         ) : (

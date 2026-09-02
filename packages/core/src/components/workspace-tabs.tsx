@@ -241,7 +241,7 @@ export const WorkspaceTabsList: React.FC<WorkspaceTabsListProps> = ({
     <div
       ref={tabContainerRef}
       className={cn(
-        "flex items-center gap-1 scroll-fade-x overflow-x-auto overflow-y-hidden tab-scrollbar flex-1 pr-2",
+        "flex items-center gap-1 scroll-fade-x overflow-x-auto overflow-y-hidden scrollbar-none flex-1 pr-2",
         className,
       )}
     >
@@ -268,7 +268,7 @@ export const WorkspaceTabDropdown: React.FC<WorkspaceTabDropdownProps> = ({
   );
 
   return (
-    <Popover className={cn("relative shrink-0 pb-1", className)}>
+    <Popover className={cn("relative shrink-0 pb-1 ml-auto", className)}>
       {({ open, close }) => (
         <>
           <PopoverButton
@@ -276,16 +276,16 @@ export const WorkspaceTabDropdown: React.FC<WorkspaceTabDropdownProps> = ({
             variant="outline"
             size="sm"
             className={cn(
-              "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-all",
+              "h-8 px-2.5 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-all shrink-0 whitespace-nowrap",
               open
                 ? "bg-accent border-accent text-accent-foreground shadow-2xs font-semibold"
                 : "bg-background/80 hover:bg-accent border-border/80 text-muted-foreground hover:text-foreground",
             )}
             title="All Open Tabs"
           >
-            <TabIcon />
-            <span>{openTabs.length} Tabs</span>
-            <span className="text-[10px]">▾</span>
+            <TabIcon className="size-3.5 shrink-0" />
+            <span className="shrink-0">{openTabs.length} Tabs</span>
+            <span className="text-[10px] shrink-0">▾</span>
           </PopoverButton>
 
           {/* DROPDOWN MENU POPUP */}
@@ -558,7 +558,7 @@ export const WorkspaceTabs: WorkspaceTabsComponent = ({
     <WorkspaceTabsContext.Provider value={contextValue}>
       <div
         className={cn(
-          "bg-card border-b border-border pt-2 px-1 sm:px-4 flex items-center justify-between gap-2 relative select-none shrink-0",
+          "bg-card border-b border-border pt-2 px-2 sm:px-4 flex items-center justify-between gap-2 relative select-none shrink-0 min-w-0 w-full overflow-hidden",
           className,
         )}
       >

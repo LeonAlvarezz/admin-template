@@ -2,6 +2,7 @@
 
 ## [PLANS]
 
+- 2026-09-02T11:33:00+07:00 [CODE] Fixed 5 Tabs dropdown button clipping on mobile: replaced `w-screen` (100vw viewport blowout) with `w-full max-w-full` in `admin-layout.tsx`, added `px-2 sm:px-4` and `min-w-0` to `WorkspaceTabs`, and added `shrink-0 whitespace-nowrap ml-auto` on `WorkspaceTabDropdown` so the button is never pushed off-screen or clipped.
 - 2026-09-02T11:24:00+07:00 [CODE] Switched mock mode configuration from string `VITE_DATA_MODE` to boolean `VITE_ENABLE_MOCK=true|false` across `apps/starter/.env.example` and `api-client.ts`.
 - 2026-09-02T11:16:00+07:00 [CODE] Isolated mock architecture into standalone `apps/starter/src/mocks/` (`handlers.ts`, `data/users.ts`, `data/products.ts`, `data/orders.ts`) with lazy dynamic imports in `api-client.ts` gated by `VITE_ENABLE_MOCK=true`; decoupled UI modules (`order-modal.tsx` uses `useProductsQuery()`); deleted all scattered mock constants across feature modules (`mock_product.ts`, `mock_order.ts`, `mock_settings.ts`, `libs/mock/`). Mocks can now be deleted completely via `rm -rf src/mocks`.
 - 2026-09-02T11:11:00+07:00 [CODE] Cleaned up unnecessary type and non-null assertions across `apps/starter/src/libs/mock/mock-handlers.ts`: changed `handleMockRequest` return type to `Promise<any>`, returned concrete response payloads directly without `as unknown as T`, and eliminated redundant `!` non-null assertions.
