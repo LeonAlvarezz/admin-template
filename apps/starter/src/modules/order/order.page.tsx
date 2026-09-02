@@ -1,21 +1,29 @@
-import { DataTable } from "@z3/admin-core";
+import { DataTable, toast } from "@z3/admin-core";
 import type { Order } from "@z3/types";
-import { SAMPLE_ORDERS } from "./constant/mock_order";
 import { useState } from "react";
 import { createOrderColumn } from "./components/order.column";
 import { OrderModal } from "./components/order-modal";
+import { useOrdersQuery, useUpdateOrderMutation } from "./api/order.api";
 
 function OrderPage() {
-  const [orders, setOrders] = useState<Order[]>(SAMPLE_ORDERS);
+  const { data, isLoading } = useOrdersQuery();
+  const orders = data?.orders ?? [];
+  const updateOrderMutation = useUpdateOrderMutation();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"view" | "edit">("view");
 
-  const handleSaveOrder = (updatedOrder: Order) => {
-    setSelectedOrder(updatedOrder);
-    setOrders((prev) =>
-      prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)),
-    );
+  const handleSaveOrder = async (updatedOrder: Order) => {
+    try {
+      await updateOrderMutation.mutateAsync({
+        id: updatedOrder.id,
+        data: updatedOrder,
+      });
+      setSelectedOrder(updatedOrder);
+      toast.success(`Order #${updatedOrder.orderNumber} updated successfully`);
+    } catch {
+      toast.error("Failed to update order");
+    }
   };
 
   const columns = createOrderColumn({
@@ -45,7 +53,7 @@ function OrderPage() {
           </p>
         </div>
       </div>
-      <DataTable columns={columns} data={orders} />
+      <DataTable columns={columns} data={orders} loading={isLoading} />
 
       <OrderModal
         isOpen={isModalOpen}
@@ -59,3 +67,4 @@ function OrderPage() {
 }
 
 export default OrderPage;
+

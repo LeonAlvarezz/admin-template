@@ -1,14 +1,16 @@
 import type {
   CreateProduct,
+  ListProductsQuery,
   UpdateProduct,
   User,
   USER_ROLE,
 } from "@z3/types";
-import {
-  type FindAllProductsParams,
-  ProductRepository,
-} from "./product.repository";
+import { ProductRepository } from "./product.repository";
 import { auth, ForbiddenException, NotFoundException } from "@/lib";
+import {
+  dateToISOString,
+  processCursorResult,
+} from "@/utils/cursor-pagination";
 
 export class ProductService {
   private readonly productRepository: ProductRepository;
@@ -17,8 +19,25 @@ export class ProductService {
     this.productRepository = new ProductRepository();
   }
 
-  findAll(params?: FindAllProductsParams) {
-    return this.productRepository.findAll(params);
+  async cPaginate(filter: ListProductsQuery) {
+    const [data, total] = await Promise.all([
+      this.productRepository.cPaginate(filter),
+      this.productRepository.count(filter),
+    ]);
+
+    const products = data.map((item) => ({
+      ...item,
+      price: Number(item.price),
+      created_at: dateToISOString(item.createdAt),
+    }));
+
+    const cursorResult = processCursorResult(products, filter.limit ?? 20);
+
+    return {
+      products,
+      total,
+      meta: cursorResult.meta,
+    };
   }
 
   findById(id: number) {

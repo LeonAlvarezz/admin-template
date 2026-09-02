@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { CursorPaginationQuerySchema } from "./common";
+import { CursorMetaSchema, CursorPaginationQuerySchema } from "./common";
 
 export enum USER_ROLE {
   SUPER_ADMIN = "super_admin",
@@ -51,6 +51,7 @@ export type EnableTwoFactor = v.InferOutput<typeof EnableTwoFactorSchema>;
 export const UsersListResponseSchema = v.object({
   users: v.array(UserSchema),
   total: v.number(),
+  meta: v.optional(CursorMetaSchema),
 });
 
 export const SetRoleSchema = v.object({

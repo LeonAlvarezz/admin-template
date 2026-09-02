@@ -26,7 +26,7 @@ import {
 import type { Color } from "@z3/admin-core";
 import type { Order, OrderItem } from "@z3/types";
 import { ORDER_STATUS, PAYMENT_STATUS } from "@z3/types";
-import { ORDER_ITEMS_POOL } from "../constant/mock_order";
+import { useProductsQuery } from "@/modules/product/api/product.api";
 import { OrderStatusColor } from "@/modules/shared/status-color";
 
 export interface OrderModalProps {
@@ -109,6 +109,15 @@ export function OrderModal({
   const [selectedProductToAdd, setSelectedProductToAdd] = useState<
     number | null
   >(null);
+
+  const { data: productsData } = useProductsQuery(
+    { limit: 100 },
+    { enabled: isOpen },
+  );
+  const availableProducts = useMemo(
+    () => productsData?.products ?? [],
+    [productsData?.products],
+  );
 
   // Sync mode and items when order or modal state changes
   useEffect(() => {
@@ -240,15 +249,15 @@ export function OrderModal({
   };
 
   const handleAddItem = () => {
-    if (!selectedProductToAdd) return;
-    const poolItem = ORDER_ITEMS_POOL.find(
-      (p) => p.productId === selectedProductToAdd,
+    if (!selectedProductToAdd || !order) return;
+    const selectedProduct = availableProducts.find(
+      (p) => p.id === selectedProductToAdd,
     );
-    if (!poolItem) return;
+    if (!selectedProduct) return;
 
     // Check if item already exists in order
     const existingIndex = editableItems.findIndex(
-      (item) => item.productId === poolItem.productId,
+      (item) => item.productId === selectedProduct.id,
     );
 
     if (existingIndex >= 0) {
@@ -266,30 +275,30 @@ export function OrderModal({
           return item;
         }),
       );
-      toast.success(`Incremented quantity for "${poolItem.productName}"`);
+      toast.success(`Incremented quantity for "${selectedProduct.name}"`);
     } else {
       // Add new item
       const newItem: OrderItem = {
         id: Date.now(),
         orderId: order.id,
-        productId: poolItem.productId,
-        productName: poolItem.productName,
-        productImage: poolItem.productImage,
-        price: poolItem.price,
+        productId: selectedProduct.id,
+        productName: selectedProduct.name,
+        productImage: selectedProduct.image ?? null,
+        price: selectedProduct.price,
         quantity: 1,
-        subtotal: poolItem.price,
+        subtotal: selectedProduct.price,
         createdAt: new Date().toISOString(),
       };
       setEditableItems((prev) => [...prev, newItem]);
-      toast.success(`Added "${poolItem.productName}" to order`);
+      toast.success(`Added "${selectedProduct.name}" to order`);
     }
 
     setSelectedProductToAdd(null);
   };
 
-  const productSelectOptions = ORDER_ITEMS_POOL.map((p) => ({
-    label: `${p.productName} (${formatCurrency(p.price)})`,
-    value: p.productId,
+  const productSelectOptions = availableProducts.map((p) => ({
+    label: `${p.name} (${formatCurrency(p.price)})`,
+    value: p.id,
   }));
 
   const isEditMode = mode === "edit";

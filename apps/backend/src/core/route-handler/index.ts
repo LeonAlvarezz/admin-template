@@ -5,6 +5,7 @@ import {
   type Response,
 } from "express";
 import { authRoute } from "@/modules/auth/auth.route";
+import { orderRoute } from "@/modules/order/order.route";
 import { productRoute } from "@/modules/product/product.route";
 import { userRoute } from "@/modules/user/user.route";
 import { docsRoute } from "./docs.route";
@@ -60,6 +61,9 @@ export default () => {
 
   // Product Routes
   productRoute(app);
+
+  // Order Routes
+  orderRoute(app);
 
   // User Routes
   userRoute(app);

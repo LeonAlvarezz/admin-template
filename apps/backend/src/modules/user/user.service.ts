@@ -37,7 +37,7 @@ export class UserService {
     return {
       users,
       total,
-      ...cursorResult,
+      meta: cursorResult.meta,
     };
   }
 

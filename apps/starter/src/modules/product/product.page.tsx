@@ -12,10 +12,19 @@ import { ProductModal } from "./components/add-product-modal";
 import type { ProductFormData } from "./components/add-product-modal";
 import { createProductColumn } from "./components/product.column";
 import type { Product } from "@z3/types";
-import { SAMPLE_PRODUCTS } from "./constant/mock_product";
+import {
+  useProductsQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+} from "./api/product.api";
 
 function ProductPage() {
-  const [products, setProducts] = React.useState<Product[]>(SAMPLE_PRODUCTS);
+  const { data, isLoading } = useProductsQuery();
+  const products = data?.products ?? [];
+  const createProductMutation = useCreateProductMutation();
+  const updateProductMutation = useUpdateProductMutation();
+  const deleteProductMutation = useDeleteProductMutation();
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
@@ -26,38 +35,35 @@ function ProductPage() {
     null,
   );
 
-  const handleSaveProduct = (formData: ProductFormData) => {
-    const now = new Date().toISOString();
-    if (selectedProduct) {
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === selectedProduct.id
-            ? {
-                ...p,
-                ...formData,
-                updatedAt: now,
-              }
-            : p,
-        ),
-      );
-    } else {
-      const nextId =
-        products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
-      const newProduct: Product = {
-        id: nextId,
-        ...formData,
-        createdAt: now,
-        updatedAt: now,
-      };
-      setProducts((prev) => [newProduct, ...prev]);
+  const handleSaveProduct = async (formData: ProductFormData) => {
+    try {
+      if (selectedProduct) {
+        await updateProductMutation.mutateAsync({
+          id: selectedProduct.id,
+          data: formData,
+        });
+        toast.success(`Updated "${formData.name}" successfully`);
+      } else {
+        await createProductMutation.mutateAsync(formData);
+        toast.success(`Created "${formData.name}" successfully`);
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      toast.error("Failed to save product");
     }
   };
 
-  const handleDeleteProduct = () => {
+  const handleDeleteProduct = async () => {
     if (productToDelete) {
-      setProducts((prev) => prev.filter((p) => p.id !== productToDelete.id));
-      toast.warning(`Deleted product ${productToDelete.name}`);
-      setProductToDelete(null);
+      try {
+        await deleteProductMutation.mutateAsync(productToDelete.id);
+        toast.warning(`Deleted product "${productToDelete.name}"`);
+      } catch (error) {
+        toast.error("Failed to delete product");
+      } finally {
+        setProductToDelete(null);
+        setIsDeleteOpen(false);
+      }
     }
   };
 
@@ -92,10 +98,19 @@ function ProductPage() {
       <DataTable
         columns={columns}
         data={products}
+        loading={isLoading}
         toolbar={(table) => (
           <DataTable.Toolbar>
             <Input
               placeholder="Search products..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as
+                  | string
+                  | undefined) ?? ""
+              }
+              onChange={(e) =>
+                table.getColumn("name")?.setFilterValue(e.target.value)
+              }
               startIcon={<SearchIcon />}
               containerClassName="h-8"
               className="min-w-80"
@@ -138,3 +153,4 @@ function ProductPage() {
 }
 
 export default ProductPage;
+

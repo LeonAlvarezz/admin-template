@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ProductService } from "./product.service";
 import {
   CreateProductSchema,
+  ListProductsQuerySchema,
   NumberIdSchema,
   UpdateProductSchema,
 } from "@z3/types";
@@ -19,23 +20,17 @@ export class ProductController {
     this.productService = new ProductService();
   }
 
-  findAll = async (req: Request, res: Response, next: NextFunction) => {
+  cPaginate = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { search, page, limit, sortBy, sortOrder } = req.query;
-
-      const result = await this.productService.findAll({
-        search: search ? String(search) : undefined,
-        page: page ? Number(page) : undefined,
-        limit: limit ? Number(limit) : undefined,
-        sortBy: sortBy as "name" | "price" | "createdAt" | "stock",
-        sortOrder: sortOrder as "asc" | "desc",
-      });
-
+      const query = v.parse(ListProductsQuerySchema, req.query);
+      const result = await this.productService.cPaginate(query);
       res.success(result);
     } catch (error) {
       next(error);
     }
   };
+
+  findAll = this.cPaginate;
 
   findById = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -13,7 +13,7 @@ import {
 } from "@z3/admin-core";
 import { getErrorMessage } from "@/libs/api-client";
 import { useUpdateUserMutation } from "../api/settings.api";
-import type { UserProfileData } from "../constant/mock_settings";
+import type { UserProfileData } from "../constant/settings.constant";
 
 interface PersonalInfoSectionProps {
   user?: {

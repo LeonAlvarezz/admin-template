@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import { CursorMetaSchema, CursorPaginationQuerySchema } from "./common";
 
 export enum ORDER_STATUS {
   PENDING = "pending",
@@ -53,9 +54,9 @@ export const OrderSchema = v.object({
 export type Order = v.InferOutput<typeof OrderSchema>;
 
 export const CreateOrderItemSchema = v.object({
-  productId: v.optional(v.pipe(v.number(), v.integer())),
+  productId: v.optional(v.nullable(v.pipe(v.number(), v.integer()))),
   productName: v.pipe(v.string(), v.minLength(1, "Product name is required")),
-  productImage: v.optional(v.string()),
+  productImage: v.optional(v.nullable(v.string())),
   price: v.pipe(v.number(), v.minValue(0, "Price must be positive")),
   quantity: v.pipe(v.number(), v.integer(), v.minValue(1, "Quantity must be at least 1")),
   subtotal: v.pipe(v.number(), v.minValue(0)),
@@ -64,19 +65,19 @@ export const CreateOrderItemSchema = v.object({
 export type CreateOrderItem = v.InferOutput<typeof CreateOrderItemSchema>;
 
 export const CreateOrderSchema = v.object({
-  userId: v.optional(v.string()),
+  userId: v.optional(v.nullable(v.string())),
   customerName: v.pipe(v.string(), v.minLength(1, "Customer name is required")),
   customerEmail: v.pipe(v.string(), v.email("Invalid email format")),
-  customerPhone: v.optional(v.string()),
+  customerPhone: v.optional(v.nullable(v.string())),
   status: v.optional(v.enum(ORDER_STATUS), ORDER_STATUS.PENDING),
   paymentStatus: v.optional(v.enum(PAYMENT_STATUS), PAYMENT_STATUS.PENDING),
-  paymentMethod: v.optional(v.string(), "credit_card"),
+  paymentMethod: v.optional(v.nullable(v.string()), "credit_card"),
   subtotal: v.pipe(v.number(), v.minValue(0)),
   tax: v.optional(v.pipe(v.number(), v.minValue(0)), 0),
   shippingFee: v.optional(v.pipe(v.number(), v.minValue(0)), 0),
   totalAmount: v.pipe(v.number(), v.minValue(0)),
-  shippingAddress: v.optional(v.string()),
-  notes: v.optional(v.string()),
+  shippingAddress: v.optional(v.nullable(v.string())),
+  notes: v.optional(v.nullable(v.string())),
   items: v.pipe(v.array(CreateOrderItemSchema), v.minLength(1, "At least one item is required")),
 });
 
@@ -85,10 +86,41 @@ export type CreateOrder = v.InferOutput<typeof CreateOrderSchema>;
 export const UpdateOrderStatusSchema = v.object({
   status: v.optional(v.enum(ORDER_STATUS)),
   paymentStatus: v.optional(v.enum(PAYMENT_STATUS)),
-  notes: v.optional(v.string()),
+  notes: v.optional(v.nullable(v.string())),
 });
 
 export type UpdateOrderStatus = v.InferOutput<typeof UpdateOrderStatusSchema>;
 
-export const UpdateOrderSchema = v.partial(CreateOrderSchema);
+export const UpdateOrderSchema = v.object({
+  ...v.partial(CreateOrderSchema).entries,
+  items: v.optional(v.array(v.union([OrderItemSchema, CreateOrderItemSchema]))),
+});
 export type UpdateOrder = v.InferOutput<typeof UpdateOrderSchema>;
+
+export const ListOrdersQuerySchema = v.object({
+  ...CursorPaginationQuerySchema.entries,
+  search: v.optional(v.string()),
+  status: v.optional(v.enum(ORDER_STATUS)),
+  paymentStatus: v.optional(v.enum(PAYMENT_STATUS)),
+});
+
+export type ListOrdersQuery = {
+  search?: string;
+  status?: ORDER_STATUS;
+  paymentStatus?: PAYMENT_STATUS;
+  cursor?: string | null;
+  limit?: number;
+  order?: "asc" | "desc";
+};
+
+export const OrdersListResponseSchema = v.object({
+  orders: v.array(OrderSchema),
+  total: v.number(),
+  meta: v.optional(CursorMetaSchema),
+});
+
+export type OrdersListResponse = v.InferOutput<
+  typeof OrdersListResponseSchema
+>;
+
+

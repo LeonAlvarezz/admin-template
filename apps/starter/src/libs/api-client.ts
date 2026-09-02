@@ -369,6 +369,54 @@ export class ApiClient {
     url: string,
     config: ApiClientConfig,
   ): Promise<ApiClientResponse<T>> {
+    const isMockMode =
+      import.meta.env.VITE_ENABLE_MOCK === "true" ||
+      import.meta.env.VITE_ENABLE_MOCK === true;
+    if (isMockMode) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      try {
+        const { handleMockRequest } = await import("@/mocks/handlers");
+        const data = (await handleMockRequest<T>(url, config)) as T;
+        const apiResponse: ApiClientResponse<T> = {
+          config,
+          data,
+          headers: new Headers({ "content-type": "application/json" }),
+          response: new Response(JSON.stringify(data), {
+            status: 200,
+            statusText: "OK",
+          }),
+          status: 200,
+          statusText: "OK",
+          url,
+        };
+        return apiResponse;
+      } catch (mockErr: unknown) {
+        if (
+          mockErr &&
+          typeof mockErr === "object" &&
+          "status" in mockErr &&
+          typeof mockErr.status === "number"
+        ) {
+          const err = mockErr as {
+            status: number;
+            message?: string;
+            data?: unknown;
+          };
+          throw new ApiClientError({
+            config,
+            data: (err.data as T) ?? null,
+            message: err.message || "Mock Request Error",
+            response: new Response(JSON.stringify(err.data), {
+              status: err.status,
+              statusText: err.message || "Mock Request Error",
+            }),
+            url,
+          });
+        }
+        throw mockErr;
+      }
+    }
+
     const method = config.method?.toUpperCase() ?? "GET";
     const headers = new Headers(config.headers);
     const timeoutSignal = mergeSignals(

@@ -1,62 +1,43 @@
 import { db } from "@/db";
 import { product } from "@/db/schema";
-import type { CreateProduct, UpdateProduct } from "@z3/types";
-import { asc, count, desc, eq, ilike, or } from "drizzle-orm";
-
-export interface FindAllProductsParams {
-  search?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: "name" | "price" | "createdAt" | "stock";
-  sortOrder?: "asc" | "desc";
-}
+import type { CreateProduct, ListProductsQuery, UpdateProduct } from "@z3/types";
+import { and, asc, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 
 export class ProductRepository {
-  /**
-   * Find all products with optional search filter and pagination
-   */
-  async findAll(params: FindAllProductsParams = {}) {
-    const {
-      search,
-      page = 1,
-      limit = 10,
-      sortBy = "createdAt",
-      sortOrder = "desc",
-    } = params;
+  private buildFilter(filter: ListProductsQuery) {
+    const where: SQL[] = [];
+    if (filter.search && filter.search.trim() !== "") {
+      const searchPattern = `%${filter.search.trim()}%`;
+      const searchCondition = or(
+        ilike(product.name, searchPattern),
+        ilike(product.slug, searchPattern),
+        ilike(product.description, searchPattern),
+      );
+      if (searchCondition) where.push(searchCondition);
+    }
 
-    const offset = (page - 1) * limit;
+    if (filter.status) where.push(eq(product.status, filter.status));
+    return where;
+  }
 
-    const filter = search
-      ? or(
-          ilike(product.name, `%${search}%`),
-          ilike(product.slug, `%${search}%`),
-          ilike(product.description, `%${search}%`),
-        )
-      : undefined;
-
-    const sortColumn = product[sortBy] ?? product.createdAt;
-    const orderFn = sortOrder === "asc" ? asc : desc;
-
-    const items = await db
+  async cPaginate(filter: ListProductsQuery) {
+    const where = this.buildFilter(filter);
+    const orderFn = filter.order === "asc" ? asc : desc;
+    return await db
       .select()
       .from(product)
-      .where(filter)
-      .orderBy(orderFn(sortColumn))
-      .limit(limit)
-      .offset(offset);
+      .where(and(...where))
+      .limit(filter.limit ?? 20)
+      .orderBy(orderFn(product.createdAt));
+  }
 
+  async count(filter: ListProductsQuery) {
+    const where = this.buildFilter(filter);
     const [{ total }] = await db
-      .select({ total: count() })
+      .select({ total: sql<number>`count(*)::int` })
       .from(product)
-      .where(filter);
-
-    return {
-      items,
-      total: Number(total),
-      page,
-      limit,
-      totalPages: Math.ceil(Number(total) / limit),
-    };
+      .where(and(...where));
+    return total;
   }
 
   /**
