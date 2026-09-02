@@ -2,8 +2,13 @@
   "name": "z3-admin",
   "private": true,
   "scripts": {
+    "setup": "bun run scripts/setup.ts",
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:mock": "bun --cwd apps/starter dev",
+    "dev:full": "docker compose up -d && turbo run dev",
+    "dev:backend": "bun --cwd apps/backend dev",
+    "dev:frontend": "bun --cwd apps/starter dev",
     "lint": "turbo run lint",
     "test": "bun test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -16,6 +21,8 @@
     "docker:down": "docker compose down"
   },
   "devDependencies": {
+    "@clack/prompts": "^0.9.1",
+    "picocolors": "^1.1.1",
     "prettier": "^3.7.4",
     "turbo": "^2.10.9",
     "typescript": "5.9.2"

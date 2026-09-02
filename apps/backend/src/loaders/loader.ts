@@ -20,7 +20,7 @@ export default function expressLoader({ app }: { app: express.Application }) {
   app.use(
     helmet({
       contentSecurityPolicy: false,
-    }),
+    }) as unknown as express.RequestHandler,
   );
   app.use(
     cors({

@@ -14,6 +14,7 @@ z3-admin/
 ├── packages/
 │   ├── core/              # Core framework, UI components, layout, and styling (@z3/admin-core)
 │   ├── types/             # Shared Valibot schemas, contracts, and TypeScript models (@z3/types)
+│   ├── create-z3-admin/   # Scaffolding CLI for generating Mock/Fullstack projects
 │   ├── eslint-config/     # Shared ESLint configuration (@z3/eslint-config)
 │   └── typescript-config/ # Shared TypeScript base configurations (@z3/typescript-config)
 ├── docker-compose.yml     # Local PostgreSQL 16 container definition
@@ -608,40 +609,76 @@ The backend is built with **Express 5**, **Better Auth**, and **Drizzle ORM**, f
 
 ## 🛠️ Development & Quickstart
 
-### 1. Prerequisites
+### Option A: Create New Project via CLI (Recommended)
 
-- [Bun](https://bun.sh) v1.1+
-- [Docker](https://www.docker.com/) & Docker Compose
+Generate a clean new project with interactive choice between **Mock Data (Frontend Only)** and **Fullstack Monorepo**:
 
-### 2. Installation & Setup
+```bash
+# With Bun (recommended)
+bun create z3-admin my-admin
+
+# With NPM / NPX
+npx create-z3-admin my-admin
+
+# With PNPM
+pnpm create z3-admin my-admin
+```
+
+---
+
+### Option B: Clone & Setup Wizard
 
 ```bash
 # 1. Clone repository and install dependencies
-git clone https://github.com/LeonAlvarezz/z3-admin.git
-cd z3-admin
+git clone https://github.com/LeonAlvarezz/admin-template.git
+cd admin-template
 bun install
 
-# 2. Configure environment variables
+# 2. Run interactive setup wizard (configures .env and DB based on your mode)
+bun run setup
+```
+
+---
+
+### Option C: Manual Setup
+
+#### 1. Frontend-Only Mode (Mock Data)
+No Docker, PostgreSQL, or backend required. Runs with stateful in-memory CRUD:
+
+```bash
+cp apps/starter/.env.example apps/starter/.env
+# Set VITE_ENABLE_MOCK=true in apps/starter/.env
+bun run dev:mock
+```
+
+#### 2. Fullstack Mode (Express API + Drizzle ORM + PostgreSQL)
+
+```bash
+# 1. Configure environment variables
 cp apps/backend/.env.example apps/backend/.env
 cp apps/starter/.env.example apps/starter/.env
 
-# 3. Start PostgreSQL container
+# 2. Start PostgreSQL container & run migrations
 bun docker:up
-
-# 4. Apply database migrations & seed default accounts
 bun db:migrate
 bun db:seed
+
+# 3. Run full stack in parallel
+bun run dev
 ```
 
-### 3. Running Applications
+### Running Applications & Verification
 
 ```bash
-# Run full stack (backend on :3333, frontend on :5173) in parallel
+# Run standalone frontend (Mock mode)
+bun run dev:mock
+
+# Run full stack in parallel (Backend on :3333, Frontend on :5173)
 bun run dev
 
 # Or run individual apps:
-bun --cwd apps/backend dev     # Backend API
-bun --cwd apps/starter dev     # Frontend UI
+bun run dev:backend     # Backend API
+bun run dev:frontend    # Frontend UI
 ```
 
 ### 4. Verification & Quality Checks

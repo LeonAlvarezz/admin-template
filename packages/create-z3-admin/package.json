@@ -1,0 +1,35 @@
+{
+  "name": "create-z3-admin",
+  "version": "0.1.0",
+  "description": "Scaffold a Z3 Admin template project with Mock or Fullstack architecture",
+  "type": "module",
+  "bin": {
+    "create-z3-admin": "./bin/index.js"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "keywords": [
+    "create-z3-admin",
+    "admin-template",
+    "scaffold",
+    "react",
+    "tanstack-router",
+    "express",
+    "drizzle-orm"
+  ],
+  "author": "Leon Alvarez",
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "giget": "^1.2.4",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5"
+  }
+}

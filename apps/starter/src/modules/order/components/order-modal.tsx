@@ -249,7 +249,7 @@ export function OrderModal({
   };
 
   const handleAddItem = () => {
-    if (!selectedProductToAdd || !order) return;
+    if (!selectedProductToAdd) return;
     const selectedProduct = availableProducts.find(
       (p) => p.id === selectedProductToAdd,
     );

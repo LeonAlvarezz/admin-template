@@ -232,7 +232,7 @@ export async function handleMockRequest<T = any>(
         has_more: filtered.length > limit,
         limit,
         next_cursor:
-          filtered.length > limit && lastUser
+          filtered.length > limit
             ? btoa(
                 JSON.stringify({
                   id: lastUser.id,
@@ -303,7 +303,7 @@ export async function handleMockRequest<T = any>(
         has_more: filtered.length > limit,
         limit,
         next_cursor:
-          filtered.length > limit && lastProduct
+          filtered.length > limit
             ? btoa(
                 JSON.stringify({
                   id: lastProduct.id,
@@ -421,7 +421,7 @@ export async function handleMockRequest<T = any>(
         has_more: filtered.length > limit,
         limit,
         next_cursor:
-          filtered.length > limit && lastOrder
+          filtered.length > limit
             ? btoa(
                 JSON.stringify({
                   id: lastOrder.id,
