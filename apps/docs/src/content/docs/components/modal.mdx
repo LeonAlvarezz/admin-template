@@ -1,0 +1,40 @@
+---
+title: Modal & Confirm Modal
+description: Accessible dialog windows with smooth transitions and confirmation presets.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { ModalDemo } from "@/components/demos";
+
+`Modal` and `ConfirmModal` provide dialogs built on Headless UI Dialog.
+
+<ComponentPreview
+  client:load
+  title="Modal Components"
+  description="Standard Modal & Destructive Confirm Dialog"
+  code={`import { Modal, ModalHeader, ModalFooter, ConfirmModal } from "@z3/admin-core";
+
+export function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Modal open={open} onClose={() => setOpen(false)} size="lg">
+      <ModalHeader title="Edit Profile" description="Update your settings." />
+      <div className="p-6">Form fields go here...</div>
+      <ModalFooter primaryAction={{ label: "Save", onClick: () => setOpen(false) }} />
+    </Modal>
+  );
+}`}
+>
+  <ModalDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Modal, ModalHeader, ModalFooter, ConfirmModal } from "@z3/admin-core";
+```
+
+## Sizes
+
+Supported sizes: `"sm"` | `"md"` | `"lg"` | `"xl"` | `"2xl"` | `"3xl"` | `"4xl"` | `"5xl"` | `"full"`.

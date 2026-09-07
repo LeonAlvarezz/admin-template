@@ -74,6 +74,7 @@ const iconNames = [
   "lucide/link-2",
   "lucide/file-text",
   "akar-icons/cloud-upload",
+  "humbleicons/spinner-earring",
 ];
 
 for (const name of iconNames) {

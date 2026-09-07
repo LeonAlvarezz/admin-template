@@ -1,0 +1,31 @@
+---
+title: AI & LLM Context Integration
+description: How AI assistants, agents, and LLMs can interact with Z3 Admin documentation.
+---
+
+Z3 Admin is built from the ground up to be **AI-first**, providing structured context files for coding assistants like Claude, ChatGPT, Cursor, and Gemini.
+
+## AI Plaintext Endpoints
+
+| Endpoint | Content | Format |
+| :--- | :--- | :--- |
+| **`/llms.txt`** | Curated sitemap of component APIs, rules, and export maps | Plaintext Markdown |
+| **`/llms-full.txt`** | Full consolidated documentation for RAG & prompt ingestion | Plaintext Markdown |
+
+## Feeding Context to AI
+
+When working with an AI coding assistant, you can point it to:
+```
+https://your-docs-domain.com/llms.txt
+```
+Or paste the content directly into your system prompt.
+
+## Recommended System Prompt for AI Agents
+
+```markdown
+You are developing features for Z3 Admin.
+Always follow these rules:
+1. MANDATORY REUSE: Inspect `@z3/admin-core` before writing any UI elements. Never use raw `<button>`, `<input>`, `<select>`, or `<table>`.
+2. ZERO SCATTERED UTILS: Never create ad-hoc formatters or utils in feature directories. Import shared formatters (`formatCurrency`, `formatDate`, `cn`) directly from `@z3/admin-core`.
+3. DESIGN TOKENS: Use OKLCH theme tokens (`bg-card`, `bg-popover`, `text-accent-foreground`, `border-border`).
+```

@@ -1,0 +1,29 @@
+---
+title: Upload & File
+description: Drag-and-drop file upload with clipboard paste (Ctrl+V) and direct URL paste.
+---
+
+`Upload` (and `FileUpload`) provides accessible file uploading with drag-and-drop, link input, clipboard paste, and image thumbnail previews.
+
+## Features
+
+- **Drag-and-Drop & File Browser**: Accessible click or drop targets.
+- **Clipboard Paste (Ctrl+V / Cmd+V)**: Paste copied screenshot images or pasted file URLs directly.
+- **Semantic Presets**: Supports `accept="image"`, `accept="pdf"`, or extension arrays `[".png", ".jpg"]`.
+
+## Import & Usage
+
+```tsx
+import { Upload } from "@z3/admin-core";
+
+export function UploadExample() {
+  return (
+    <Upload
+      accept="image"
+      maxSizeMB={5}
+      multiple
+      onUpload={(files) => console.log("Uploaded files:", files)}
+    />
+  );
+}
+```

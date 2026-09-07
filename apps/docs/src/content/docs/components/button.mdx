@@ -1,0 +1,63 @@
+---
+title: Button
+description: Interactive button with variants, sizes, and loading state.
+---
+
+import { ButtonPreview } from "@/components/demos";
+
+The `Button` component provides standard button styles, sizes, and asynchronous loading spinners.
+
+## Live Interactive Buttons
+
+<div class="not-content flex gap-4">
+<ButtonPreview
+  client:load
+  title="Button Variants & States"
+  className="my-10"
+  code={`import { Button } from "@z3/admin-core";
+
+export function Example() {
+  return (
+  <div className="not-content my-4 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card p-6">
+    <Button
+      variant="default"
+      onClick={() => alert("Clicked Primary Button!")}
+    >
+      Primary Button
+    </Button>
+    <Button variant="secondary">
+      Secondary Button
+    </Button>
+    <Button variant="outline">
+      Outline Button
+    </Button>
+    <Button variant="ghost">
+      Ghost Button
+    </Button>
+    <Button variant="destructive">
+      Destructive
+    </Button>
+    <Button variant="default" loading>
+      Loading State
+    </Button>
+  </div>
+  );
+}`}
+/>
+</div>
+
+## Import
+
+```tsx
+import { Button } from "@z3/admin-core";
+```
+
+## Props Reference
+
+| Prop        | Type                                                                              | Default     | Description                                   |
+| :---------- | :-------------------------------------------------------------------------------- | :---------- | :-------------------------------------------- |
+| `variant`   | `"default" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "barebone"` | `"default"` | Visual appearance variant                     |
+| `size`      | `"icon" \| "sm" \| "base" \| "md" \| "lg" \| "xl"`                                | `"base"`    | Button height and padding size                |
+| `loading`   | `boolean`                                                                         | `false`     | Shows an animated spinner and disables clicks |
+| `disabled`  | `boolean`                                                                         | `false`     | Disables interaction and dims opacity         |
+| `className` | `string`                                                                          | `undefined` | Additional Tailwind CSS classes               |

@@ -1,0 +1,32 @@
+---
+title: Command Search
+description: Interactive Cmd+K command palette modal with route indexing and pluggable actions.
+---
+
+`CommandSearch` opens via global keyboard shortcut (`Cmd+K` / `Ctrl+K`) or the sidebar search bar.
+
+## Features
+
+- **Auto Route Indexing**: Automatically indexes all routes from your `navGroups`.
+- **Keyboard Navigation**: Native arrow key navigation (`↑`, `↓`), selection (`Enter`), and exit (`Esc`).
+- **Dynamic Commands API**: Register custom page-level actions on the fly via `useRegisterCommands()`.
+
+## Registering Custom Commands
+
+```tsx
+import { useRegisterCommands } from "@z3/admin-core";
+
+export function ProductsPage() {
+  useRegisterCommands([
+    {
+      id: "export-csv",
+      label: "Export Products to CSV",
+      category: "Product Actions",
+      onSelect: () => handleExportCSV(),
+      shortcut: ["shift", "e"],
+    },
+  ]);
+
+  return <div>Products Content</div>;
+}
+```

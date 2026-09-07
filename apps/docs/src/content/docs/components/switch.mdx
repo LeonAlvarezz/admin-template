@@ -1,0 +1,36 @@
+---
+title: Switch
+description: Accessible toggle switch component for binary form options.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { SwitchDemo } from "@/components/demos";
+
+`<Switch>` provides an accessible toggle switch.
+
+<ComponentPreview
+  client:load
+  title="Switch Controls"
+  description="Controlled toggle switches with custom sizes"
+  code={`import { Switch } from "@z3/admin-core";
+
+export function Example() {
+  const [enabled, setEnabled] = useState(true);
+
+  return (
+    <Switch
+      checked={enabled}
+      onChange={setEnabled}
+      size="md"
+    />
+  );
+}`}
+>
+  <SwitchDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Switch } from "@z3/admin-core";
+```

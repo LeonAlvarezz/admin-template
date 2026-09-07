@@ -1,0 +1,59 @@
+---
+title: Utilities Reference
+description: Centralized shared formatters, string utilities, and DOM helpers.
+---
+
+To maintain clean code architecture, all formatters, string manipulators, and DOM helpers are centralized in `@z3/admin-core`.
+
+## Import
+
+```tsx
+import {
+  cn,
+  formatCurrency,
+  formatNumber,
+  formatDate,
+  formatRelativeTime,
+  formatFileSize,
+  slugify,
+  capitalize,
+  truncate,
+  countWords,
+  copyToClipboard,
+  normalizeAccept,
+  useQueryFilters,
+  useDebounce,
+} from "@z3/admin-core";
+```
+
+## Reference Table
+
+| Function | Example Usage | Output |
+| :--- | :--- | :--- |
+| `formatCurrency(val, opts)` | `formatCurrency(129.99, { currency: "USD" })` | `"$129.99"` |
+| `formatNumber(val, opts)` | `formatNumber(12500, { notation: "compact" })` | `"12.5K"` |
+| `formatDate(date, opts)` | `formatDate(new Date(), { month: "short", day: "numeric" })` | `"Sep 2"` |
+| `formatRelativeTime(date)` | `formatRelativeTime("2026-09-02T10:00:00Z")` | `"1 hour ago"` |
+| `formatFileSize(bytes)` | `formatFileSize(1548576)` | `"1.5 MB"` |
+| `slugify(text)` | `slugify("Wireless Noise Canceling")` | `"wireless-noise-canceling"` |
+| `capitalize(text)` | `capitalize("active")` | `"Active"` |
+| `truncate(text, max)` | `truncate("Super long product title", 10)` | `"Super long..."` |
+| `copyToClipboard(text)` | `await copyToClipboard("SKU-12345")` | Copies string to clipboard |
+
+## Custom Hooks
+
+### `useQueryFilters` / `useTableFilters`
+Synchronizes search input and dropdown filters with URL search parameters:
+
+```tsx
+const {
+  filters,
+  searchValue,
+  setSearchValue,
+  setFilter,
+  resetFilters,
+  isFiltered,
+} = useQueryFilters({
+  defaultValues: { search: "", role: "all" },
+});
+```

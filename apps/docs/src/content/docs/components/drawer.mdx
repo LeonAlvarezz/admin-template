@@ -1,0 +1,42 @@
+---
+title: Drawer / Sheet
+description: Slide-out panel for side overlays and inspector panels.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { DrawerDemo } from "@/components/demos";
+
+`<Drawer>` slides in from the right edge of the screen, useful for inspectors and detail views.
+
+<ComponentPreview
+  client:load
+  title="Side Drawer"
+  description="Slide-out inspector panel with header and close trigger"
+  code={`import { Drawer, Button } from "@z3/admin-core";
+
+export function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Drawer</Button>
+      <Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Inspector"
+        description="View details"
+      >
+        <div className="p-6">Content goes here...</div>
+      </Drawer>
+    </>
+  );
+}`}
+>
+  <DrawerDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Drawer } from "@z3/admin-core";
+```

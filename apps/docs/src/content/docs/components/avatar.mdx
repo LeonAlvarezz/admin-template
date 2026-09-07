@@ -1,0 +1,34 @@
+---
+title: Avatar
+description: User profile avatar with initials fallback and image error handling.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { AvatarDemo } from "@/components/demos";
+
+`<Avatar>` renders profile images with fallback initials computed automatically from the `name` prop.
+
+<ComponentPreview
+  client:load
+  title="Profile Avatars"
+  description="Image avatars and computed initials fallbacks"
+  code={`import { Avatar } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <div className="flex gap-3">
+      <Avatar src="https://example.com/photo.jpg" name="Sarah Connor" size="lg" />
+      <Avatar name="Leon Alvarez" size="md" />
+      <Avatar name="Super Admin" size="sm" />
+    </div>
+  );
+}`}
+>
+  <AvatarDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Avatar } from "@z3/admin-core";
+```

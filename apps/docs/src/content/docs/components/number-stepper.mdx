@@ -1,0 +1,38 @@
+---
+title: Number Stepper
+description: Accessible number stepper with min/max clamp boundaries and customizable step size.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { NumberStepperDemo } from "@/components/demos";
+
+`<NumberStepper>` allows incrementing and decrementing numeric values with boundary controls.
+
+<ComponentPreview
+  client:load
+  title="Quantity Stepper"
+  description="Controlled stepper clamped between 1 and 20"
+  code={`import { NumberStepper } from "@z3/admin-core";
+
+export function Example() {
+  const [qty, setQty] = useState(1);
+
+  return (
+    <NumberStepper
+      value={qty}
+      min={1}
+      max={20}
+      step={1}
+      onChange={setQty}
+    />
+  );
+}`}
+>
+  <NumberStepperDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { NumberStepper } from "@z3/admin-core";
+```

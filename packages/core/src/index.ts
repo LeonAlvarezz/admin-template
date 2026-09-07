@@ -10,7 +10,16 @@ export {
   Textarea as CoreTextarea,
 } from "./components/ui/textarea";
 export type { TextareaProps } from "./components/ui/textarea";
-export { default as Button } from "./components/ui/button";
+export {
+  default as Button,
+  Button as CoreButton,
+  buttonVariants,
+} from "./components/ui/button";
+export type {
+  ButtonProps,
+  ButtonVariant,
+  ButtonSize,
+} from "./components/ui/button";
 export { default as Checkbox } from "./components/ui/checkbox";
 export type { CheckboxProps } from "./components/ui/checkbox";
 export { default as Tooltip } from "./components/ui/tooltip";

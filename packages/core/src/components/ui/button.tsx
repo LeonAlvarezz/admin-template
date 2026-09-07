@@ -2,22 +2,22 @@ import { Button as HeadlessButton } from "@headlessui/react";
 import type { ButtonProps as HeadlessButtonProps } from "@headlessui/react";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
+import type { ReactNode } from "react";
 import { cn } from "../../utils/cn";
+import { SpinnerIcon } from "./icons";
 
 export type ButtonVariant =
-  | "default"
-  | "destructive"
-  | "outline"
-  | "ghost"
-  | "secondary"
-  | "barebone";
+  "default" | "destructive" | "outline" | "ghost" | "secondary" | "barebone";
 export type ButtonSize = "icon" | "sm" | "base" | "md" | "lg" | "xl";
 
-export type ButtonProps = HeadlessButtonProps<"button"> &
-  VariantProps<typeof buttonVariants>;
+export type ButtonProps = Omit<HeadlessButtonProps<"button">, "children"> &
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean;
+    children?: ReactNode;
+  };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-foreground cursor-pointer data-active:translate-y-px transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 select-none",
+  "inline-flex items-center justify-center gap-2 rounded-md text-foreground cursor-pointer data-active:translate-y-px transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 select-none",
   {
     variants: {
       variant: {
@@ -46,12 +46,28 @@ export const buttonVariants = cva(
   },
 );
 
-function Button({ variant, className, size, ...props }: ButtonProps) {
+export function Button({
+  variant,
+  className,
+  size,
+  loading = false,
+  disabled,
+  children,
+  ...props
+}: ButtonProps) {
   return (
     <HeadlessButton
+      disabled={disabled || loading}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {loading && (
+        <span className="animate-spin">
+          <SpinnerIcon />
+        </span>
+      )}
+      {children}
+    </HeadlessButton>
   );
 }
 export default Button;

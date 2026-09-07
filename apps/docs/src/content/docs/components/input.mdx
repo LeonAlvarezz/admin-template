@@ -1,0 +1,42 @@
+---
+title: Input & Password
+description: Accessible form text inputs with icons and password reveal toggles.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { InputDemo } from "@/components/demos";
+
+`Input` and `InputPassword` wrap native text inputs with consistent focus rings, leading/trailing icon slots, and show/hide password buttons.
+
+<ComponentPreview
+  client:load
+  title="Form Inputs"
+  description="Text, Password visibility toggle, and disabled states"
+  code={`import { Input, InputPassword } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <div className="space-y-3">
+      <Input placeholder="Email address..." />
+      <InputPassword placeholder="Password..." />
+    </div>
+  );
+}`}
+>
+  <InputDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Input, InputPassword } from "@z3/admin-core";
+```
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `startIcon` | `ReactNode` | `undefined` | Leading icon element |
+| `endIcon` | `ReactNode` | `undefined` | Trailing icon element |
+| `invalid` | `boolean` | `false` | Applies error border and ring |
+| `containerClassName` | `string` | `undefined` | Classes for outer wrapper `div` |

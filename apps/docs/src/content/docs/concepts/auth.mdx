@@ -1,0 +1,62 @@
+---
+title: Auth
+description: Better Auth integration, session management, role permissions, and TOTP two-factor authentication.
+sidebar:
+  order: 4
+---
+
+Auth is what makes or breaks an application. No matter how great your UI or features are, if you cannot protect your users from unauthorized access, everything else falls apart.
+
+This is more relevant than ever in the age of AI. When anyone can prompt an application into existence out of thin air, security is often the first thing neglected. To build software that actually lasts in production, you have to understand its fundamentals.
+
+## Core Concept
+
+HTTP is stateless by default, When you make a request, the server treats every incoming request as if it has never seen the client before, but not all request are equal, some routes are public, some require a logged-in user, and some are restricted to admin. That is where the concept of **Authentication** and **Authorization** come in.
+
+### What is Authentication?
+
+Authentication is the process of verifying identity. In web applications, this usually boils down to two transport strategies:
+
+- **HTTP-Only Cookies (Session-Based)**: After login, the server sets a cookie containing a session ID. Browsers automatically attach this cookie to subsequent requests. Because the cookie is marked **HttpOnly**, client-side JavaScript cannot access it via `document.cookie`, making it immune to token theft via XSS attacks. The trade-off is that it requires proper CORS configuration (`credentials: "include"` on the client and explicit origins on the backend) and protection against CSRF.
+- **Bearer Tokens (JWT / State Storage)**: After login, the server returns an access token that the client stores in memory or `localStorage` and attaches manually via the `Authorization: Bearer <token>` header. This is convenient for mobile apps and third-party APIs. However, tokens stored in `localStorage` are vulnerable to XSS. Standard mitigation is issuing short-lived access tokens (e.g., 10 minutes) paired with a refresh token to rotate credentials frequently.
+
+### What is Authorization?
+
+Once a user proves who they are, authorization determines what they can touch. Even after successful login, regular users shouldn't access billing settings or manage user accounts. that's why we need to also define clear **Permission**. For example, only user with role `admin` can create new user, or only `admin` can promote user to `admin`, etc.
+
+### Common Misconception
+
+You'll often hear: "Never roll your own auth." For production apps, that's sound advice, hashing passwords, handling session revocation, and mitigating timing attacks are easy to get wrong. But as a learning exercise, building auth from scratch at least once is invaluable. you will understand how cookies, salt/hash algorithms, and sessions work under the hood.
+
+For Z3 Admin, we chose Better Auth. Unlike NextAuth/Auth.js (which is tightly coupled to Next.js), Better Auth is framework-agnostic, built for TypeScript, integrates cleanly and provides modular plugins like TOTP, role-based permissions right out of the box.
+
+## 2FA Authentication
+Email and password is often never truly enough to protect you from getting your identity stolen. That is why is second layer of protection is crucial for most application nowaday. There are many methods, noticably OTP (One Time Password), TOTP (Time-based One-Time Password), and Passkeys.
+- **OTP**: Once you login, the server will send a random passphrase to either the user email or phone number, only after type in the correct passphrase 
+
+Better Auth's Two-Factor plugin is fully wired from database to UI:
+
+1. **Password Verification**: User confirms password to initiate 2FA setup.
+2. **QR Code Generation**: Displays SVG QR code generated with `react-qr-code` and plain base32 secret.
+3. **6-Digit Challenge**: User inputs TOTP authenticator code to enable 2FA.
+4. **Backup Recovery Codes**: Modal provides 10 single-use emergency backup recovery codes downloadable as `.txt` or copyable.
+5. **Challenge on Login**: Unauthenticated login detects `TWO_FACTOR_REDIRECT` and presents the 6-digit TOTP challenge screen.
+
+## Frontend Auth Hook
+
+```tsx
+import { useAuth } from "@z3/admin-core";
+
+export function UserHeader() {
+  const { user, isAuthenticated, signOut } = useAuth();
+
+  return (
+    <div>
+      <span>
+        Welcome, {user?.name} ({user?.role})
+      </span>
+      <button onClick={signOut}>Logout</button>
+    </div>
+  );
+}
+```

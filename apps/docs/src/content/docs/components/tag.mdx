@@ -1,0 +1,44 @@
+---
+title: Tag / Badge
+description: Status badges and tags supporting all Tailwind colors with optional dot indicators.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { TagDemo } from "@/components/demos";
+
+`<Tag>` renders colorful status badges across all 22 Tailwind colors.
+
+<ComponentPreview
+  client:load
+  title="Status Tags"
+  description="Semantic Tailwind colors and dot indicators"
+  code={`import { Tag } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <div className="flex gap-2">
+      <Tag color="blue" showDot>Active</Tag>
+      <Tag color="emerald" showDot>Published</Tag>
+      <Tag color="amber" showDot>Pending</Tag>
+      <Tag color="rose" showDot>Archived</Tag>
+      <Tag color="violet">Pro Tier</Tag>
+    </div>
+  );
+}`}
+>
+  <TagDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Tag } from "@z3/admin-core";
+```
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `Color` (Tailwind palette) | `"blue"` | Tailwind color variant (`violet`, `emerald`, `amber`, etc.) |
+| `showDot` | `boolean` | `false` | Displays a leading pulse dot indicator |
+| `size` | `"sm" \| "md"` | `"md"` | Tag padding and font size |

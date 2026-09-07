@@ -9,6 +9,8 @@
     "dev:full": "docker compose up -d && turbo run dev",
     "dev:backend": "bun --cwd apps/backend dev",
     "dev:frontend": "bun --cwd apps/starter dev",
+    "dev:docs": "bun --cwd apps/docs dev",
+    "build:docs": "bun --cwd apps/docs build",
     "lint": "turbo run lint",
     "test": "bun test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

@@ -1,0 +1,91 @@
+---
+title: Data Layer & API Client
+description: ApiClient, TanStack Query hooks, cursor pagination, and response envelope unwrapping.
+sidebar:
+  order: 3
+---
+
+Now for a crucial part of any application: how do we fetch and handle data from the server?
+
+## Basic Understanding
+
+Even in the most complex applications, data fetching ultimately comes down to fetch. You'll see libraries like `axios` everywhere, but they are still just wrappers over native HTTP requests. Whenever we call fetch, we pass options and headers telling the server what operation to run and what data format to return.
+
+```ts
+// Request options and headers
+{
+  method: "GET", // HTTP method (GET, POST, PUT, DELETE)
+  headers: {
+    "Content-Type": "application/json;charset=utf-8", // Format of sent/received data
+    Authorization: "Bearer xxx", // Authentication credentials
+  },
+  // signal: AbortSignal.timeout(10_000), // Request timeout
+}
+```
+
+Once fetch resolves, the server returns a response (usually JSON). To make this type-safe, we type or validate the parsed payload against TypeScript schemas. That's basically the gist of how it works. Obviously, in a real-world project it might not be that simple, raw fetch calls become messy fast when you need things like authentication headers, interceptors, error handling, and cancellation without duplicating code.
+
+I recommend building your own API client from scratch at least once. It's the best way to understand how data and auth flow through an application. In my opinion, a good API client commonly follows these standards:
+
+- Request & response interceptors: Handle authentication, token refreshes, and error logging without modifying core client logic.
+- Smart header merging: Merge request-specific headers cleanly with global defaults.
+- Configurable baseURL: Support environment-specific hosts and path prefixes out of the box.
+- Dual auth support: Seamlessly handle both HTTP-only session cookies and Bearer tokens.
+- Clean HTTP method helpers: Provide typed methods for get, post, put, patch, and delete.
+
+## Api Client
+
+Z3 Admin comes with a fully built API client (`apps/starter/src/libs/api-client.ts`) that can be used anywhere:
+
+- **Zero Dependencies**: Built entirely with native `fetch`, `AbortController`, and `URLSearchParams` (no extra Axios bundle weight).
+- **Envelope Unwrapping**: Automatically unwraps `{ success: true, data: T }` responses directly into `T`.
+- **Error Handling**: Standardizes HTTP errors and envelope `{ success: false, message }` payloads into typed `ApiClientError`.
+
+## Data Layer & Flow
+
+The API client handles network transport, but UI components shouldn't call it directly. Instead, we organize requests into a domain API layer (e.g. `product.api.ts`, `order.api.ts`). It's highly beneficial if you consider using library like Tanstack Query. This gives you caching, automatic background refetching, and request deduplication without messy `useEffect` boilerplate.
+
+![Data Flow in Application](../../../assets/data-layer.png)
+
+```tsx
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/libs/api-client";
+import type {
+  ProductsListResponse,
+  CreateProduct,
+  ListProductsQuery,
+} from "@z3/types";
+
+export const productKeys = {
+  all: ["products"] as const,
+  lists: () => [...productKeys.all, "list"] as const,
+  list: (filters?: ListProductsQuery) =>
+    [...productKeys.lists(), filters] as const,
+};
+
+export function useProductsQuery(filters?: ListProductsQuery) {
+  return useQuery({
+    queryKey: productKeys.list(filters),
+    queryFn: () =>
+      apiClient.get<ProductsListResponse>("/products", {
+        params: {
+          search: filters?.search || undefined,
+          status: filters?.status || undefined,
+          cursor: filters?.cursor || undefined,
+          limit: filters?.limit,
+          order: filters?.order,
+        },
+      }),
+  });
+}
+
+export function useCreateProductMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateProduct) => apiClient.post("/products", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: productKeys.all });
+    },
+  });
+}
+```

@@ -1,0 +1,80 @@
+---
+title: Architecture
+description: File structure, package relationships, and workspace boundaries.
+sidebar:
+  order: 3
+---
+
+Z3 Admin is structured as a Turborepo monorepo managed with Bun workspaces.
+
+```zsh
+z3-admin/
+├── apps/
+│   ├── starter/           # React 19 + TanStack Router frontend client
+│   ├── backend/           # Express 5 + Drizzle ORM + Better Auth backend API
+│   └── docs/              # Astro Starlight documentation & component showcase
+├── packages/
+│   ├── core/              # Core framework, UI components, layout, styling (@z3/admin-core)
+│   ├── types/             # Shared Valibot schemas & TypeScript models (@z3/types)
+│   ├── eslint-config/     # Shared ESLint configuration (@z3/eslint-config)
+│   └── typescript-config/ # Shared TypeScript base configs (@z3/typescript-config)
+├── docker-compose.yml     # Local PostgreSQL 16 container definition
+└── package.json           # Monorepo root scripts & workspace configuration
+```
+
+## Feature Based Architecture
+
+Z3 Admin enforces feature-based colocation across both frontend and backend rather than grouping by technical file types (e.g., throwing all components or controllers into single massive global folders).
+
+```zsh
+z3-admin/
+├── apps/
+│   ├── starter/src/modules/
+│   │   └── order/
+│   │       ├── api/
+│   │       │   └── order.api.ts          # TanStack Query & mutation hooks
+│   │       ├── components/
+│   │       │   ├── order-modal.tsx       # Feature-specific modals/drawers
+│   │       │   └── order.column.tsx      # DataTable column definitions
+│   │       └── order.page.tsx            # Main page view component
+│   └── backend/src/modules/
+│       └── order/
+│           ├── order.route.ts            # Route definitions & guards
+│           ├── order.controller.ts       # HTTP request parsing & response handling
+│           ├── order.service.ts          # Core business logic
+│           └── order.repository.ts       # Direct database queries (Drizzle ORM)
+```
+
+### Why Feature Colocation?
+
+When building real-world project, features grow quickly. Isolating each domain (such as `order`, `product`, or `user`) into its own folder keeps the codebase modular and readable:
+
+- Isolated blast radius: If order checkout breaks, all relevant UI, queries, API endpoints, and database queries live in the order/ directory.
+- Easy deletion & refactoring: When a feature is deprecated or reworked, removing its module folder cleanly deletes 90% of its related code without hunting through scattered root folders.
+
+## Backend Architecture
+
+```zsh
+z3-admin/
+├── apps/
+│   ├── backend/
+│     └── modules/
+│       └── orders/
+│           └── order.repository.ts
+│           └── order.service.ts
+│           └── order.controller.ts
+│           └── order.route.ts
+```
+
+After battling and changing pattern multiple times, I ultimately decided to follows Controller-Service-Repository layered architecture (inspired by NestJS and Clean Architecture principles):
+
+- **Route (`*.route.ts`)**: Defines HTTP verbs, paths, and attaches route-level middlewares.
+- **Controller (`*.controller.ts`)**: Extracts request params/body, input validation, execute service function.
+- **Service (`*.service.ts`)**: Houses pure business logic, permissions, validations, and multi-step workflows.
+- **Repository (`*.repository.ts`)**: The only layer that touches Drizzle ORM and executes direct database queries. If you change your ORM or database engine, only this layer changes.
+
+## Shared Type
+
+Instead of writing separate frontend and backend TypeScript types (which quickly get out of sync), we place all application domain, and types in `packages/type`.
+
+We will go in dept in [Typing](google.com)

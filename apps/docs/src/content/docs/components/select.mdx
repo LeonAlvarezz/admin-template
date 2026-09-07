@@ -1,0 +1,67 @@
+---
+title: Select & Combobox
+description: Searchable dropdown, multi-select tag chips, async remote data, and compound options.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { SelectDemo } from "@/components/demos";
+
+`<Select>` is a high-performance combobox built on `@headlessui/react` v2.
+
+<ComponentPreview
+  client:load
+  title="Select Modes"
+  description="Searchable Combobox & Multi-Select Tag Chips"
+  code={`import { Select } from "@z3/admin-core";
+
+export function Example() {
+  const [val, setVal] = useState("apple");
+  const [tags, setTags] = useState(["react", "ts"]);
+
+  return (
+    <>
+      <Select
+        searchable
+        clearable
+        options={[
+          { value: "apple", label: "🍎 Apple" },
+          { value: "banana", label: "🍌 Banana" },
+        ]}
+        value={val}
+        onChange={setVal}
+      />
+
+      <Select
+        multiple
+        searchable
+        options={[
+          { value: "react", label: "React 19" },
+          { value: "ts", label: "TypeScript" },
+        ]}
+        value={tags}
+        onChange={setTags}
+      />
+    </>
+  );
+}`}
+>
+  <SelectDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Select } from "@z3/admin-core";
+```
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `options` | `SelectOption[]` | `[]` | Array of options, groups, or strings |
+| `searchable` | `boolean` | `false` | Enables client-side combobox search |
+| `multiple` | `boolean` | `false` | Enables multi-select tag chips |
+| `clearable` | `boolean` | `false` | Displays a clear button (`x`) |
+| `loadOptions` | `(query) => Promise` | `undefined` | Async remote data fetcher |
+| `debounceMs` | `number` | `250` | Debounce delay for async search |
+| `loading` | `boolean` | `false` | Displays a loading spinner |

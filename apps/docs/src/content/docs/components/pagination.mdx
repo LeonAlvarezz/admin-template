@@ -1,0 +1,26 @@
+---
+title: Pagination
+description: Page navigation controls with item counts and jump buttons.
+---
+
+`Pagination` renders page number buttons, ellipses, previous/next controls, and item counts.
+
+## Usage
+
+```tsx
+import { Pagination } from "@z3/admin-core";
+
+export function PaginationExample() {
+  const [page, setPage] = useState(1);
+
+  return (
+    <Pagination
+      currentPage={page}
+      totalPages={10}
+      onPageChange={setPage}
+      totalItems={100}
+      pageSize={10}
+    />
+  );
+}
+```

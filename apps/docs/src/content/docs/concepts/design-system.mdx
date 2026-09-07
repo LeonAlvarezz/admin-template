@@ -1,0 +1,65 @@
+---
+title: Design System
+description: design system, color scheme, typography
+sidebar:
+  order: 1
+---
+
+Before starting any project, you should always defined how the system should look like or at the very least define the semantic of the whole application. For instance, what should the color should we use when text or button is hovered, what color should we use when selector is selected, etc. These are important and can save you time and stress during development. Instead of thinking what color to use and should new color be added, everything is already set and defined.
+
+## Semantic Color Tokens
+
+All colors are declared as CSS variables in `@z3/admin-core` (`packages/core/src/styles/main.css`) and registered with Tailwind v4's `@theme` directive:
+
+| Token                | Light Value                 | Dark Value                  | Purpose & Usage                                                          |
+| :------------------- | :-------------------------- | :-------------------------- | :----------------------------------------------------------------------- |
+| `--primary`          | `oklch(0.55 0.22 260)`      | `oklch(0.6 0.22 255)`       | Main brand actions, active rings, key CTAs                               |
+| `--background`       | `oklch(0.99 0 0)`           | `oklch(0.17 0.015 255)`     | Base page canvas background                                              |
+| `--card`             | `oklch(0.99 0.005 240)`     | `oklch(0.26 0.03 266)`      | Elevated cards, sidebar, table containers                                |
+| `--popover`          | `oklch(1 0 0)`              | `oklch(0.29 0.028 266)`     | Floating dropdowns, select menus, dialog modals                          |
+| `--muted`            | `oklch(0.75 0.01 240)`      | `oklch(0.55 0.02 255)`      | Inactive tab borders, subtle backgrounds, skeletons                      |
+| `--muted-foreground` | `oklch(0.145 0.02 260)`     | `oklch(0.85 0 0)`           | Secondary labels, descriptions, timestamps                               |
+| `--accent`           | `oklch(0.95 0.015 255)`     | `oklch(0.32 0.035 260)`     | Hover and active interactive states (`bg-accent text-accent-foreground`) |
+| `--border`           | `oklch(0.9 0.01 240)`       | `oklch(0.5 0.01 240)`       | Dividers, card strokes, table borders                                    |
+| `--destructive`      | `oklch(70.4% 0.191 22.216)` | `oklch(70.4% 0.191 22.216)` | Danger actions, delete buttons, error alerts                             |
+
+## Typography
+
+Standardized on **Plus Jakarta Sans**, declared in `packages/core/src/styles/main.css`:
+
+```css
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+}
+```
+
+To switch to a different font, replace the Google Font `@import` and update `--font-sans`.
+
+## Icon
+
+When building modern dashboards, using Iconify is tempting because of its massive catalog (150,000+ icons from Solar, Lucide, Tabler, Carbon, etc.). However, **how** you load them matters.
+
+Many templates use `@iconify/react` (e.g., `<Icon icon="solar:user-bold" />`). While convenient, this streams icon SVGs at runtime from an external CDN (`api.iconify.design`):
+
+- **Flash of Unstyled Icons (FOIC)**: Icons pop in with a delay after the page loads, causing visual layout shifts (CLS).
+- **Network & Offline Failures**: If the user has a spotty connection, is offline, or runs behind a strict corporate firewall, icons simply fail to render.
+- **Runtime Overhead**: Requires an extra client-side parser and continuous HTTP requests.
+
+Z3 Admin bundles icons at compile time via Vite:
+
+1. **Centralized Common Icons**: Repeated icons (`SearchIcon`, `CloseIcon`, `ChevronDownIcon`, `UserIcon`) are consolidated in [`packages/core/src/components/ui/icons.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/packages/core/src/components/ui/icons.tsx) and exported via `@z3/admin-core`:
+
+```tsx
+import { SearchIcon, CloseIcon, Icons } from "@z3/admin-core";
+```
+
+2. **Feature-Specific Icons**: When you need a one-off icon for a specific feature, import it directly on the fly:
+
+```tsx
+import DashboardIcon from "~icons/solar/widget-5-bold";
+import CartIcon from "~icons/solar/cart-4-bold";
+```
+
+## Customizing & Making It Your Own
+
+A template is just a starting point, how the application looks and feels is just as important as how it runs under the hood., so you should go to town with it, clone the project, experiment with palettes in `main.css`, swap the typography, and shape it to fit your exact product vision.

@@ -1,0 +1,44 @@
+---
+title: Introduction
+description: Overview of Z3 Admin features, philosophy, and tech stack.
+sidebar:
+  order: 1
+---
+
+**Z3 Admin** is a personal project born out of years of building real-world admin applications, distilling those lessons into a clean, modern monorepo setup.
+
+## Why This Exists
+
+Every time I started a new admin dashboard, I found myself repeatedly solving the same problems from scratch: setting up table pagination, wiring auth sessions, handling modals on mobile screens, or copying messy utility snippets between repositories.
+
+I built **Z3 Admin** to solve two goals:
+
+1. **A Ready-to-Use Foundation**: A production-grade starter you can clone or scaffold with a single command to get building immediately.
+2. **An Architectural Reference & Learning Resource**: A transparent look into modern fullstack architecture. Beyond code to copy, this repository and documentation serve as a playbook explaining **why** specific technical choices were made—from monorepo boundary separation and compound component design to choosing Valibot and TanStack Router.
+   Whether you're looking to launch a new dashboard or studying how to architect a modern TypeScript monorepo, everything here is built to be read, learned from, and extended.
+
+## Key Principles
+
+1. **Don't Reinvent the Wheel**: UI components (`DataTable`, `Select`, `Modal`, `Drawer`, `WorkspaceTabs`) live centrally in `@z3/admin-core` to prevent fragmented, copy-pasted UI logic across features.
+2. **Mobile Friendly**: Admin dashboards should be fully usable on phones and tablets, not just ultra-wide monitors. Every layout and modal is responsive by default.
+3. **End-to-End Type Safety & DX**: Valibot schemas (`@z3/types`) shared across frontend and backend, strict file-based routing, zero scattered helper files, and machine-readable docs (`/llms.txt`).
+4. **Plug & Play / Modular**: Run with mock data out of the box for instant UI work, or spin up the full Express 5 + PostgreSQL backend with a single setup command.
+
+## Technology Used
+
+| Layer                 | Technology                                                       |
+| :-------------------- | :--------------------------------------------------------------- |
+| **Package Manager**   | [Bun](https://bun.sh) (with `workspace:*` dependency protocol)   |
+| **Monorepo Engine**   | [Turborepo](https://turbo.build)                                 |
+| **Frontend**          | React 19, Vite, TanStack Router, TanStack Query, Tailwind CSS v4 |
+| **Backend**           | Express, Drizzle ORM, PostgreSQL, Better Auth, Scalar Docs       |
+| **Core UI Library**   | Headless UI v2, Iconify (`unplugin-icons`)                       |
+| **Schema Validation** | [Valibot](https://valibot.dev) (shared across client and server) |
+
+## Future Plan
+
+This project isn't meant to stay locked into a single stack. Good architecture doesn't start and stop with React + Express—there are plenty of great tools worth exploring.
+
+When time permits, I'd love to expand support to alternatives like **Vue / Nuxt** on the frontend, or **Hono / Elysia** on the backend.
+
+If you have ideas or want to help add new adapters, PRs and discussions are always welcome!

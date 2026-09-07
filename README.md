@@ -46,7 +46,7 @@ z3-admin/
 
 ---
 
-## 🧩 UI Components (`@z3/admin-core`)
+## 🧩 Components
 
 | Component                               | Description                                                                                                                                                                                                  |
 | :-------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -643,6 +643,7 @@ bun run setup
 ### Option C: Manual Setup
 
 #### 1. Frontend-Only Mode (Mock Data)
+
 No Docker, PostgreSQL, or backend required. Runs with stateful in-memory CRUD:
 
 ```bash

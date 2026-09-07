@@ -58,10 +58,10 @@ To prevent fragmented, duplicated, and scattered utility functions across featur
 
 ## Workspace Quick Reference Map
 
-### UI Components (`@z3/admin-core`)
+### Components
 
 | UI Primitives & Core Components               | Export Path (`@z3/admin-core`)                                     | Source File                                          |
-| :-------------------------------------------- | :-------------------------------------------------------------- | :--------------------------------------------------- |
+| :-------------------------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------- |
 | `<Button>`                                    | `import { Button } from "@z3/admin-core"`                          | `packages/core/src/components/ui/button.tsx`         |
 | `<Input>`, `<InputPassword>`                  | `import { Input, InputPassword } from "@z3/admin-core"`            | `packages/core/src/components/ui/input.tsx`          |
 | `<Textarea>`                                  | `import { Textarea } from "@z3/admin-core"`                        | `packages/core/src/components/ui/textarea.tsx`       |

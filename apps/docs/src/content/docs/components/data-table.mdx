@@ -1,0 +1,40 @@
+---
+title: Data Table
+description: High-performance data table powered by TanStack Table v8 with compound toolbars and pagination.
+---
+
+`DataTable` renders responsive data tables with column sorting, visibility filters, search toolbars, and skeleton loading.
+
+## Basic Usage
+
+```tsx
+import { DataTable } from "@z3/admin-core";
+import { type ColumnDef } from "@tanstack/react-table";
+
+const columns: ColumnDef<User>[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "email", header: "Email" },
+  { accessorKey: "role", header: "Role" },
+];
+
+export function UsersTable({ users, isLoading }) {
+  return (
+    <DataTable
+      columns={columns}
+      data={users}
+      loading={isLoading}
+      toolbar={(table) => (
+        <DataTable.Toolbar table={table} onSearchChange={(q) => console.log(q)} />
+      )}
+      pagination={(table) => <DataTable.Pagination table={table} />}
+    />
+  );
+}
+```
+
+## Compound Architecture
+
+- `DataTable.Toolbar`: Search input, action buttons, and column visibility toggle.
+- `DataTable.ColumnHeader`: Clickable header with sort order indicator.
+- `DataTable.Pagination`: Page numbers, row counts, and navigation buttons.
+- `DataTable.ViewOptions`: Dropdown menu for toggling column visibility.

@@ -1,0 +1,44 @@
+---
+title: Toaster & Notifications
+description: Vibrant Split Hero Glass Pillar toast notifications with promise support.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { ToasterDemo } from "@/components/demos";
+
+`toast` and `<Toaster>` provide glass notifications with progress indicators and promise resolution.
+
+<ComponentPreview
+  client:load
+  title="Toast Notifications"
+  description="Success, Error, and Asynchronous Promise toasts"
+  code={`import { toast } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <>
+      <button onClick={() => toast.success("Changes saved!")}>Success</button>
+      <button onClick={() => toast.error("Failed to update record")}>Error</button>
+      <button
+        onClick={() =>
+          toast.promise(saveData(), {
+            loading: "Saving...",
+            success: "Saved!",
+            error: "Error saving",
+          })
+        }
+      >
+        Promise
+      </button>
+    </>
+  );
+}`}
+>
+  <ToasterDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Toaster, toast } from "@z3/admin-core";
+```

@@ -1,0 +1,30 @@
+---
+title: Tooltip
+description: Accessible floating tooltips with automatic overflow truncation detection.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { TooltipDemo } from "@/components/demos";
+
+`<Tooltip>` renders a floating tooltip with automatic viewport positioning.
+
+<ComponentPreview
+  client:load
+  title="Floating Tooltip"
+  description="Hover or focus to reveal tooltip"
+  code={`import { Tooltip, Button } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <Tooltip content="Accessible floating tooltip message">
+      <Button variant="outline">Hover over me</Button>
+    </Tooltip>
+  );
+}`}
+>
+  <TooltipDemo />
+</ComponentPreview>
+
+## Truncation-Only Tooltip
+
+When `showWhenTruncated={true}`, the tooltip only renders if the wrapped element actually overflows its parent container width.

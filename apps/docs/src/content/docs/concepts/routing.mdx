@@ -1,0 +1,172 @@
+---
+title: Routing & Navigation
+description: TanStack Router file-based routing, type-safe search params, route guards, and nested navigation.
+sidebar:
+  order: 2
+---
+
+When choosing a router for modern React, the two main contenders are React Router and TanStack Router. I ultimately chose [TanStack Router](https://tanstack.com/router/latest) with file-based route generation for its end-to-end type safety and built-in search param validation.
+
+## Why File-Based Routing?
+
+I initially leaned toward code-based routing. However, after testing both approaches, file-based routing proved far more maintainable. Unless your project is extremely complex with deep level routing, the convenience trade off is just not worth it.
+Another factor is our sidebar navigation. Having to define routes manually in code and then turn around to configure the sidebar separately felt like out-of-sync paths. File-based keeps everything intuitive and centralized. You can just focus on the feature instead of going back and forth with defining route.
+That said, don't feel locked in. If you ever need fine-grained control, you can always swap back to a code-based setup by checking out the [TanStack Router Dpcs](https://tanstack.com/router/latest/docs/installation/manual#using-code-based-route-configuration).
+
+---
+
+## Route Hierarchy & Thin Route Files
+
+`apps/starter` uses TanStack Router's pathless layout route (`_authenticated.tsx`) to guard private pages and wrap them in `<AdminLayout>`:
+
+```zsh
+apps/starter/src/routes/
+├── __root.tsx                    # Root HTML container and QueryClient provider
+├── login.tsx                     # Public unauthenticated login route (/login)
+└── _authenticated.tsx            # Authenticated layout guard (wraps AdminLayout)
+    └── _authenticated/
+        ├── index.tsx             # Dashboard (/)
+        ├── shop/
+        │   ├── products.tsx      # Products (/shop/products)
+        │   └── orders.tsx        # Orders (/shop/orders)
+        ├── users.tsx             # Users (/users)
+        └── settings.tsx          # Settings & 2FA (/settings)
+```
+
+### Thin Routes & Module Colocation
+
+Route files in `src/routes/` are intentionally **thin** (often under 10 lines). Route files should focus strictly on routing, search param validation, and loader context—while all UI, state, and feature components live in `src/modules/`:
+
+```zsh
+src/
+├── modules/user/                 # Feature module (domain logic)
+│   ├── api/user.api.ts           # React Query hooks
+│   ├── components/               # Feature-specific modals & column defs
+│   │   ├── change-role-modal.tsx
+│   │   └── user.column.tsx
+│   └── user.page.tsx             # Main view component
+└── routes/_authenticated/
+    └── users.tsx                 # Thin route entrypoint
+```
+
+Here is the entire [`users.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/routes/_authenticated/users.tsx) route file:
+
+```tsx
+import { createFileRoute } from "@tanstack/react-router";
+import { UserPage } from "../../modules/user/user.page";
+import { ListUsersQuerySchema, safeValidateSearch } from "@z3/types";
+
+export const Route = createFileRoute("/_authenticated/users")({
+  // Type-safe URL search params validated against shared Valibot schema
+  validateSearch: safeValidateSearch(ListUsersQuerySchema),
+  component: UserPage,
+});
+```
+
+---
+
+## Route Guards (`beforeLoad`)
+
+Protected routes check user authentication inside `_authenticated.tsx` via TanStack Router's `beforeLoad` hook:
+
+```tsx
+export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isLoading && !context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      });
+    }
+  },
+  component: AuthenticatedLayout,
+  notFoundComponent: AuthenticatedNotFound,
+});
+```
+
+---
+
+## Sidebar Navigation Configuration
+
+The sidebar supports multi-group and 2-level nested navigation. You can configure your menu in [`apps/starter/src/config/navigation.tsx`](file:///Users/leonhong/Personal%20Project/admin-template/apps/starter/src/config/navigation.tsx):
+
+```tsx
+import type { NavGroupConfig } from "@z3/admin-core";
+import { ProductIcon, OrderIcon, UsersIcon } from "@z3/admin-core";
+import DashboardIcon from "~icons/boxicons/dashboard-filled";
+import ShopIcon from "~icons/solar/cart-4-bold";
+import GearIcon from "~icons/solar/settings-bold";
+
+export const navGroups: NavGroupConfig[] = [
+  {
+    id: "main",
+    title: "Overview",
+    items: [
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        path: "/",
+        icon: <DashboardIcon />,
+      },
+      {
+        id: "shop",
+        label: "Shop",
+        icon: <ShopIcon />,
+        items: [
+          {
+            id: "products",
+            label: "Products",
+            path: "/shop/products",
+            icon: <ProductIcon />,
+          },
+          {
+            id: "orders",
+            label: "Orders",
+            path: "/shop/orders",
+            icon: <OrderIcon />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "system",
+    title: "System",
+    items: [
+      { id: "users", label: "Users", path: "/users", icon: <UsersIcon /> },
+      {
+        id: "settings",
+        label: "Settings",
+        path: "/settings",
+        icon: <GearIcon />,
+      },
+    ],
+  },
+];
+```
+
+### Navigation API Reference
+
+The navigation hierarchy is strictly typed and exported from `@z3/admin-core`:
+
+#### `NavGroupConfig`
+
+| Property | Type              | Description                                               |
+| :------- | :---------------- | :-------------------------------------------------------- |
+| `id`     | `string`          | Optional unique identifier for the group section.         |
+| `title`  | `string`          | Optional group header label rendered above the item list. |
+| `items`  | `NavItemConfig[]` | Array of top-level navigation items within this group.    |
+
+#### `NavItemConfig`
+
+| Property      | Type              | Description                                                                               |
+| :------------ | :---------------- | :---------------------------------------------------------------------------------------- |
+| `id`          | `string`          | Unique identifier for the item (used for React keys and router matching).                 |
+| `label`       | `ReactNode`       | Label text or custom element displayed for the link.                                      |
+| `path`        | `RoutePath`       | Target route path (e.g. `"/shop/products"`). Rendered as a type-safe TanStack `<Link>`.   |
+| `icon`        | `ReactNode`       | Icon element rendered to the left of the label.                                           |
+| `items`       | `NavItemConfig[]` | Nested child items for 2-level accordion / flyout sub-menus.                              |
+| `badge`       | `ReactNode`       | Optional chip or counter badge on the right edge (e.g. `<Tag color="violet">New</Tag>`).  |
+| `action`      | `ReactNode`       | Optional interactive control embedded inside the row (e.g. `<Switch>`).                   |
+| `defaultOpen` | `boolean`         | Whether an accordion item starts expanded on mount (default: `false`).                    |
+| `active`      | `boolean`         | Explicit override for active state (default: auto-detected from current router pathname). |

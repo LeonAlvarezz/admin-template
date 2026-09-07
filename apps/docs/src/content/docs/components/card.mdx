@@ -1,0 +1,42 @@
+---
+title: Card
+description: Compound card component for dashboard metric widgets and content sections.
+---
+
+import { ComponentPreview } from "@/components/ComponentPreview";
+import { CardDemo } from "@/components/demos";
+
+`<Card>` is a compound container supporting Header, Content, and Footer slots.
+
+<ComponentPreview
+  client:load
+  title="Metric Card"
+  description="Card with Header, Content, and Footer action slots"
+  code={`import { Card, Button, Tag } from "@z3/admin-core";
+
+export function Example() {
+  return (
+    <Card className="max-w-sm">
+      <Card.Header
+        title="Revenue"
+        description="Last 30 days"
+        action={<Tag color="emerald">+18%</Tag>}
+      />
+      <Card.Content>
+        <div className="text-3xl font-bold">$48,250.00</div>
+      </Card.Content>
+      <Card.Footer className="flex justify-end gap-2">
+        <Button variant="solid" size="sm">View Report</Button>
+      </Card.Footer>
+    </Card>
+  );
+}`}
+>
+  <CardDemo />
+</ComponentPreview>
+
+## Import
+
+```tsx
+import { Card } from "@z3/admin-core";
+```
