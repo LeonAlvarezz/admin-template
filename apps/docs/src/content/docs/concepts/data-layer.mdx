@@ -27,11 +27,11 @@ Once fetch resolves, the server returns a response (usually JSON). To make this 
 
 I recommend building your own API client from scratch at least once. It's the best way to understand how data and auth flow through an application. In my opinion, a good API client commonly follows these standards:
 
-- Request & response interceptors: Handle authentication, token refreshes, and error logging without modifying core client logic.
-- Smart header merging: Merge request-specific headers cleanly with global defaults.
-- Configurable baseURL: Support environment-specific hosts and path prefixes out of the box.
-- Dual auth support: Seamlessly handle both HTTP-only session cookies and Bearer tokens.
-- Clean HTTP method helpers: Provide typed methods for get, post, put, patch, and delete.
+1. **Request & response interceptors**: Handle authentication, token refreshes, and error logging without modifying core client logic.
+2. **Smart header merging**: Merge request-specific headers cleanly with global defaults.
+3. **Configurable baseURL**: Support environment-specific hosts and path prefixes out of the box.
+4. **Dual auth support**: Seamlessly handle both HTTP-only session cookies and Bearer tokens.
+5. **Clean HTTP method helpers**: Provide typed methods for get, post, put, patch, and delete.
 
 ## Api Client
 
